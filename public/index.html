@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Portal de Entrada</title>
+    <style>
+        :root { --primary: #8A63D2; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --gold: #FFD700; --anil: #1E88E5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card-prisma13 { background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 450px; width: 90%; text-align: center; border: 1px solid #333; }
+        .sap-frase { background: #2a2a2a; border-left: 4px solid var(--primary); padding: 15px; margin: 20px 0; text-align: left; color: var(--gold); font-style: italic; font-size: 1.05rem; line-height: 1.5; }
+        .btn-navegar { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; transition: 0.3s; }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: var(--anil); background: transparent; -webkit-appearance: none; margin: 15px 0; }
+        .footer-lemas { margin-top: 25px; font-size: 0.8rem; color: #888; font-style: italic; border-top: 1px solid #333; padding-top: 15px; }
+        .ontologia { font-size: 0.9rem; color: #bbb; margin-bottom: 15px; }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+<div id="display-sapiencia" style="font-weight: bold; color: #0047AB; text-align: center; padding: 20px; font-size: 1.2em;">
+    Iniciando Metamorfose...
+</div>
+
+<script>
+    (function() {
+        /**
+         * ALGORITMO PRISMA13 - MATRIZ MATERIALIZADA DE LUZ
+         * Identifica a semana no ciclo de 13 e carrega o banco correspondente.
+         */
+        function despertarMatriz() {
+            const hoje = new Date();
+            const inicioAno = new Date(hoje.getFullYear(), 0, 1);
+            const milissegundosPorDia = 24 * 60 * 60 * 1000;
+            const diasDecorridos = Math.floor((hoje - inicioAno) / milissegundosPorDia);
+            
+            // Cálculo do Ciclo de 1 a 13
+            const semanaDoAno = Math.ceil((diasDecorridos + 1) / 7);
+            const ciclo13 = ((semanaDoAno - 1) % 13) + 1;
+            const idSemana = ciclo13.toString().padStart(2, '0');
+
+            // Caminho da pasta conforme imagem 014b15.png
+            const pastaSapiencia = "TELA 06 - 1 Saúde Física – Tracker de atividade e sono – Horas de exercício sono";
+            const arquivoJS = `${pastaSapiencia}/frasesSemana${idSemana}.js`;
+
+            console.log(`🚀 AI-Agente: Sincronizando Diamante da Semana ${idSemana}`);
+
+            const motorScript = document.createElement('script');
+            motorScript.src = arquivoJS;
+
+            motorScript.onload = () => {
+                // Acessa o objeto global (ex: frasesSemana01)
+                const banco = window[`frasesSemana${idSemana}`];
+                const display = document.getElementById('display-sapiencia');
+                
+                if (banco && display) {
+                    // Manifesta a frase âncora "1-13" (Pureza Máxima)
+                    display.innerText = banco["1-13"];
+                } else {
+                    console.error("❌ Erro: Objeto de Sapiência não encontrado no arquivo.");
+                    display.innerText = "Soberania em Processamento...";
+                }
+            };
+
+            motorScript.onerror = () => {
+                console.error(`❌ Erro: Não foi possível localizar o arquivo ${arquivoJS}`);
+                document.getElementById('display-sapiencia').innerText = "Aguardando Conexão com o Almoxarifado...";
+            };
+
+            document.head.appendChild(motorScript);
+        }
+
+        // Executa a Ressurreição ao carregar a página
+        if (document.readyState === 'complete') {
+            despertarMatriz();
+        } else {
+            window.addEventListener('load', despertarMatriz);
+        }
+    })();
+</script>
+
+    <script>
+        const app = document.getElementById('app');
+        
+        // COMEÇAMOS PELO VIGOR (DIMENSÃO 6)
+        const DIMENSAO_ATUAL = 6; 
+
+        const NOMES_DIMENSOES = {
+            6: "VIGOR FÍSICO",
+            7: "MENTE E EQUILÍBRIO",
+            8: "AFETOS E RELAÇÕES",
+            9: "CARREIRA E OBRA",
+            10: "SOBERANIA FINANCEIRA",
+            11: "FAMÍLIA E LAÇOS",
+            12: "COMUNIDADE E CIDADANIA",
+            13: "CRIATIVIDADE E APOTEOSE"
+        };
+
+        function dispararSapiencia(dim) {
+            const dataInicio = localStorage.getItem('prisma_data_inicio') || new Date().toISOString();
+            if(!localStorage.getItem('prisma_data_inicio')) localStorage.setItem('prisma_data_inicio', dataInicio);
+            const dias = Math.floor((new Date() - new Date(dataInicio)) / (1000 * 60 * 60 * 24)) + 1;
+            const semanaNum = Math.ceil(dias / 7) || 1;
+            const semana = semanaNum > 13 ? 13 : semanaNum;
+            const par = dim <= 7 ? `${dim}-${14-dim}` : `${14-dim}-${dim}`;
+            try {
+                const baseFrases = window[`frasesSemana${semana.toString().padStart(2, '0')}`];
+                return baseFrases[par];
+            } catch (e) { return "Seeemmpre MelhorrrAndo... NUNKAKABA!"; }
+        }
+
+        const screens = {
+            aquilatar: () => {
+                const fraseAura = dispararSapiencia(DIMENSAO_ATUAL);
+                const nomeDestaTela = NOMES_DIMENSOES[DIMENSAO_ATUAL] || "PORTAL PRISMA13";
+                return `
+                <div class="card-prisma13">
+                    <h1 style="color:var(--primary); font-size:1.2rem; margin-top:0;">${nomeDestaTela}</h1>
+                    <div class="sap-frase"><span>"${fraseAura}"</span></div>
+                    <p class="ontologia"><b>Iniciar</b> o Aquilatamento para Longevidade Saudável:</p>
+                    <div style="margin:15px 0;">
+                        <div style="width:100%; height:14px; border-radius:7px; background:linear-gradient(to right, #5D4037, #FFEE58, #EF5350, #1E88E5); box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);"></div>
+                    </div>
+                    <input type="range" id="slider" min="1" max="13" value="7" oninput="document.getElementById('v').innerText = this.value">
+                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:bold; color:#888;">
+                        <span>BARRO</span>
+                        <span id="v" style="font-size:1.3rem; color:var(--anil);">7</span>
+                        <span>SOPRO</span>
+                    </div>
+                    <button class="btn-navegar" onclick="consolidar()">INICIAR JORNADA</button>
+                    <div class="footer-lemas"><b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b><br>Há braços!</div>
+                </div>`;
+            }
+        };
+
+        function consolidar() {
+            const nota = document.getElementById('slider').value;
+            localStorage.setItem(`prisma_dim_6`, nota);
+            // APONTANDO PARA A PRIMEIRA PASTA INTERNA
+            window.location.href = "TELA 06 - 1 Saúde Física – Tracker de atividade e sono – Horas de exercício  sono/index.html";
+        }
+
+        window.onload = () => app.innerHTML = screens.aquilatar();
+    </script>
+</body>
+</html>

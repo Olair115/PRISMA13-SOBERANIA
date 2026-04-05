@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada da Nutrição Integral</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        .prose h4 { margin-top: 1em; margin-bottom: 0.2em; font-size: 1.1rem; font-weight: 600; }
+        .prose p { margin-top: 0.2em; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div id="app" class="max-w-4xl mx-auto p-4 md:p-6">
+        <div id="mainApp">
+            <div id="welcomeScreen"></div>
+            <div id="anthropometricScreen" class="hidden"></div>
+            <div id="interpretationScreen" class="hidden"></div>
+            <div id="assessmentScreen" class="hidden"></div>
+        </div>
+    </div>
+
+    <script>
+    // =================================================================
+    // --- BLOCO A: CONTROLE GERAL E NAVEGAÇÃO ---
+    // =================================================================
+    const screens = ['welcomeScreen', 'assessmentScreen', 'anthropometricScreen', 'interpretationScreen'];
+    
+    window.onload = () => {
+        document.getElementById('mainApp').classList.remove('hidden');
+        showScreen('welcomeScreen');
+    };
+
+    function showScreen(screenId) {
+        screens.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) el.classList.add('hidden');
+        });
+        const targetEl = document.getElementById(screenId);
+        if (targetEl) {
+            targetEl.classList.remove('hidden');
+        }
+        if (screenId === 'welcomeScreen') renderWelcomeScreen();
+        if (screenId === 'anthropometricScreen') renderAnthropometricScreen();
+        if (screenId === 'assessmentScreen') renderAssessment();
+    }
+
+    // =================================================================
+    // --- BLOCO 1: TELA DE BOAS-VINDAS ---
+    // =================================================================
+    function renderWelcomeScreen() {
+        const container = document.getElementById('welcomeScreen');
+        container.innerHTML = \`
+            <div class="bg-white p-8 rounded-lg shadow-md text-center mt-10">
+                <h2 class="text-md font-bold uppercase text-blue-600 tracking-wider">VERSÃO TESTE</h2>
+                <h3 class="text-2xl font-semibold italic text-gray-800 mt-4">JORNADA DA NUTRIÇÃO INTEGRAL</h3>
+                <button onclick="showScreen('anthropometricScreen')" class="mt-8 w-full max-w-sm mx-auto bg-blue-600 text-white font-semibold py-3 px-4 rounded-lg shadow hover:bg-blue-700 transition duration-300 text-lg">
+                    Começar
+                </button>
+            </div>
+        \`;
+    }
+
+    // =================================================================
+    // --- BLOCO 2: DADOS ANTROPOMÉTRICOS E COMPARAÇÕES ---
+    // =================================================================
+    function renderAnthropometricScreen() {
+        const container = document.getElementById('anthropometricScreen');
+        container.innerHTML = \`
+            <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-md mx-auto mt-10">
+                <div class="flex justify-between items-center mb-6">
+                    <h2 class="text-2xl font-bold text-gray-800">Seus Dados Atuais</h2>
+                    <button onclick="showScreen('welcomeScreen')" class="text-gray-500 hover:text-gray-800">&times; Voltar</button>
+                </div>
+                <div class="space-y-4">
+                    <div><label for="age" class="block text-sm font-medium text-gray-700">Idade (anos)</label><input type="number" id="age" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Ex: 65"></div>
+                    <div><label for="height" class="block text-sm font-medium text-gray-700">Altura (em cm)</label><input type="number" id="height" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Ex: 164"></div>
+                    <div><label for="weight" class="block text-sm font-medium text-gray-700">Peso (em kg)</label><input type="number" id="weight" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm" placeholder="Ex: 76"></div>
+                </div>
+                <div id="anthropometricError" class="text-red-600 text-center my-4 h-5"></div>
+                <button onclick="calculateAndShowInterpretations()" class="w-full mt-4 bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-green-700 transition">Calcular e Ver Análise</button>
+            </div>
+        \`;
+        const savedData = localStorage.getItem('jornadaNutriUserData');
+        if (savedData) {
+            const { age, height, weight } = JSON.parse(savedData);
+            document.getElementById('age').value = age;
+            document.getElementById('height').value = height;
+            document.getElementById('weight').value = weight;
+        }
+    }
+
+    function calculateAndShowInterpretations() {
+        const age = parseInt(document.getElementById('age').value, 10);
+        const heightCm = parseFloat(document.getElementById('height').value.replace(',', '.'));
+        const weight = parseFloat(document.getElementById('weight').value.replace(',', '.'));
+        const errorEl = document.getElementById('anthropometricError');
+        
+        errorEl.textContent = '';
+        if (isNaN(age) || isNaN(heightCm) || isNaN(weight) || age <= 0 || heightCm <= 0 || weight <= 0) {
+            errorEl.textContent = 'Por favor, preencha todos os campos.';
+            return;
+        }
+        
+        localStorage.setItem('jornadaNutriUserData', JSON.stringify({ age, height: heightCm, weight }));
+        const heightM = heightCm / 100;
+        const bmi = weight / (heightM * heightM);
+        const interpretationText = getBmiInterpretation(age, bmi);
+
+        renderInterpretationScreen(age, bmi, interpretationText);
+        showScreen('interpretationScreen');
+    }
+
+    function getBmiInterpretation(age, bmi) {
+        if (age < 20) return "<h4>Avaliação para Jovens</h4><p>Nesta fase da vida, o IMC é avaliado por curvas de percentil. O acompanhamento com um profissional é fundamental.</p>";
+        if (age >= 60) {
+            if (bmi < 22) return "<h4>Atenção à Nutrição</h4><p>Para idosos, um IMC abaixo de 22 pode indicar risco de desnutrição.</p>";
+            if (bmi <= 27) return "<h4>Faixa Saudável para a Maturidade</h4><p>Parabéns! Manter o IMC nesta faixa na maturidade está associado a uma maior reserva funcional.</p>";
+            return "<h4>Ponto de Atenção</h4><p>Um IMC acima de 27 pode aumentar o risco de condições metabólicas.</p>";
+        }
+        if (bmi < 18.5) return "<h4>Atenção à Nutrição</h4><p>Um IMC abaixo de 18.5 pode indicar uma necessidade de maior aporte calórico e de nutrientes.</p>";
+        if (bmi < 25) return "<h4>Faixa de Normalidade</h4><p>Excelente! Seu IMC está na faixa considerada ideal.</p>";
+        if (bmi < 30) return "<h4>Ponto de Atenção: Sobrepeso</h4><p>Seu IMC indica sobrepeso. Esta é uma oportunidade para reavaliar hábitos.</p>";
+        return "<h4>Cuidado Ampliado: Obesidade</h4><p>Seu IMC se enquadra na faixa de obesidade, o que requer atenção e cuidado.</p>";
+    }
+
+    function renderInterpretationScreen(age, bmi, interpretationText) {
+         const container = document.getElementById('interpretationScreen');
+         container.innerHTML = \`
+             <div class="bg-white p-6 sm:p-8 rounded-xl shadow-lg max-w-2xl mx-auto mt-10 text-left">
+                <div class="flex justify-between items-center mb-4">
+                     <h2 class="text-2xl font-bold text-gray-800">Análise Inicial</h2>
+                     <button onclick="showScreen('anthropometricScreen')" class="text-gray-500 hover:text-gray-800">&times; Voltar</button>
+                </div>
+                <div class="space-y-4 prose max-w-none">
+                    <p>Com base nos seus dados (Idade: \${age}, IMC: <strong>\${bmi.toFixed(2).replace(',',',')}</strong>), esta é uma análise:</p>
+                    <div class="mt-4 p-4 bg-blue-50 border-l-4 border-blue-500 text-blue-800">\${interpretationText}</div>
+                </div>
+                <button onclick="showScreen('assessmentScreen')" class="mt-8 w-full bg-blue-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:bg-blue-700 transition">Continuar para Autoavaliação</button>
+             </div>
+        \`;
+    }
+
+    // =================================================================
+    // --- BLOCO 3: AUTOAVALIAÇÃO (A SER CONSTRUÍDA) ---
+    // =================================================================
+    function renderAssessment() {
+        const container = document.getElementById('assessmentScreen');
+        container.innerHTML = \`
+            <div class="bg-white p-8 rounded-lg shadow-md text-center mt-10">
+                <h2 class="text-2xl font-bold">Bloco 3: Autoavaliação de Hábitos</h2>
+                <p class="mt-4">Nosso próximo passo será construir aqui o questionário com as 40 perguntas.</p>
+                <button onclick="showScreen('interpretationScreen')" class="mt-6 bg-gray-300 text-gray-800 font-semibold py-2 px-6 rounded-lg hover:bg-gray-400 transition">Voltar</button>
+            </div>
+        \`;
+    }
+    </script>
+</body>
+</html>

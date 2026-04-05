@@ -1,0 +1,11 @@
+const screens = {
+SEMANA 01: O DESPERTAR DO BARRO
+{
+    "1-13": "S01: O Vigor (1) é o combustível da Criatividade (13). Sem o Barro forte, o Sopro não encontra morada.",
+    "2-12": "S01: Uma Mente (2) organizada é o primeiro passo para pertencer a uma Comunidade (12) saudável.",
+    "3-11": "S01: A Ética com o próximo (3) protege o silêncio e a paz da sua Família (11).",
+    "4-10": "S01: Sua Carreira (4) deve ser o seu rastro de cuidado com o Meio Ambiente (10).",
+    "5-9":  "S01: A Ética Financeira (5) é a base da liberdade para poder Contribuir (9) de verdade.",
+    "6-8":  "S01: O Ócio Criativo (6) é a pausa que o Intelecto (8) exige para gerar Sapiência.",
+    "7-7":  "CLÍMAX S01: No centro do Prisma, a Saúde Mental é o equilíbrio entre o Agir e o Ser."
+}

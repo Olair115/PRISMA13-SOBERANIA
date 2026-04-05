@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada da Nutrição Integral (3 Blocos)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        /* CSS NATIVO UNIFICADO */
+        
+        :root {
+            --cor-fundo: #121212;
+            --cor-fundo-card: #1A1A22;
+            --cor-texto-principal: #E0E0E0;
+            --cor-texto-secundario: #BDBDBD;
+            --cor-texto-terciario: #9E9E9E;
+            --cor-borda: #333;
+            --cor-destaque: #8A63D2;
+            --gradiente-destaque: linear-gradient(135deg, #7873F5 0%, #8A63D2 100%);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        main {
+            width: 100%;
+            max-width: 800px;
+            padding: 2rem;
+            box-sizing: border-box;
+            margin: auto;
+        }
+        .card {
+            width: 100%;
+            padding: 2.5rem;
+            box-sizing: border-box;
+        }
+        .hidden { display: none; }
+        .fade-in-up { animation: fadeInUpAnimation 0.8s ease-out forwards; }
+        @keyframes fadeInUpAnimation {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* TIPOGRAFIA E ESTILOS GERAIS */
+        h1 { font-size: 2.5rem; font-weight: 900; text-align: center; background: var(--gradiente-destaque); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 1rem 0; }
+        h2 { font-size: 1.75rem; font-weight: 700; color: #FFFFFF; margin-bottom: 2.5rem; text-align: center; }
+        h3 { font-size: 1.25rem; color: var(--cor-texto-principal); margin-top: 2rem; border-top: 1px solid var(--cor-borda); padding-top: 1.5rem; }
+        p, li { font-size: 1.1rem; line-height: 1.7; color: var(--cor-texto-secundario); }
+        hr { border: 0; height: 1px; background-color: var(--cor-borda); margin: 2.5rem 0; }
+
+        /* BOTÕES E LINKS */
+        .button-group { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; }
+        .button { font-size: 1rem; font-weight: 700; padding: 14px 28px; border-radius: 12px; border: 1px solid #555; cursor: pointer; transition: all 0.3s ease; background-color: transparent; color: var(--cor-texto-principal); }
+        .button-primary { border-color: var(--cor-destaque); }
+        .button:hover { background-color: #2a2a2a; border-color: var(--cor-texto-principal); }
+        
+        /* FORMULÁRIO (BLOCO 2) */
+        .form-title { font-size: 1.75rem; font-weight: 700; color: #FFFFFF; margin-bottom: 2rem; text-align: center; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--cor-texto-secundario); margin-bottom: 0.5rem;}
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background-color: #2a2a2a;
+            border: 1px solid var(--cor-borda);
+            border-radius: 8px;
+            color: var(--cor-texto-principal);
+            font-size: 1rem;
+            box-sizing: border-box;
+        }
+        .form-error { color: #ef4444; text-align: center; margin-top: 1rem; height: 1.25rem; font-size: 0.875rem;}
+        
+        /* TELA DE INTERPRETAÇÃO (BLOCO 2) */
+        .interpretation-box { margin-top: 1rem; padding: 1.25rem; background-color: var(--cor-fundo-card); border-left: 4px solid var(--cor-destaque); border-radius: 8px; }
+        .interpretation-box h4 { margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 600; color: var(--cor-texto-principal); }
+        .interpretation-box p { margin: 0; }
+        .disclaimer { margin-top: 1.5rem; font-size: 0.75rem; color: #757575; font-style: italic; }
+
+        /* FOOTER */
+        .footer-cta { text-align: center; padding: 1rem 2rem 2rem 2rem; color: #9E9E9E; }
+        .cta-text { font-size: 1.25rem; font-style: italic; line-height: 1.5; }
+        .cta-text-highlight { font-weight: 700; color: #FFFFFF; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <main id="app">
+        <div id="bloco0" class="card"></div>
+        
+        <div id="bloco1" class="card hidden"></div>
+        
+        <div id="bloco2" class="card hidden"></div>
+
+        <div id="bloco2_interpretacao" class="card hidden"></div>
+    </main>
+    
+    <footer id="footer-cta" class="footer-cta">
+        <p class="cta-text">Aqui começa a <em>transformação definitiva</em> da sua vida...</p>
+        <p class="cta-text">Você vai <strong class="cta-text-highlight">GOSTAR</strong> DE GOSTAR MAIS DE <strong class="cta-text-highlight">VOCÊ</strong></p>
+    </footer>
+
+    <script>
+    // =================================================================
+    //  🧠 O CÉREBRO DO TREM: NAVEGAÇÃO E LÓGICA
+    // =================================================================
+    
+    // --- NAVEGAÇÃO ---
+    window.onload = () => { renderScreen('bloco0'); };
+
+    function renderScreen(screenId) {
+        document.querySelectorAll('main > div').forEach(div => div.classList.add('hidden'));
+        const container = document.getElementById(screenId);
+        container.classList.remove('hidden');
+        container.classList.add('fade-in-up');
+        
+        switch (screenId) {
+            case 'bloco0': renderBloco0(); break;
+            case 'bloco1': renderBloco1(); break;
+            case 'bloco2': renderBloco2(); break;
+        }
+    }
+
+    // =================================================================
+    //  🚂 LOCOMOTIVA 1: BLOCO 0 - APRESENTAÇÃO DO APP
+    // =================================================================
+    function renderBloco0() {
+        const container = document.getElementById('bloco0');
+        container.innerHTML = `
+            <h1>Jornada da Nutrição Integral</h1>
+            <h2 style="font-size: 1.25rem; color: var(--cor-texto-terciario); font-weight: 400;">Conheça mais sobre o aplicativo</h2>
+            <hr>
+            <p>Este aplicativo é um convite para uma avaliação profunda e integrada da saúde. A jornada explora as 8 áreas fundamentais da vida, indo além do físico para abraçar o bem-estar emocional, mental e espiritual.</p>
+            <div class="button-group" style="justify-content: center;">
+                <button class="button button-primary" onclick="renderScreen('bloco1')">Conhecer o Idealizador →</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚂 LOCOMOTIVA 2: BLOCO 1 - APRESENTAÇÃO DO IDEALIZADOR
+    // =================================================================
+    function renderBloco1() {
+        const container = document.getElementById('bloco1');
+        container.innerHTML = `
+            <h2>Conheça mais sobre o idealizador</h2>
+            <div style="text-align: center; background-color: var(--cor-fundo-card); border: 1px solid var(--cor-borda); border-radius: 16px; padding: 1.5rem; margin: 0 auto 2rem auto; max-width: 400px;">
+                <p style="font-size: 1.25rem; font-weight: 700;"><a href="https://www.instagram.com/drolairrafael" target="_blank" rel="noopener noreferrer" style="color: #82aaff; text-decoration: none;">@drolairrafael</a></p>
+            </div>
+            <div style="text-align: center;"><h3 style="font-size: 1.75rem; font-weight: 700; margin: 0; border: none; padding: 0;">Olair Rafael da Silva Jr</h3></div>
+            <div style="text-align: left; padding-left: 1rem;">
+                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: var(--cor-texto-terciario);">– Médico Perito Judicial Juramentado</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: var(--cor-texto-terciario);">– Especialista (RQE CRM/SP) em Pediatria e em Medicina do Trabalho</p>
+                <p style="margin: 0.5rem 0; font-size: 0.9rem; color: var(--cor-texto-terciario);">– Pós-graduado em Homeopatia, Nutrologia, Medicina Canábica, Medicina do Estilo de Vida e Longevidade Saudável, Outras.</p>
+            </div>
+            <hr>
+            <h3>Máximas e Aforismos</h3>
+            <p><span>– Hipócrates: </span><strong style="font-style: italic;"><em>Que o seu remédio seja seu alimento, e que o seu alimento seja seu remédio.</em></strong></p>
+            <p><span>– Dr Olair Rafael: </span><strong style="font-style: italic;"><em>Comer alimentos inadequados de modo continuado, tanto para corpo e para a mente, é responsável pela imensa maioria das consultas, internações, cirurgias e afastamentos...</em></strong></p>
+            <div class="button-group">
+                <button class="button" onclick="renderScreen('bloco0')">← Voltar</button>
+                <button class="button button-primary" onclick="renderScreen('bloco2')">Iniciar Coleta de Dados →</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 1: BLOCO 2 - DADOS ANTROPOMÉTRICOS
+    // =================================================================
+    function renderBloco2() {
+        const container = document.getElementById('bloco2');
+        container.innerHTML = `
+            <h2 class="form-title">Dados para Análise</h2>
+            <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 400px; margin: auto;">
+                <div class="form-group">
+                    <label for="age" class="form-label">Idade (anos)</label>
+                    <input type="number" id="age" class="form-input" placeholder="Ex: 45">
+                </div>
+                <div class="form-group">
+                    <label for="height" class="form-label">Altura (em metros)</label>
+                    <input type="number" id="height" class="form-input" step="0.01" placeholder="Ex: 1.75">
+                </div>
+                <div class="form-group">
+                    <label for="weight" class="form-label">Peso (em kg)</label>
+                    <input type="number" id="weight" class="form-input" step="0.1" placeholder="Ex: 70.5">
+                </div>
+                <div class="form-group">
+                    <label for="activity" class="form-label">Nível de Atividade Física Semanal</label>
+                    <select id="activity" class="form-input">
+                        <option value="sedentario">Sedentário(a)</option>
+                        <option value="leve">Leve (1-2 vezes por semana)</option>
+                        <option value="moderado">Moderado (3-4 vezes por semana)</option>
+                        <option value="intenso">Intenso (5+ vezes ou atleta)</option>
+                    </select>
+                </div>
+            </div>
+            <div id="formError" class="form-error"></div>
+            <div class="button-group">
+                <button class="button" onclick="renderScreen('bloco1')">← Voltar</button>
+                <button class="button button-primary" onclick="handleDataSubmit()">Ver Análise →</button>
+            </div>
+        `;
+    }
+
+    function handleDataSubmit() {
+        const age = parseInt(document.getElementById('age').value);
+        const height = parseFloat(document.getElementById('height').value);
+        const weight = parseFloat(document.getElementById('weight').value);
+        const activity = document.getElementById('activity').value;
+        const errorEl = document.getElementById('formError');
+        
+        errorEl.textContent = '';
+        if (isNaN(age) || isNaN(height) || isNaN(weight) || age <= 0 || height <= 0 || weight <= 0) {
+            errorEl.textContent = 'Por favor, preencha todos os campos corretamente.';
+            return;
+        }
+        
+        const bmi = weight / (height * height);
+        const interpretationData = getBmiInterpretation(age, bmi, activity);
+        
+        renderInterpretationScreen(age, bmi, interpretationData);
+    }
+    
+    function getBmiInterpretation(age, bmi, activity) {
+        let result = { category: "", text: "", warning: "" };
+        if (age < 20) {
+            result.category = "Avaliação para Jovens (até 19 anos)";
+            result.text = "Nesta fase, o IMC é avaliado por curvas de percentil (ideal entre 5 e 85). Uma avaliação profissional é crucial.";
+        } else if (age >= 60) {
+            if (bmi < 22) { result.category = "Atenção à Nutrição (Idosos)"; result.text = "IMC abaixo de 22 pode indicar risco de desnutrição e perda de massa muscular (sarcopenia)."; }
+            else if (bmi <= 27) { result.category = "Faixa Saudável para a Maturidade"; result.text = "Manter o IMC entre 22 e 27 está associado a uma maior reserva funcional."; }
+            else { result.category = "Ponto de Atenção (Idosos)"; result.text = "IMC acima de 27 pode aumentar o risco de condições metabólicas."; }
+        } else {
+            if (bmi < 18.5) { result.category = "Atenção à Nutrição (Adultos)"; result.text = "IMC abaixo de 18.5 pode indicar necessidade de maior aporte nutricional."; }
+            else if (bmi < 25) { result.category = "Faixa de Normalidade (Adultos)"; result.text = "Excelente! Seu IMC está na faixa ideal, associada a menores riscos de doenças crônicas."; }
+            else if (bmi < 30) { result.category = "Ponto de Atenção: Sobrepeso"; result.text = "Seu IMC indica sobrepeso, uma oportunidade para reavaliar hábitos."; }
+            else { result.category = "Cuidado Ampliado: Obesidade"; result.text = "Seu IMC está na faixa de obesidade, o que requer atenção e cuidado."; }
+        }
+        if (bmi >= 25 && activity === 'intenso') {
+            result.warning = '<strong>Nota (Paradoxo de Holyfield):</strong> Como seu nível de atividade é intenso, um IMC elevado pode refletir maior massa muscular, e não excesso de gordura. Recomenda-se uma avaliação de composição corporal.';
+        }
+        return result;
+    }
+
+    function renderInterpretationScreen(age, bmi, data) {
+        const container = document.getElementById('bloco2_interpretacao');
+        let warningHtml = data.warning ? `<div class="interpretation-box" style="background-color: #312E2A; border-color: #facc15;"><p style="color: #fefce8;">${data.warning}</p></div>` : "";
+        
+        container.innerHTML = `
+            <h2 class="form-title">Análise dos Seus Dados</h2>
+            <div style="margin-bottom: 1.5rem;">
+                <p><strong>Idade Informada:</strong> ${age} anos</p>
+                <p><strong>Seu IMC Calculado:</strong> <span style="font-size: 2.25rem; font-weight: 700; color: #82aaff;">${bmi.toFixed(2).replace('.',',')}</span></p>
+            </div>
+            <div class="interpretation-box">
+                 <h4>${data.category}</h4>
+                 <p>${data.text}</p>
+            </div>
+            ${warningHtml}
+            <div class="disclaimer" style="margin-top: 1.5rem;">
+                <p><strong>Cuidado com o risco da "normose”!</strong> Lembre-se que o IMC é uma ferramenta estatística e não substitui uma avaliação individual por um profissional.</p>
+            </div>
+            <div class="button-group">
+                <button class="button" onclick="renderScreen('bloco2')">← Voltar e Recalcular</button>
+                <button class="button button-primary">Continuar para Autoavaliação →</button>
+            </div>
+        `;
+        renderScreen('bloco2_interpretacao');
+    }
+    </script>
+</body>
+</html>

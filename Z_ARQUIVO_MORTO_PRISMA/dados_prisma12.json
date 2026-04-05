@@ -1,0 +1,20 @@
+{
+  "PRISMA12": {
+    "EIXO_FISICO": {
+      "PRIMAVERA": {
+        "VESTIBULAR_NETO": {
+          "f1": "Conquistar saúde plena agora",
+          "f2": "Nutrir células com luz",
+          "f3": "Zelar pelo templo físico",
+          "f4": "Honrar a vida centenária"
+        },
+        "ADEPTO_FILHO": {
+          "f1": "Praticar o movimento vital",
+          "f2": "Fortalecer o nexo biológico",
+          "f3": "Manter a chama ereta",
+          "f4": "Fixar hábitos de ouro"
+        }
+      }
+    }
+  }
+}

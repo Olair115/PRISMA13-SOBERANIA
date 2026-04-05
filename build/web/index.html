@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA12 - Vigor e Ponderação</title>
+    <style>
+        body { font-family: 'Inter', sans-serif; background: #000; color: #fff; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; overflow-x: hidden; }
+        .container { padding: 40px; max-width: 850px; width: 100%; text-align: center; }
+        h1 { font-size: 3.5em; font-weight: 800; letter-spacing: 12px; text-transform: uppercase; margin-bottom: 5px; }
+        .subtitulo-topo { font-size: 1.1em; letter-spacing: 4px; margin-bottom: 50px; opacity: 0.8; }
+        p { font-size: 1.3em; line-height: 1.6; margin-bottom: 25px; font-weight: 300; }
+        .destaque { font-weight: 700; color: #FFD700; }
+        .hidden { display: none !important; }
+        .item-coleta { margin-bottom: 25px; text-align: center; max-width: 500px; margin-left: auto; margin-right: auto; }
+        label { display: block; font-size: 1.1em; margin-bottom: 10px; color: #FFD700; }
+        input, select { background: #111; border: none; border-bottom: 2px solid #FFD700; color: #FFD700; font-size: 1.2em; padding: 12px; width: 100%; box-sizing: border-box; outline: none; text-align: center; }
+        .btn-avancar { width: 150px; height: 150px; background: url('Esbelteza_2.jpg') no-repeat center; background-size: contain; border: 2px solid #FFD700; border-radius: 50%; cursor: pointer; margin: 40px auto; display: block; box-shadow: 0 0 20px rgba(255, 215, 0, 0.4); transition: 0.2s; }
+        .btn-avancar:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+
+    <div id="tela1" class="container">
+        <h1>PRISMA12</h1>
+            <div class="subtitulo-topo">A r)EVOLUÇÃO da NUTRIÇÃO INTEGRAL</div>
+            <p>Você que chegou ao <strong>PRISMA12</strong> tem prioridade máxima. Aceite as minhas Boas-Vindas ao seu Legado de Saúde!</p>
+            <button class="btn-avancar" onclick="showScreen('tela2')"></button>
+        </div>
+
+        <div id="tela2" class="container hidden">
+            <h1>PRISMA12</h1>
+            <div class="subtitulo-topo">CALIBRANDO O SEU VIGOR VITAL</div>
+            <div class="item-coleta">
+                <label>- Nascimento:</label>
+                <input type="date" id="dn" class="persist">
+            </div>
+            <div class="item-coleta">
+                <label>- Peso (kg):</label>
+            <input type="number" id="peso" step="0.1" class="persist">
+        </div>
+        <div class="item-coleta">
+            <label>- Estatura (cm):</label>
+            <input type="number" id="altura" class="persist">
+        </div>
+        <button class="btn-avancar" onclick="showScreen('tela5')"></button>
+    </div>
+
+    <div id="tela3" class="container hidden">
+        <h1>PRISMA12</h1>
+        <div class="subtitulo-topo">DADOS BIOPRESSIONAIS</div>
+        <div class="item-coleta">
+            <label>Trabalho Atual (Ocupação):</label>
+            <input type="text" id="trabalho" class="persist">
+        </div>
+        <div class="item-coleta">
+            <label>CEP (Clima e Localização):</label>
+            <input type="text" id="cep" class="persist">
+        </div>
+        <div class="item-coleta">
+            <label>Grau de Instrução:</label>
+            <select id="instrucao" class="persist">
+                <option value="superior">Superior / Pós</option>
+                <option value="medio">Médio / Técnico</option>
+                <option value="basico">Básico</option>
+            </select>
+        </div>
+        <button class="btn-avancar" onclick="showScreen('tela4')"></button>
+    </div>
+
+    <div id="tela4" class="container hidden">
+        <h1>PRISMA12</h1>
+        <div class="subtitulo-topo">HÁBITOS DE VIGOR</div>
+        <div class="item-coleta">
+            <label>Yoga ou Meditação?</label>
+            <select id="yoga" class="persist">
+                <option value="nao">NÃO</option>
+                <option value="pouco">< 3x/semana</option>
+                <option value="muito">> 3x/semana</option>
+            </select>
+        </div>
+        <div class="item-coleta">
+            <label>Mora Sozinho(a)?</label>
+            <select id="moradia" class="persist">
+                <option value="sim">Sim</option>
+                <option value="nao">Não</option>
+            </select>
+        </div>
+        <button class="btn-avancar" onclick="showScreen('tela5')"></button>
+    </div>
+
+    <div id="tela5" class="container hidden">
+        <h1 style="text-align: right;">PRISMA12</h1>
+        <p style="text-align: right; opacity: 0.8;">O SEU VEREDITO NUTRICIONAL</p>
+        <p style="color: #4ade80; font-size: 1.8em; font-weight: 800; text-transform: uppercase;">“ESBELTEZA É SUPERIOR À BIOMETRIA”</p>
+        <div id="res-calculado" style="font-size: 1.5em; line-height: 2.2; margin: 30px 0;">
+            IMC atual: <strong>34,243 Kg/m²</strong><br>
+            Meta: <span class="destaque">IMC 24,5 Kg/m²</span><br>
+            Eliminar: <span style="color:#ff4d4d; font-weight:800;">27,172 Kg</span>
+        </div>
+        
+        <p style="text-decoration: underline; color: #FFD700; cursor: pointer; margin-bottom: 40px;" onclick="showScreen('tela3')">
+            <strong>Deseja ver seu IMC PONDERADO?</strong> (Recalibrar Cofatores)
+        </p>
+
+        <p style="font-size: 0.8em; color: #FFD700; opacity: 0.6;">🛡️ LGPD: DADOS PROTEGIDOS POR SIGILO MÉDICO</p>
+        <p>Clique no BOTÃO abaixo para baixar seu E-Book GRÁTIS:</p>
+        <p class="destaque" style="font-size: 1.4em;">"Dicas de Alimentação Saudável e Convivência Harmoniosa"</p>
+        <button class="btn-avancar" onclick="baixarDireto()"></button>
+        
+        <p class="destaque">Seeemmpre MelhorrrAndo... NUNKAKABA!</p>
+        <p style="font-style: italic;">Há braços!</p>
+    </div>
+
+    <script>
+        window.onload = () => {
+            document.querySelectorAll('.persist').forEach(el => {
+                const savedValue = localStorage.getItem(el.id);
+                if (savedValue) el.value = savedValue;
+                el.addEventListener('input', () => localStorage.setItem(el.id, el.value));
+            });
+            if (!localStorage.getItem('peso')) document.getElementById('peso').value = "95.5";
+            if (!localStorage.getItem('altura')) document.getElementById('altura').value = "167";
+            if (!localStorage.getItem('trabalho')) document.getElementById('trabalho').value = "aposentado";
+            if (!localStorage.getItem('cep')) document.getElementById('cep').value = "12327-190";
+        };
+
+        function showScreen(id) {
+            document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
+            document.getElementById(id).classList.remove('hidden');
+            window.scrollTo(0,0);
+        }
+        function baixarDireto() {
+            window.open('https://drive.google.com/file/d/1FZodMafShtOBVA73V2iny7ezXNoxjeCD/view', '_blank');
+            location.reload();
+        }
+    </script>
+</body>
+</html>

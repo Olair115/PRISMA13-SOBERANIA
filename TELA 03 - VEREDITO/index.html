@@ -1,0 +1,46 @@
+veredito: () => {
+            const p = parseFloat(localStorage.getItem('prisma_p'));
+            const a = parseFloat(localStorage.getItem('prisma_a'));
+            const imc = (p / (a * a)).toFixed(2);
+            
+            // Lógica de Veredito com Rigor Técnico
+            let categoria = "";
+            let orientacao = "";
+            
+            if (imc < 22) {
+                categoria = "Abaixo da Faixa de Reserva";
+                orientacao = "<b>Nutrir</b> o barro para garantir a proteção funcional.";
+            } else if (imc <= 27) {
+                categoria = "Zona de Proteção e Vigor";
+                orientacao = "<b>Manter</b> a homeostase. Você está na faixa de longevidade.";
+            } else {
+                categoria = "Alerta de Normose / Sobrepeso";
+                orientacao = "<b>Ajustar</b> hábitos. Lembre-se: Esbelteza é superior à Biometria.";
+            }
+
+            return `
+            <div class="card-prisma13">
+                <h1>TELA 03: O VEREDITO</h1>
+                <div class="result-box" style="border: 2px solid #3498db; padding: 20px; border-radius: 15px; background: #f0f9ff;">
+                    <h2 style="margin:0; color:#2c3e50;">IMC: ${imc.replace('.',',')} Kg/m²</h2>
+                    <p style="font-weight:bold; color:#2980b9;">${categoria}</p>
+                </div>
+
+                <div class="welcome-text">
+                    <p>${orientacao}</p>
+                    <p><b>Nota (Paradoxo de Holyfield):</b> Se você pratica musculação intensa, este número pode refletir músculos, não gordura.</p>
+                </div>
+
+                <div class="highlight-box" style="background:#fff4e5; padding:15px; border-radius:10px; border-left:5px solid #e67e22;">
+                    <p><b>Deseja Calcular o VIGOR PONDERADO?</b></p>
+                    <p style="font-size:0.85em;">Vamos cruzar Idade + Clima + Atividade para o escore real.</p>
+                    <button class="btn-navegar" style="background:#e67e22;" onclick="navegar('ponderado')">CALCULAR VIGOR PONDERADO</button>
+                </div>
+
+                <div class="footer-lemas">
+                    <p><b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b></p>
+                    <p>Há braços!</p>
+                </div>
+            </div>
+            `;
+        },

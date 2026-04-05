@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jornada da Nutrição Integral - Avaliação Completa</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.29.3/index.min.js"></script>
+
+    <style>
+        /* CSS NATIVO UNIFICADO */
+        
+        :root {
+            --cor-fundo: #121212;
+            --cor-fundo-card: #1A1A22;
+            --cor-texto-principal: #E0E0E0;
+            --cor-texto-secundario: #BDBDBD;
+            --cor-texto-terciario: #9E9E9E;
+            --cor-borda: #333;
+            --cor-destaque: #8A63D2;
+            --gradiente-destaque: linear-gradient(135deg, #7873F5 0%, #8A63D2 100%);
+            --cor-sucesso: #10B981;
+            --cor-alerta: #F59E0B;
+            --cor-erro: #EF4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--cor-fundo);
+            color: var(--cor-texto-principal);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        main {
+            width: 100%;
+            max-width: 900px;
+            padding: 2rem;
+            box-sizing: border-box;
+            margin: auto;
+            overflow-x: hidden;
+        }
+        .card {
+            width: 100%;
+            padding: 2.5rem;
+            box-sizing: border-box;
+            opacity: 0; /* Começa invisível para animação */
+        }
+        .visible {
+            opacity: 1;
+            animation: fadeInUpAnimation 0.8s ease-out forwards;
+        }
+        .hidden { display: none; }
+        
+        @keyframes fadeInUpAnimation {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* TIPOGRAFIA E ESTILOS GERAIS */
+        h1 { font-size: 2.5rem; font-weight: 900; text-align: center; background: var(--gradiente-destaque); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin: 0 0 1rem 0; }
+        h2 { font-size: 1.75rem; font-weight: 700; color: #FFFFFF; margin-bottom: 2.5rem; text-align: center; }
+        h3 { font-size: 1.25rem; color: var(--cor-texto-principal); margin-top: 2rem; border-top: 1px solid var(--cor-borda); padding-top: 1.5rem; }
+        p, li { font-size: 1.1rem; line-height: 1.7; color: var(--cor-texto-secundario); }
+        hr { border: 0; height: 1px; background-color: var(--cor-borda); margin: 2.5rem 0; }
+
+        /* BOTÕES E LINKS */
+        .button-group { display: flex; justify-content: space-between; align-items: center; margin-top: 2.5rem; gap: 1rem; flex-wrap: wrap; }
+        .button { font-size: 1rem; font-weight: 700; padding: 14px 28px; border-radius: 12px; border: 1px solid #555; cursor: pointer; transition: all 0.3s ease; background-color: transparent; color: var(--cor-texto-principal); text-decoration: none; display: inline-block; text-align: center; }
+        .button-primary { border-color: var(--cor-destaque); background: var(--gradiente-destaque); color: #FFFFFF; }
+        .button-secondary { border-color: var(--cor-borda); }
+        .button-success { border-color: var(--cor-sucesso); color: var(--cor-sucesso); }
+        .button:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .button-primary:hover { border-color: #fff; }
+        
+        /* FORMULÁRIO */
+        .form-title { font-size: 1.75rem; font-weight: 700; color: #FFFFFF; margin-bottom: 2rem; text-align: center; }
+        .form-group { margin-bottom: 1.25rem; }
+        .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--cor-texto-secundario); margin-bottom: 0.5rem;}
+        .form-input, .form-textarea, .form-select { width: 100%; padding: 0.75rem; background-color: #2a2a2a; border: 1px solid var(--cor-borda); border-radius: 8px; color: var(--cor-texto-principal); font-size: 1rem; box-sizing: border-box; }
+        .form-textarea { resize: vertical; min-height: 80px; }
+        .form-error { color: #ef4444; text-align: center; margin-top: 1rem; height: 1.25rem; font-size: 0.875rem;}
+        
+        /* TELA DE INTERPRETAÇÃO E CARDS */
+        .interpretation-box { margin-top: 1rem; padding: 1.25rem; background-color: var(--cor-fundo-card); border-left: 4px solid var(--cor-destaque); border-radius: 8px; }
+        .interpretation-box h4 { margin: 0 0 0.5rem 0; font-size: 1.1rem; font-weight: 600; color: var(--cor-texto-principal); }
+        .interpretation-box p { margin: 0; font-size: 1rem; }
+        .disclaimer { margin-top: 1.5rem; font-size: 0.85rem; color: #9e9e9e; font-style: italic; background-color: var(--cor-fundo-card); padding: 1rem; border-radius: 8px; border-left: 4px solid var(--cor-alerta); }
+
+        /* AVALIAÇÃO DAS ÁREAS */
+        .area-container { margin-bottom: 2rem; }
+        .area-title { font-size: 1.5rem; font-weight: 700; color: var(--cor-texto-principal); margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; gap: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--cor-borda);}
+        .area-icon { font-size: 2rem; }
+        .question-block { margin-bottom: 2.5rem; }
+        .question-text { font-size: 1.1rem; font-weight: 500; color: var(--cor-texto-principal); margin-bottom: 1rem; }
+        
+        /* ======================================== */
+        /* SLIDER DE AVALIAÇÃO 0-99 (VISUAL MELHORADO) */
+        /* ======================================== */
+        .rating-slider { 
+            margin-top: 1rem;
+            padding-bottom: 10px; /* Espaço para a sombra do polegar */
+        }
+
+        .slider-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 1rem; 
+            margin-bottom: 0.5rem;
+        }
+
+        .slider-value { 
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.5rem; 
+            font-weight: 700; 
+            color: var(--cor-destaque); 
+            min-width: 40px; 
+            text-align: center;
+        }
+
+        .slider-labels { 
+            display: flex; 
+            justify-content: space-between; 
+            font-size: 0.8rem; 
+            color: var(--cor-texto-terciario);
+            padding: 0 5px; /* Alinhamento com a trilha */
+        }
+
+        /* A Trilha (Track) */
+        .slider {
+            flex: 1;
+            -webkit-appearance: none;
+            appearance: none;
+            height: 8px; /* Um pouco mais espessa */
+            outline: none;
+            border-radius: 4px;
+            background: #333; /* Cor de fundo para navegadores que não suportam o gradiente */
+            /* A MÁGICA: Gradiente que mostra o progresso */
+            background: linear-gradient(to right, 
+                var(--cor-destaque) 0%, 
+                var(--cor-destaque) calc(100% * (var(--value, 50) / var(--max, 99))), 
+                #333 calc(100% * (var(--value, 50) / var(--max, 99))), 
+                #333 100%
+            );
+            transition: background 0.1s ease-in-out;
+        }
+
+        /* O Polegar (Thumb) para Webkit/Blink (Chrome, Safari, Edge) */
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--cor-destaque);
+            border: 3px solid #FFF; /* Borda branca para contraste */
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(138, 99, 210, 0.5), 0 2px 4px rgba(0,0,0,0.3);
+            transform: scale(1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .slider::-webkit-slider-thumb:hover {
+            transform: scale(1.15); /* Aumenta no hover */
+        }
+
+        .slider::-webkit-slider-thumb:active {
+            transform: scale(1.25); /* Aumenta mais ainda ao clicar */
+            box-shadow: 0 0 15px rgba(138, 99, 210, 0.8), 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        /* O Polegar (Thumb) para Firefox */
+        .slider::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--cor-destaque);
+            border: 3px solid #FFF;
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(138, 99, 210, 0.5), 0 2px 4px rgba(0,0,0,0.3);
+            transform: scale(1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .slider::-moz-range-thumb:hover {
+            transform: scale(1.15);
+        }
+
+        .slider::-moz-range-thumb:active {
+            transform: scale(1.25);
+            box-shadow: 0 0 15px rgba(138, 99, 210, 0.8), 0 2px 6px rgba(0,0,0,0.4);
+        }
+
+        /* PROGRESSO */
+        .progress-bar { width: 100%; height: 8px; background-color: #333; border-radius: 4px; overflow: hidden; margin-bottom: 1rem; }
+        .progress-fill { height: 100%; background: var(--gradiente-destaque); transition: width 0.3s ease; }
+        .progress-text { text-align: center; font-size: 0.9rem; color: var(--cor-texto-terciario); margin-bottom: 2rem; }
+
+        /* GRÁFICOS */
+        .chart-container { margin: 2rem 0; padding: 1.5rem; background-color: var(--cor-fundo-card); border-radius: 12px; border: 1px solid var(--cor-borda); }
+        .chart-title { font-size: 1.1rem; font-weight: 600; color: var(--cor-texto-principal); margin-bottom: 1rem; text-align: center; }
+        .chart-wrapper { position: relative; height: 300px; }
+        .variation-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-top: 1rem; }
+        .stat-card { padding: 1rem; background-color: var(--cor-fundo); border-radius: 8px; text-align: center; }
+        .stat-value { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .stat-label { font-size: 0.9rem; color: var(--cor-texto-terciario); }
+        .positive { color: var(--cor-sucesso); }
+        .negative { color: var(--cor-erro); }
+        .neutral { color: var(--cor-texto-secundario); }
+        
+        /* PLANOS DE LICENÇA */
+        .plans-container { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .plans-container { grid-template-columns: repeat(2, 1fr); } }
+        @media (min-width: 1024px) { .plans-container { grid-template-columns: repeat(3, 1fr); } }
+        .plan-card { background-color: var(--cor-fundo-card); border: 1px solid var(--cor-borda); border-radius: 16px; padding: 2rem; text-align: center; display: flex; flex-direction: column; transition: all 0.3s ease; }
+        .plan-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+        .plan-card.vermelho { border-top: 5px solid #EF4444; }
+        .plan-card.laranja { border-top: 5px solid #F59E0B; }
+        .plan-card.verde { border-top: 5px solid #10B981; }
+        .plan-card.azul { border-top: 5px solid #3B82F6; }
+        .plan-card.violeta { border-top: 5px solid #8A63D2; }
+        .plan-name { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .plan-price { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.5rem; }
+        .plan-duration { color: var(--cor-texto-terciario); margin-bottom: 1.5rem; }
+        .plan-features { list-style: none; padding: 0; margin-bottom: 2rem; text-align: left; flex-grow: 1; }
+        .plan-features li { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; font-size: 0.95rem; }
+        .plan-button { margin-top: auto; }
+
+
+        /* FOOTER */
+        .footer-cta { text-align: center; padding: 1rem 2rem 2rem 2rem; color: #9E9E9E; }
+        .cta-text { font-size: 1.25rem; font-style: italic; line-height: 1.5; }
+        .cta-text-highlight { font-weight: 700; color: #FFFFFF; text-transform: uppercase; }
+
+        /* ESTILOS NOVOS PARA BLOCO 0 e 1 */
+        .locomotiva-container { text-align: center; margin-bottom: 2rem; }
+        .locomotiva-svg { width: 150px; height: auto; animation: floatAnimation 4s ease-in-out infinite; }
+        @keyframes floatAnimation {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .intro-point { display: flex; align-items: center; gap: 1rem; background-color: var(--cor-fundo-card); padding: 1rem; border-radius: 12px; margin-bottom: 1rem; }
+        .intro-icon { font-size: 2rem; }
+
+        .idealizador-container { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+        @media (min-width: 768px) { .idealizador-container { flex-direction: row; align-items: flex-start; } }
+        .profile-card { flex-shrink: 0; width: 250px; background-color: var(--cor-fundo-card); border-radius: 16px; padding: 1.5rem; text-align: center; border: 1px solid var(--cor-borda); }
+        .profile-image { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin-bottom: 1rem; border: 4px solid var(--cor-destaque); }
+        .profile-name { font-size: 1.25rem; font-weight: 700; color: #fff; margin: 0; }
+        .profile-link { color: #82aaff; text-decoration: none; font-weight: 500; display: block; margin-top: 0.5rem;}
+        .idealizador-content { flex: 1; }
+        .credentials-list { list-style: none; padding: 0; }
+        .credentials-list li { display: flex; align-items: flex-start; gap: 0.75rem; margin-bottom: 0.75rem; font-size: 0.95rem; line-height: 1.5; }
+        .aphorism-box { margin-top: 1.5rem; padding: 1.5rem; background-color: var(--cor-fundo-card); border-left: 4px solid var(--cor-destaque); border-radius: 8px; font-style: italic; }
+        .aphorism-box p { font-size: 1rem; }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .button-group { flex-direction: column; align-items: stretch; }
+            .button { width: 100%; }
+            .variation-stats { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <main id="app">
+        <div id="bloco0" class="card"></div>
+        <div id="bloco1" class="card"></div>
+        <div id="bloco2" class="card"></div>
+        <div id="bloco2_interpretacao" class="card"></div>
+        <div id="bloco3" class="card"></div>
+        <div id="bloco4" class="card"></div>
+        <div id="bloco5" class="card"></div>
+        <div id="bloco6" class="card"></div>
+        <div id="bloco7" class="card"></div>
+        <div id="bloco8" class="card"></div>
+        <div id="bloco9" class="card"></div>
+    </main>
+    
+    <footer id="footer-cta" class="footer-cta">
+        <p class="cta-text">Aqui começa a <em>transformação definitiva</em> da sua vida...</p>
+        <p class="cta-text">Você vai <strong class="cta-text-highlight">GOSTAR</strong> DE GOSTAR MAIS DE <strong class="cta-text-highlight">VOCÊ</strong></p>
+    </footer>
+<script>
+    // =================================================================
+    //  🧠 CONFIGURAÇÃO E DADOS GLOBAIS
+    // =================================================================
+    
+    const AREAS_DA_VIDA = [
+        { nome: "Físico", icon: "🏃‍♀️", questoes: [ "Comer alimentos naturais renova a energia do organismo.", "Praticar atividade física mantém o corpo saudável.", "Beber água pura auxilia nas funções vitais.", "Respirar profundamente relaxa os músculos.", "Dormir o suficiente equilibra o metabolismo.", "Mastigar devagar facilita a digestão.", "Evitar excessos preserva a vitalidade.", "Tomar sol com moderação fortalece os ossos.", "Manter higiene diária previne doenças.", "Alongar o corpo reduz tensões.", "Fazer pausas durante as tarefas restaura o vigor.", "Escolher variedade no prato amplia a nutrição." ] },
+        { nome: "Emocional", icon: "💖", questoes: [ "Praticar gratidão promove bem-estar.", "Escutar com atenção fortalece os laços.", "Expressar sentimentos liberta emoções represadas.", "Sorrir estimula a leveza interna.", "Lidar com frustrações desenvolve resiliência.", "Demonstrar gentileza espalha harmonia.", "Reconhecer emoções facilita o autoconhecimento.", "Aceitar dias difíceis constrói maturidade emocional.", "Cuidar de feridas emocionais previne mágoas futuras.", "Perdoar liberta de pesos desnecessários.", "Cercar-se de bons exemplos inspira confiança.", "Contemplar alegrias simples acende a esperança." ] },
+        { nome: "Mental/Intelectual", icon: "🧠", questoes: [ "Ler regularmente expande horizontes.", "Resolver desafios aguça o raciocínio.", "Explorar novos temas desenvolve habilidades.", "Fazer perguntas aprofunda compreensões.", "Refletir sobre experiências amadurece ideias.", "Procurar diversas opiniões amplia perspectivas.", "Organizar tarefas clareia objetivos.", "Observar detalhes revela novas possibilidades.", "Anotar aprendizados auxilia na fixação do conteúdo.", "Revisar temas importantes reforça a memória.", "Manter curiosidade incentiva a criatividade.", "Participar de debates estimula o pensamento crítico." ] },
+        { nome: "Espiritual", icon: "🙏", questoes: [ "Reservar tempo para silêncio acalma o espírito.", "Meditar aprofunda a consciência do agora.", "Contemplar a natureza desperta reverência.", "Praticar compaixão une pessoas e propósitos.", "Buscar sentido nas ações fortalece valores.", "Cultivar paciência dissolve pressa desnecessária.", "Celebrar pequenas conquistas alimenta a gratidão.", "Refletir sobre a existência amplia o entendimento.", "Reconhecer a beleza no cotidiano revela milagres.", "Sintonizar-se com o presente liberta preocupações.", "Honrar tradições mantém raízes vivas.", "Cultivar esperança inspira novos sonhos." ] },
+        { nome: "Financeiro", icon: "💰", questoes: [ "Administrar gastos favorece segurança material.", "Planejar despesas permite escolhas conscientes.", "Economizar recursos fortalece a autonomia.", "Investir em educação fomenta crescimento sustentável.", "Doar valoriza a solidariedade no coletivo.", "Priorizar necessidades essenciais organiza o orçamento.", "Buscar oportunidades incentiva prosperidade.", "Registrar movimentações financeiras oferece controle.", "Avaliar prioridades minimiza desperdício.", "Repartir ganhos promove equilíbrio social.", "Exercitar responsabilidade financeira evita desequilíbrios.", "Utilizar recursos com sabedoria gera tranquilidade." ] },
+        { nome: "Social", icon: "👥", questoes: [ "Cumprimentar cordialmente favorece boas relações.", "Ajudar quem precisa reforça a empatia.", "Trabalhar em equipe estimula a cooperação.", "Celebrar conquistas alheias fortalece vínculos.", "Praticar diálogo aberto amplia o entendimento comum.", "Respeitar diferenças constrói convivência saudável.", "Oferecer apoio fortalece o grupo.", "Cumprir acordos solidifica confiança.", "Compartilhar ideias incentiva inovação coletiva.", "Participar de eventos sociais amplia o círculo de amizades.", "Aproximar gerações enriquece vivências.", "Expressar gratidão fortalece laços sociais." ] },
+        { nome: "Criativo", icon: "🎨", questoes: [ "Experimentar novas técnicas estimula a imaginação.", "Criar soluções favorece o desenvolvimento.", "Desenhar ideias amplia formas de expressão.", "Improvisar alternativas desenvolve flexibilidade mental.", "Observar inspirações no dia a dia alimenta a criatividade.", "Arriscar projetos inéditos diversifica resultados.", "Transformar erros em aprendizados impulsiona inovação.", "Registrar insights facilita futuras realizações.", "Explorar diferentes materiais amplia recursos expressivos.", "Dialogar com criadores enriquece perspectivas.", "Misturar estilos revela possibilidades únicas.", "Cultivar curiosidade reforça o potencial criativo." ] },
+        { nome: "Ecológico", icon: "🌳", questoes: [ "Separar resíduos colabora com o meio ambiente.", "Economizar água preserva recursos naturais.", "Reduzir consumo de plásticos protege ecossistemas.", "Reutilizar embalagens minimiza impacto ambiental.", "Optar por alimentos orgânicos favorece a saúde do solo.", "Plantar árvores auxilia na manutenção do clima.", "Valorizar produtos locais diminui pegada ecológica.", "Descartar pilhas corretamente previne contaminação.", "Incentivar biodiversidade sustenta equilíbrio ecológico.", "Utilizar transporte coletivo reduz emissão de poluentes.", "Apoiar projetos de conservação fortalece a natureza.", "Praticar consumo consciente contribui para a sustentabilidade." ] }
+    ];
+
+    let currentEvaluation = {};
+    let evaluationHistory = [];
+    let currentAreaIndex = 0;
+    let userLicense = { type: 'none', expiry: null }; // none, free, Laranja, Verde, Azul, Violeta
+
+    // =================================================================
+    //  🚂 CONTROLE DA JORNADA (NAVEGAÇÃO E PERSISTÊNCIA)
+    // =================================================================
+    
+    window.onload = () => {  
+        loadDataFromStorage();
+        renderScreen('bloco0'); 
+    };
+
+    function saveDataToStorage() {
+        try {
+            localStorage.setItem('appnutri_evaluations', JSON.stringify(evaluationHistory));
+            localStorage.setItem('appnutri_current', JSON.stringify(currentEvaluation));
+            localStorage.setItem('appnutri_license', JSON.stringify(userLicense));
+        } catch (error) {
+            console.error("Erro ao salvar dados no localStorage:", error);
+        }
+    }
+
+    function loadDataFromStorage() {
+        try {
+            const savedHistory = localStorage.getItem('appnutri_evaluations');
+            const savedCurrent = localStorage.getItem('appnutri_current');
+            const savedLicense = localStorage.getItem('appnutri_license');
+            
+            if (savedHistory) evaluationHistory = JSON.parse(savedHistory);
+            if (savedCurrent) currentEvaluation = JSON.parse(savedCurrent);
+            if (savedLicense) userLicense = JSON.parse(savedLicense);
+
+            // Check if license is expired
+            if (userLicense.expiry && new Date(userLicense.expiry) < new Date()) {
+                userLicense = { type: 'none', expiry: null };
+                saveDataToStorage();
+            }
+
+        } catch (error) {
+            console.error("Erro ao carregar dados do localStorage:", error);
+            localStorage.clear(); // Clear storage on error
+        }
+    }
+
+    function renderScreen(screenId) {
+        // License Check
+        const isPaidUser = userLicense.type !== 'none' && userLicense.type !== 'free';
+        if (screenId === 'bloco9' && !isPaidUser && evaluationHistory.length > 0) {
+            alert("O histórico de evolução é um recurso para assinantes. Considere um de nossos planos para acompanhar seu progresso!");
+            renderScreen('bloco6'); // Redirect to plans
+            return;
+        }
+
+        document.querySelectorAll('main > div').forEach(div => {
+            div.classList.remove('visible');
+            div.classList.add('hidden');
+        });
+        const container = document.getElementById(screenId);
+        container.classList.remove('hidden');
+        
+        setTimeout(() => {
+            container.classList.add('visible');
+        }, 10);
+        switch (screenId) {
+            case 'bloco0': renderBloco0(); break;
+            case 'bloco1': renderBloco1(); break;
+            case 'bloco2': renderBloco2(); break;
+            case 'bloco2_interpretacao': renderBloco2Interpretacao(); break;
+            case 'bloco3': renderBloco3(); break;
+            case 'bloco4': renderBloco4(); break;
+            case 'bloco5': renderBloco5(); break;
+            case 'bloco6': renderBloco6(); break;
+            case 'bloco7': renderBloco7(); break;
+            case 'bloco8': renderBloco8(); break;
+            case 'bloco9': renderBloco9(); break;
+        }
+        window.scrollTo(0, 0);
+    }
+
+    // =================================================================
+    //  🚂 LOCOMOTIVA 1: BLOCO 0 - A ESTAÇÃO INICIAL
+    // =================================================================
+    function renderBloco0() {
+        const container = document.getElementById('bloco0');
+        let buttonHTML = '';
+        const isPaidUser = userLicense.type !== 'none' && userLicense.type !== 'free';
+        if (isPaidUser) {
+             buttonHTML = `<button class="button button-primary" onclick="renderScreen('bloco1')">Iniciar Nova Viagem →</button>`;
+        } else {
+             buttonHTML = `<button class="button button-primary" onclick="renderScreen('bloco6')">Ver Planos e Iniciar →</button>`;
+        }
+
+        container.innerHTML = `
+            <div class="locomotiva-container">
+                <svg class="locomotiva-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                        <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#7873F5;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#8A63D2;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <path d="M19 8H5C3.89543 8 3 8.89543 3 10V18C3 19.1046 3.89543 20 5 20H19C20.1046 20 21 19.1046 21 18V10C21 8.89543 20.1046 8 19 8Z" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M7 20V22" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M17 20V22" stroke="#BDBDBD" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M3 14H21" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M12 4L14 8H10L12 4Z" stroke="url(#grad1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <h1>Embarque na Jornada da Nutrição Integral</h1>
+            <h2 style="font-size: 1.25rem; color: var(--cor-texto-terciario); font-weight: 400;">Sua locomotiva pessoal para o bem-estar e a longevidade.</h2>
+            <hr>
+            <div class="intro-point"><span class="intro-icon">🗺️</span><p><strong>Mapeie sua vida:</strong> Uma avaliação completa em 8 dimensões essenciais, da saúde física à espiritual.</p></div>
+            <div class="intro-point"><span class="intro-icon">🎯</span><p><strong>Encontre seu norte:</strong> Descubra seus pontos fortes e as áreas que merecem mais atenção e cuidado.</p></div>
+            <div class="intro-point"><span class="intro-icon">📈</span><p><strong>Acompanhe sua evolução:</strong> Com gráficos e relatórios, veja seu progresso em direção a uma vida mais plena e saudável.</p></div>
+            
+            <div class="button-group" style="justify-content: center;">
+                ${buttonHTML}
+            </div>
+        `;
+    }
+// =================================================================
+    //  🚂 LOCOMOTIVA 2: BLOCO 1 - O MAQUINISTA
+    // =================================================================
+    function renderBloco1() {
+        const container = document.getElementById('bloco1');
+        container.innerHTML = `
+            <h2>Conheça o Maquinista da sua Jornada</h2>
+            <div class="idealizador-container">
+                <div class="profile-card">
+                    <img src="URL_DA_SUA_FOTO_AQUI" alt="Foto de Olair Rafael" class="profile-image" onerror="this.onerror=null;this.src='https://placehold.co/200x200/1A1A22/E0E0E0?text=Olair';">
+                    <h3 class="profile-name" style="border:none; padding:0; margin-top:0;">Olair Rafael da Silva Jr</h3>
+                    <p style="font-size: 0.9rem; color: var(--cor-texto-terciario); margin-top: 0.25rem;">Médico</p>
+                    <a href="https://www.instagram.com/drolairrafael" target="_blank" rel="noopener noreferrer" class="profile-link">Instagram</a>
+                    <a href="https://www.sol.med.br" target="_blank" rel="noopener noreferrer" class="profile-link">Website Oficial</a>
+                </div>
+                <div class="idealizador-content">
+                    <h3 style="border:none; padding:0; margin-top:0;">Qualificações</h3>
+                    <ul class="credentials-list">
+                        <li><span>⚖️</span> <strong>Médico Perito Judicial Juramentado</strong></li>
+                        <li><span>📜</span> <div><strong>Títulos de Especialista (RQE CRM/SP)</strong><div style="font-size:0.9em; color: var(--cor-texto-terciario)">- Pediatria (nº 12.786)<br>- Medicina do Trabalho (nº 12.761)</div></div></li>
+                        <li><span>🌿</span> <div><strong>Pós-Graduado em</strong><div style="font-size:0.9em; color: var(--cor-texto-terciario)">Homeopatia, Nutrologia, Medicina Canábica, Medicina do Estilo de Vida e Longevidade Saudável.</div></div></li>
+                        <li><span>📚</span> <div><strong>Educação Contínua</strong><div style="font-size:0.9em; color: var(--cor-texto-terciario)">Dezenas de cursos, seminários e congressos para promover a saúde integral.</div></div></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <h3 style="margin-top: 3rem;">Aforismos e Máximas</h3>
+            <div class="aphorism-box">
+                <p><em>"Que o seu remédio seja seu alimento, e que o seu alimento seja seu remédio." - Hipócrates</em></p>
+                <p><em>"O médico que só sabe de Medicina, nem de Medicina sabe." - Abel Salazar</em></p>
+            </div>
+             <div class="aphorism-box" style="margin-top: 1rem; border-color: var(--cor-sucesso);">
+                <p><em>"Alimentação errada é a causa principal da maioria das enfermidades e doenças; consultas e licenças médicas; envelhecimento e invalidez precoces; etc." - Olair Rafael</em></p>
+            </div>
+
+            <div class="disclaimer">
+                <strong>Isenção de Responsabilidade (Disclaimer):</strong> As informações aqui fornecidas têm propósitos meramente informativos e para conhecimento geral. Para quaisquer preocupações de saúde, ou antes de tomar decisões relacionadas ao seu tratamento, é altamente recomendado consultar um profissional de saúde qualificado.
+            </div>
+
+            <div class="button-group">
+                <button class="button button-secondary" onclick="renderScreen('bloco0')">← Voltar à Estação</button>
+                <button class="button button-primary" onclick="renderScreen('bloco2')">Próximo Vagão: Dados →</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 1: BLOCO 2 - DADOS DO PASSAGEIRO
+    // =================================================================
+    function renderBloco2() {
+        const container = document.getElementById('bloco2');
+        const activity = currentEvaluation.physical_activity || '';
+
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 1: Ficha do Passageiro</h2>
+            <p style="text-align:center; margin-top:-2rem; margin-bottom: 2rem; color: var(--cor-texto-terciario);">Informações essenciais para personalizar sua jornada.</p>
+            <div style="max-width: 600px; margin: auto;">
+                <div class="form-group"><label for="gender" class="form-label">Gênero</label><select id="gender" class="form-input"><option value="masculino" ${currentEvaluation.gender === 'masculino' ? 'selected' : ''}>Masculino</option><option value="feminino" ${currentEvaluation.gender === 'feminino' ? 'selected' : ''}>Feminino</option></select></div>
+                <div class="form-group"><label for="age" class="form-label">Idade (anos)</label><input type="number" id="age" class="form-input" placeholder="Ex: 45" value="${currentEvaluation.age || ''}"></div>
+                <div class="form-group"><label for="height" class="form-label">Altura (em metros)</label><input type="number" id="height" class="form-input" step="0.01" placeholder="Ex: 1.75" value="${currentEvaluation.height || ''}"></div>
+                <div class="form-group"><label for="weight" class="form-label">Peso (em kg)</label><input type="number" id="weight" class="form-input" step="0.1" placeholder="Ex: 70.5" value="${currentEvaluation.weight || ''}"></div>
+                <div class="form-group"><label for="work_activity" class="form-label">Atividade Laborativa Principal</label><input type="text" id="work_activity" class="form-input" placeholder="Ex: Trabalho de escritório, construção, etc." value="${currentEvaluation.work_activity || ''}"></div>
+                
+                <div class="form-group">
+                    <label for="physical_activity" class="form-label">Nível de Atividade Física</label>
+                    <select id="physical_activity" class="form-input">
+                        <option value="Sedentário (não faz atividade física planejada)" ${activity === "Sedentário (não faz atividade física planejada)" ? 'selected' : ''}>Nível 0: Sedentário</option>
+                        <option value="Atividade Leve (caminhadas, etc. 1-2x/semana)" ${activity === "Atividade Leve (caminhadas, etc. 1-2x/semana)" ? 'selected' : ''}>Nível 1: Atividade Leve (1-2x/semana)</option>
+                        <option value="Atividade Moderada (musculação, corrida, etc. 3-4x/semana)" ${activity === "Atividade Moderada (musculação, corrida, etc. 3-4x/semana)" ? 'selected' : ''}>Nível 2: Atividade Moderada (3-4x/semana)</option>
+                        <option value="Ativo (exercícios intensos 5-7x/semana)" ${activity === "Ativo (exercícios intensos 5-7x/semana)" ? 'selected' : ''}>Nível 3: Ativo (5-7x/semana)</option>
+                        <option value="Muito Ativo / Atleta (treinos diários e intensos)" ${activity === "Muito Ativo / Atleta (treinos diários e intensos)" ? 'selected' : ''}>Nível 4: Muito Ativo / Atleta</option>
+                    </select>
+                </div>
+
+                <div class="form-group"><label for="current_diseases" class="form-label">Doenças ou Condições Atuais (se houver)</label><textarea id="current_diseases" class="form-textarea" placeholder="Ex: Hipertensão, diabetes, ansiedade">${currentEvaluation.current_diseases || ''}</textarea></div>
+                <div class="form-group"><label for="past_diseases" class="form-label">Doenças ou Cirurgias Importantes no Passado (se houver)</label><textarea id="past_diseases" class="form-textarea" placeholder="Ex: Cirurgia de apêndice, pneumonia">${currentEvaluation.past_diseases || ''}</textarea></div>
+            </div>
+            <div id="formError" class="form-error"></div>
+            <div class="button-group">
+                <button class="button button-secondary" onclick="renderScreen('bloco1')">← Vagão Anterior</button>
+                <button class="button button-primary" onclick="handleDataSubmit()">Gerar Diagnóstico Inicial →</button>
+            </div>
+        `;
+    }
+
+    function handleDataSubmit() {
+        const errorEl = document.getElementById('formError');
+        errorEl.textContent = '';
+
+        try {
+            currentEvaluation = {
+                gender: document.getElementById('gender').value,
+                age: parseInt(document.getElementById('age').value),
+                height: parseFloat(document.getElementById('height').value),
+                weight: parseFloat(document.getElementById('weight').value),
+                work_activity: document.getElementById('work_activity').value,
+                physical_activity: document.getElementById('physical_activity').value,
+                current_diseases: document.getElementById('current_diseases').value,
+                past_diseases: document.getElementById('past_diseases').value
+            };
+            if (isNaN(currentEvaluation.age) || isNaN(currentEvaluation.height) || isNaN(currentEvaluation.weight) || currentEvaluation.age <= 0 || currentEvaluation.height <= 0 || currentEvaluation.weight <= 0) {
+                throw new Error('Por favor, preencha idade, altura e peso corretamente.');
+            }
+
+            currentEvaluation.bmi = currentEvaluation.weight / (currentEvaluation.height * currentEvaluation.height);
+            currentEvaluation.data = new Date().toISOString();
+            currentEvaluation.areas = {};
+            currentAreaIndex = 0;
+            
+            saveDataToStorage();
+            renderScreen('bloco2_interpretacao');
+        } catch (error) {
+            errorEl.textContent = error.message;
+        }
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 2: BLOCO 2.5 - DIAGNÓSTICO INICIAL
+    // =================================================================
+    function renderBloco2Interpretacao() {
+        const container = document.getElementById('bloco2_interpretacao');
+        const interpretation = getBmiInterpretation(currentEvaluation);
+
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 2: Diagnóstico Inicial</h2>
+            <p style="text-align:center; margin-top:-2rem; margin-bottom: 2rem; color: var(--cor-texto-terciario);">Uma análise inicial baseada nos seus dados.</p>
+            
+            <div class="interpretation-box" style="border-color: ${interpretation.color};">
+                <h4>${interpretation.icon} Análise do IMC: ${currentEvaluation.bmi.toFixed(1)} (${interpretation.category})</h4>
+                <p>${interpretation.text}</p>
+                ${interpretation.warning ? `<p style="margin-top: 1rem; font-style: italic; color: var(--cor-alerta);">${interpretation.warning}</p>` : ''}
+            </div>
+
+            <div class="interpretation-box">
+                <h4>🩺 Contexto de Saúde</h4>
+                <p><strong>Atividade Laborativa:</strong> ${currentEvaluation.work_activity || 'Não informado'}.</p>
+                <p><strong>Nível de Atividade Física:</strong> ${currentEvaluation.physical_activity || 'Não informado'}.</p>
+                <p><strong>Condições Atuais:</strong> ${currentEvaluation.current_diseases || 'Nenhuma informada'}.</p>
+            </div>
+
+            <p class="disclaimer">Lembre-se: esta é uma análise preliminar. O diagnóstico e o tratamento devem sempre ser conduzidos por um profissional de saúde qualificado.</p>
+
+            <div class="button-group">
+                <button class="button button-secondary" onclick="renderScreen('bloco2')">← Corrigir Dados</button>
+                <button class="button button-primary" onclick="renderScreen('bloco3')">Iniciar Autoavaliação →</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 3: BLOCO 3 - AUTOAVALIAÇÃO DAS ÁREAS
+    // =================================================================
+    function renderBloco3() {
+        const container = document.getElementById('bloco3');
+        const currentArea = AREAS_DA_VIDA[currentAreaIndex];
+        
+        const progressPercent = ((currentAreaIndex) / AREAS_DA_VIDA.length) * 100;
+        const questionsHTML = currentArea.questoes.map((q, index) => {
+            const savedValue = (currentEvaluation.areas && currentEvaluation.areas[currentArea.nome] && currentEvaluation.areas[currentArea.nome][index] !== undefined)
+                ? currentEvaluation.areas[currentArea.nome][index]
+                : 50;
+
+            return `
+                <div class="question-block">
+                    <p class="question-text">${index + 1}. ${q}</p>
+                    <div class="rating-slider">
+                        <div class="slider-container">
+                            <input 
+                                type="range" min="0" max="99" 
+                                value="${savedValue}" 
+                                class="slider" 
+                                id="slider-${index}" 
+                                oninput="updateSliderValue(this.value, ${index})"
+                                style="--value: ${savedValue}; --max: 99;"
+                            >
+                            <div class="slider-value" id="sliderValue-${index}">${String(savedValue).padStart(2, '0')}</div>
+                        </div>
+                        <div class="slider-labels">
+                            <span>00 - Totalmente Insatisfeito</span>
+                            <span>99 - Plenamente Satisfeito</span>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 3: Autoavaliação</h2>
+            <div class="progress-bar"><div class="progress-fill" style="width: ${progressPercent}%"></div></div>
+            <div class="progress-text">Progresso da Viagem: Dimensão ${currentAreaIndex + 1} de ${AREAS_DA_VIDA.length}</div>
+            
+            <div class="area-container">
+                <div class="area-title"><span class="area-icon">${currentArea.icon}</span><span>${currentArea.nome}</span></div>
+                ${questionsHTML}
+            </div>
+            
+            <div class="button-group">
+                <button class="button button-secondary" onclick="goBackInEvaluation()">← Vagão Anterior</button>
+                <button class="button button-primary" onclick="saveDimensionRatings()">${currentAreaIndex === AREAS_DA_VIDA.length - 1 ? 'Finalizar Avaliação' : 'Próximo Vagão →'}</button>
+            </div>
+        `;
+    }
+    
+    function updateSliderValue(value, index) {
+        document.getElementById(`sliderValue-${index}`).textContent = String(value).padStart(2, '0');
+        
+        // Adição para atualizar o estilo da trilha
+        const sliderEl = document.getElementById(`slider-${index}`);
+        sliderEl.style.setProperty('--value', value);
+        sliderEl.style.setProperty('--max', sliderEl.max);
+    }
+
+    function saveDimensionRatings() {
+        const currentArea = AREAS_DA_VIDA[currentAreaIndex];
+        const ratings = [];
+        for (let i = 0; i < currentArea.questoes.length; i++) {
+            const rating = parseInt(document.getElementById(`slider-${i}`).value);
+            ratings.push(rating);
+        }
+        
+        if (!currentEvaluation.areas) currentEvaluation.areas = {};
+        currentEvaluation.areas[currentArea.nome] = ratings;
+        
+        currentAreaIndex++;
+        
+        if (currentAreaIndex >= AREAS_DA_VIDA.length) {
+            finishEvaluation();
+        } else {
+            saveDataToStorage();
+            renderScreen('bloco3');
+        }
+    }
+
+    function goBackInEvaluation() {
+        if (currentAreaIndex > 0) {
+            currentAreaIndex--;
+            renderScreen('bloco3');
+        } else {
+            renderScreen('bloco2_interpretacao');
+        }
+    }
+
+    function finishEvaluation() {
+        currentEvaluation.medias = {};
+        Object.keys(currentEvaluation.areas).forEach(areaKey => {
+            const areaRatings = currentEvaluation.areas[areaKey];
+            currentEvaluation.medias[areaKey] = areaRatings.reduce((a, b) => a + b, 0) / areaRatings.length;
+        });
+        const medias = Object.values(currentEvaluation.medias);
+        currentEvaluation.mediaGeral = medias.reduce((a, b) => a + b, 0) / medias.length;
+        
+        evaluationHistory.push({...currentEvaluation});
+        currentAreaIndex = 0;
+        // Reset for a new evaluation
+        saveDataToStorage();
+        renderScreen('bloco4');
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 4: BLOCO 4 - RESULTADOS DA VIAGEM ATUAL
+    // =================================================================
+    function renderBloco4() {
+        const container = document.getElementById('bloco4');
+        const bmi = currentEvaluation.bmi;
+        const interpretationData = getBmiInterpretation(currentEvaluation);
+        
+        const areasCards = AREAS_DA_VIDA.map(area => {
+            const media = currentEvaluation.medias[area.nome] || 0;
+            const cor = media >= 70 ? 'var(--cor-sucesso)' : media >= 50 ? 'var(--cor-alerta)' : 'var(--cor-erro)';
+            
+            return `
+                <div class="stat-card">
+                    <div class="stat-value" style="color: ${cor};">${area.icon} ${media.toFixed(0)}</div>
+                    <div class="stat-label">${area.nome}</div>
+                </div>`;
+        }).join('');
+        container.innerHTML = `
+            <h2 class="form-title">Relatório da sua Viagem</h2>
+            <div class="interpretation-box">
+                <h4>📊 Resumo Geral</h4>
+                <p><strong>Pontuação da Viagem:</strong> <span style="font-size: 1.5rem; font-weight: 700; color: var(--cor-destaque);">${currentEvaluation.mediaGeral.toFixed(0)}/99</span></p>
+                <p><strong>IMC:</strong> ${bmi.toFixed(1)} - ${interpretationData.category}</p>
+                <p><strong>Data de Chegada:</strong> ${new Date(currentEvaluation.data).toLocaleDateString('pt-BR')}</p>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Mapa das Áreas da Vida</div>
+                <div class="variation-stats">${areasCards}</div>
+            </div>
+            
+            <h3 style="text-align:center; margin-top:2rem; font-size:1.1rem; color:var(--cor-texto-secundario);">Explore os próximos vagões:</h3>
+            <div class="button-group" style="flex-direction:column; align-items:stretch;">
+                <button class="button button-primary" onclick="renderScreen('bloco9')">📈 Ver Histórico e Evolução</button>
+                <button class="button button-secondary" onclick="renderScreen('bloco7')">📚 Ver Fundamentação</button>
+                <button class="button button-secondary" onclick="renderScreen('bloco8')">⚖️ Ver Licenças e Créditos</button>
+                <button class="button button-secondary" onclick="renderScreen('bloco0')" style="margin-top:1rem;">🏠 Voltar à Estação</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 5: BLOCO 5 - FUNDAMENTAÇÃO E BIBLIOGRAFIA
+    // =================================================================
+    function renderBloco5() {
+        // This is now the Plans screen, renamed to Bloco 6
+        renderScreen('bloco6');
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 6: BLOCO 6 - PLANOS DE ACESSO COM PIX
+    // =================================================================
+    function renderBloco6() {
+        const container = document.getElementById('bloco6');
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 6: Planos de Acesso</h2>
+            <p style="text-align:center; margin-top:-2rem; margin-bottom: 2rem; color: var(--cor-texto-terciario);">Escolha seu bilhete para continuar a jornada de evolução.</p>
+
+            <div class="plans-container">
+                <div class="plan-card vermelho">
+                    <h3 class="plan-name" style="color:#EF4444;">Plano Vermelho</h3>
+                    <p class="plan-price">GRÁTIS</p>
+                    <p class="plan-duration">Acesso por 30 dias</p>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Avaliações ilimitadas (por 30 dias)</li>
+                        <li><span>❌</span> Acesso ao histórico salvo</li>
+                        <li><span>❌</span> Recursos suplementares</li>
+                    </ul>
+                    <button class="button plan-button" onclick="selectPlan('free')">Ativar Avaliação Gratuita</button>
+                </div>
+
+                <div class="plan-card laranja">
+                    <h3 class="plan-name" style="color:#F59E0B;">Plano Laranja</h3>
+                    <p class="plan-price">R$ 10,00</p>
+                    <p class="plan-duration">Acesso por 1 Mês</p>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Avaliações ilimitadas</li>
+                        <li><span>✅</span> Acesso completo ao histórico</li>
+                        <li><span>✅</span> Recursos suplementares</li>
+                    </ul>
+                    <button class="button button-primary plan-button" onclick="adquirirPlano('Laranja', 10.00, 1, '#F59E0B')">Adquirir Licença</button>
+                </div>
+
+                <div class="plan-card verde">
+                    <h3 class="plan-name" style="color:#10B981;">Plano Verde</h3>
+                    <p class="plan-price">R$ 15,00</p>
+                    <p class="plan-duration">Acesso por 2 Meses</p>
+                    <ul class="plan-features">
+                        <li><span>✅</span> Avaliações ilimitadas</li>
+                        <li><span>✅</span> Acesso completo ao histórico</li>
+                        <li><span>✅</span> Recursos suplementares</li>
+                    </ul>
+                    <button class="button button-primary plan-button" onclick="adquirirPlano('Verde', 15.00, 2, '#10B981')">Adquirir Licença</button>
+                </div>
+                
+                <div class="plan-card azul">
+                    <h3 class="plan-name" style="color:#3B82F6;">Plano Azul</h3>
+                    <p class="plan-price">R$ 20,00</p>
+                    <p class="plan-duration">Acesso por 3 Meses</p>
+                     <ul class="plan-features">
+                        <li><span>✅</span> Avaliações ilimitadas</li>
+                        <li><span>✅</span> Acesso completo ao histórico</li>
+                        <li><span>✅</span> Recursos suplementares</li>
+                    </ul>
+                    <button class="button button-primary plan-button" onclick="adquirirPlano('Azul', 20.00, 3, '#3B82F6')">Adquirir Licença</button>
+                </div>
+
+                <div class="plan-card violeta">
+                    <h3 class="plan-name" style="color:#8A63D2;">Plano Violeta</h3>
+                    <p class="plan-price">R$ 25,00</p>
+                    <p class="plan-duration">Acesso por 4 Meses</p>
+                     <ul class="plan-features">
+                        <li><span>✅</span> Avaliações ilimitadas</li>
+                        <li><span>✅</span> Acesso completo ao histórico</li>
+                        <li><span>✅</span> Recursos suplementares</li>
+                    </ul>
+                    <button class="button button-primary plan-button" onclick="adquirirPlano('Violeta', 25.00, 4, '#8A63D2')">Adquirir Licença</button>
+                </div>
+            </div>
+
+            <div id="payment-section" style="display: none; margin-top: 2rem; background: #e9ecef; color: #333; padding: 20px; border-radius: 12px;">
+                <h3 style="margin-top: 0; color: #333; text-align: center;">💳 Dados para Pagamento PIX</h3>
+                
+                <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin: 15px 0; text-align: center;">
+                    <p style="margin: 5px 0;"><strong>Valor:</strong> <span id="payment-amount" style="font-size: 1.5em; color: #28a745; font-weight: bold;">R$ 0,00</span></p>
+                    <p style="margin: 5px 0;"><strong>Plano:</strong> <span id="payment-plan" style="font-weight: bold; color: #333;">-</span></p>
+                    <p style="margin: 5px 0;"><strong>Duração:</strong> <span id="payment-duration" style="color: #333;">-</span></p>
+                </div>
+                
+                <div style="background: #fff; padding: 20px; border-radius: 8px; margin: 15px 0; border: 2px solid #007bff;">
+                    <h4 style="color: #007bff; margin-top: 0; text-align: center;">📱 Chave PIX</h4>
+                    <p style="text-align: center; margin: 10px 0;"><strong>Chave PIX:</strong> <code style="background: #f1f3f4; padding: 8px 12px; border-radius: 4px; font-family: monospace; font-size: 1.2em; color: #d73027;">olairjr@gmail.com</code></p>
+                    <p style="text-align: center; margin: 5px 0;"><strong>Titular:</strong> Olair Rafael da Silva Jr</p>
+                    <p style="text-align: center; margin: 5px 0;"><strong>Tipo:</strong> Chave Email</p>
+                </div>
+                
+                <div style="background: #d4edda; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #28a745;">
+                    <h4 style="color: #155724; margin-top: 0;">📋 Passo a Passo:</h4>
+                    <ol style="color: #155724; margin-left: 20px; line-height: 1.6;">
+                        <li>Abra seu app bancário</li>
+                        <li>Escolha <strong>PIX</strong> → <strong>Transferir</strong></li>
+                        <li>Digite a chave: <strong>olairjr@gmail.com</strong></li>
+                        <li>Valor: <strong id="payment-amount-2">R$ 0,00</strong></li>
+                        <li>Confirme os dados e efetue o pagamento</li>
+                        <li>Salve o comprovante</li>
+                    </ol>
+                </div>
+                
+                <div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 4px solid #856404;">
+                    <h4 id="after-payment-header" style="color: #856404; margin-top: 0;">📧 Após o Pagamento:</h4>
+                    <p style="color: #856404; margin: 8px 0;">Envie o comprovante por email para:</p>
+                    <p style="color: #856404; margin: 8px 0; text-align: center;"><strong>📧 Email:</strong> <code style="background: #f1f3f4; padding: 5px 10px; border-radius: 4px;">planos.jornada@gmail.com</code></p>
+                    <p style="color: #856404; margin: 8px 0;"><strong>Assunto do Email:</strong> Ativação de Plano - Jornada da Nutrição</p>
+                    <p style="color: #856404; margin: 8px 0;"><strong>Dados a serem enviados:</strong> Nome, Email e Telefone</p>
+                    <p style="color: #856404; margin: 8px 0; text-align: center; font-weight: bold;">⏰ Ativação em até 24 horas úteis</p>
+                </div>
+                
+                <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px;">
+                    <button class="button button-secondary" onclick="document.getElementById('payment-section').style.display='none'">Cancelar</button>
+                    <button class="button button-primary" onclick="enviarComprovante()">Enviar Email</button>
+                </div>
+            </div>
+
+            <div class="button-group" style="justify-content:center; margin-top: 3rem;">
+                <button class="button button-secondary" onclick="renderScreen('bloco0')">← Voltar à Estação</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  💳 FUNÇÕES DE PAGAMENTO PIX
+    // =================================================================
+    function adquirirPlano(planName, valor, duracao, planColor) {
+        // Mostrar seção de pagamento
+        document.getElementById('payment-section').style.display = 'block';
+        document.getElementById('payment-amount').textContent = `R$ ${valor.toFixed(2)}`;
+        document.getElementById('payment-amount-2').textContent = `R$ ${valor.toFixed(2)}`;
+        document.getElementById('payment-plan').textContent = `Plano ${planName}`;
+        document.getElementById('payment-duration').textContent = `${duracao} ${duracao === 1 ? 'mês' : 'meses'}`;
+        
+        // Mudar a cor do título da seção "Após o Pagamento"
+        document.getElementById('after-payment-header').style.color = planColor || '#856404';
+
+        // Armazenar dados do plano selecionado
+        window.selectedPlan = { name: planName, value: valor, duration: duracao };
+        
+        // Scroll para a seção de pagamento
+        document.getElementById('payment-section').scrollIntoView({ behavior: 'smooth' });
+        // Alerta informativo
+        alert(`🎯 Plano ${planName} selecionado!\n\nValor: R$ ${valor.toFixed(2)}\nDuração: ${duracao} ${duracao === 1 ? 'mês' : 'meses'}\n\nVeja abaixo as instruções para pagamento PIX.`);
+    }
+
+    function enviarComprovante() {
+        if (!window.selectedPlan) {
+            alert('❌ Erro: Nenhum plano selecionado.');
+            return;
+        }
+        
+        const plan = window.selectedPlan;
+        const nome = prompt('Digite seu nome completo:');
+        if (!nome) return;
+        
+        const email = prompt('Digite seu email:');
+        if (!email) return;
+        
+        const telefone = prompt('Digite seu telefone (opcional):') || 'Não informado';
+        
+        const emailBody = `
+    Solicitação de Ativação - Jornada da Nutrição Integral
+
+    DADOS DO CLIENTE:
+    Nome: ${nome}
+    Email: ${email}
+    Telefone: ${telefone}
+
+    PLANO ADQUIRIDO:
+    Plano: ${plan.name}
+    Valor: R$ ${plan.value.toFixed(2)}
+    Duração: ${plan.duration} ${plan.duration === 1 ? 'mês' : 'meses'}
+    Data da Solicitação: ${new Date().toLocaleString('pt-BR')}
+
+    PAGAMENTO:
+    Chave PIX: olairjr@gmail.com
+    Titular: Olair Rafael da Silva Jr
+
+    COMPROVANTE:
+    (Anexar comprovante do pagamento PIX)
+
+    Aguardo ativação da licença.
+    Atenciosamente,
+    ${nome}
+        `;
+        
+        const subject = `Ativação Plano ${plan.name} - Jornada da Nutrição`;
+        const mailtoLink = `mailto:planos.jornada@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+        
+        window.open(mailtoLink, '_blank');
+        alert(`📧 Email de solicitação aberto!\n\n✅ Lembre-se de:\n1. Anexar o comprovante do PIX\n2. Enviar o email\n3. Aguardar ativação em até 24h\n\n🔐 Sua licença será ativada após confirmação do pagamento.`);
+    }
+
+    function selectPlan(planType) {
+        if (planType === 'free') {
+            const expiryDate = new Date();
+            expiryDate.setDate(expiryDate.getDate() + 30); // Adiciona 30 dias
+            userLicense = { type: 'free', expiry: expiryDate.toISOString() };
+            saveDataToStorage();
+            alert('Plano gratuito de 30 dias ativado! Você pode realizar avaliações durante este período.');
+            renderScreen('bloco1');
+        }
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 7: BLOCO 7 - FUNDAMENTAÇÃO
+    // =================================================================
+    function renderBloco7() {
+        const container = document.getElementById('bloco7');
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 7: Fundamentação</h2>
+            <p style="text-align:center; margin-top:-2rem; margin-bottom: 2rem; color: var(--cor-texto-terciario);">Os pilares conceituais da Jornada da Nutrição Integral.</p>
+
+            <div class="interpretation-box">
+                <h4>Princípios da Nutrição Integral</h4>
+                <p>A nutrição vai muito além da comida. Nossos corpos físico, emocional, mental e espiritual também precisam de "nutrientes" para se manterem saudáveis. Este aplicativo foi criado para ajudar a cuidar dessas várias dimensões, pois o bem-estar depende do equilíbrio harmonioso de todas elas.</p>
+            </div>
+
+            <h3 style="margin-top: 2.5rem;">Aforismos e Sabedoria Ancestral</h3>
+            <div class="aphorism-box">
+                <p><em>"Enquanto a Dieta estiver errada de nada adianta a Medicina. Quando a Dieta estiver correta não mais será preciso a Medicina." – Medicina Ayurveda, 5.000 AEC</em></p>
+            </div>
+            <div class="aphorism-box" style="margin-top:1rem;">
+                <p><em>"Não faças de teu corpo a tumba de tua alma." – Pitágoras, 570-495 AEC</em></p>
+            </div>
+             <div class="aphorism-box" style="margin-top:1rem;">
+                <p><em>"Que o teu alimento seja o teu remédio; e que o teu remédio seja o teu alimento." – Hipócrates, 460-370 AEC</em></p>
+            </div>
+
+            <h3 style="margin-top: 2.5rem;">Saiba Mais</h3>
+            <p>Para aprofundar seus conhecimentos sobre saúde integral, longevidade e bem-estar, explore os conteúdos e vídeos no canal do idealizador.</p>
+            <div class="button-group" style="justify-content:center;">
+                 <a href="https://www.sol.med.br" target="_blank" rel="noopener noreferrer" class="button button-primary">Visitar Website Oficial</a>
+            </div>
+
+            <div class="button-group">
+                <button class="button button-secondary" onclick="renderScreen('bloco4')">← Voltar aos Resultados</button>
+            </div>
+        `;
+    }
+
+    // =================================================================
+    //  🚃 VAGÃO 8: BLOCO 8 - LICENÇAS E CRÉDITOS
+    // =================================================================
+    function renderBloco8() {
+        const container = document.getElementById('bloco8');
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 8: Licenças e Créditos</h2>
+
+            <div class="interpretation-box">
+                <h4>Direitos Autorais</h4>
+                <p>© 2025 Olair Rafael da Silva Jr. Todos os direitos reservados.</p>
+                <p style="margin-top:1rem;">É proibido copiar ou reproduzir quaisquer imagens e textos deste material sem autorização expressa pelo autor. As violações resultarão em sanções codificadas nas Leis.</p>
+            </div>
+
+             <div class="disclaimer" style="margin-top:2rem;">
+                <strong>Isenção de Responsabilidade (Disclaimer):</strong> As informações aqui fornecidas têm propósitos meramente informativos e servem exclusivamente para conhecimento geral. Para quaisquer preocupações de saúde, ou antes de tomar quaisquer decisões relacionadas à sua saúde ou tratamento, é altamente recomendado consultar um profissional de saúde qualificado.
+             </div>
+
+            <h3 style="margin-top: 2.5rem;">Créditos de Tecnologia</h3>
+            <p>Este aplicativo foi construído com o auxílio das seguintes tecnologias de código aberto:</p>
+            <ul>
+                <li><strong>Chart.js:</strong> Para a criação dos gráficos de evolução.</li>
+                <li><strong>Date-fns:</strong> Para formatação de datas.</li>
+            </ul>
+            <p>Agradecemos às comunidades de desenvolvedores que mantêm essas ferramentas.</p>
+            
+
+            <div class="button-group">
+                <button class="button button-secondary" onclick="renderScreen('bloco4')">← Voltar aos Resultados</button>
+            </div>
+        `;
+    }
+
+
+    // =================================================================
+    //  🚃 VAGÃO 9: BLOCO 9 - HISTÓRICO E EVOLUÇÃO
+    // =================================================================
+    function renderBloco9() {
+        const container = document.getElementById('bloco9');
+        if (evaluationHistory.length === 0) {
+            container.innerHTML = `<h2 class="form-title">Histórico de Viagens</h2><div class="interpretation-box"><h4>📊 Nenhuma viagem encontrada</h4><p>Você ainda não possui jornadas salvas.</p></div><div class="button-group"><button class="button button-secondary" onclick="renderScreen('bloco0')">← Início</button><button class="button button-primary" onclick="renderScreen('bloco1')">Fazer Primeira Viagem →</button></div>`;
+            return;
+        }
+        
+        let variationStats = {};
+        let daysElapsed = 0;
+        
+        if (evaluationHistory.length >= 2) {
+            const latest = evaluationHistory[evaluationHistory.length - 1];
+            const previous = evaluationHistory[evaluationHistory.length - 2];
+            daysElapsed = Math.floor((new Date(latest.data) - new Date(previous.data)) / (1000 * 60 * 60 * 24));
+            variationStats = {
+                mediaGeral: { current: latest.mediaGeral, previous: previous.mediaGeral, variation: ((latest.mediaGeral - previous.mediaGeral) / (previous.mediaGeral || 1)) * 100 },
+                bmi: { current: latest.bmi, previous: previous.bmi, variation: ((latest.bmi - previous.bmi) / (previous.bmi || 1)) * 100 }
+            };
+        }
+        
+        container.innerHTML = `
+            <h2 class="form-title">Vagão 9: Sua Evolução</h2>
+            ${evaluationHistory.length >= 2 ? `<div class="interpretation-box"><h4>📈 Variação desde a última viagem</h4><div class="variation-stats"><div class="stat-card"><div class="stat-value ${variationStats.mediaGeral.variation >= 0 ? 'positive' : 'negative'}">${variationStats.mediaGeral.variation >= 0 ? '+' : ''}${variationStats.mediaGeral.variation.toFixed(1)}%</div><div class="stat-label">Variação da Pontuação</div><div style="font-size: 0.8rem; color: var(--cor-texto-terciario);">${(variationStats.mediaGeral.previous || 0).toFixed(0)} → ${(variationStats.mediaGeral.current || 0).toFixed(0)}</div></div><div class="stat-card"><div class="stat-value ${variationStats.bmi.variation <= 0 ? 'positive' : 'negative'}">${variationStats.bmi.variation > 0 ? '+' : ''}${variationStats.bmi.variation.toFixed(1)}%</div><div class="stat-label">Variação do IMC</div><div style="font-size: 0.8rem; color: var(--cor-texto-terciario);">${(variationStats.bmi.previous || 0).toFixed(1)} → ${(variationStats.bmi.current || 0).toFixed(1)}</div></div><div class="stat-card"><div class="stat-value neutral">${daysElapsed}</div><div class="stat-label">Dias Entre Viagens</div></div></div></div>` : ''}
+            <div class="chart-container"><div class="chart-title">Evolução da Pontuação Geral</div><div class="chart-wrapper"><canvas id="generalChart"></canvas></div></div>
+            <div class="chart-container"><div class="chart-title">Evolução do IMC</div><div class="chart-wrapper"><canvas id="bmiChart"></canvas></div></div>
+            <div class="chart-container"><div class="chart-title">Evolução por Área da Vida</div><div class="chart-wrapper"><canvas id="areasChart"></canvas></div></div>
+            <div class="button-group"><button class="button button-secondary" onclick="renderScreen('bloco4')">← Voltar aos Resultados</button><button class="button button-primary" onclick="renderScreen('bloco6')">Ver Planos de Acesso</button></div>
+        `;
+        
+        setTimeout(() => renderCharts(), 100);
+    }
+
+    function renderCharts() {
+        const labels = evaluationHistory.map(e => new Date(e.data).toLocaleDateString('pt-BR'));
+        const baseOptions = { responsive: true, maintainAspectRatio: false, plugins: { legend: { labels: { color: '#E0E0E0' } } }, scales: { x: { ticks: { color: '#BDBDBD' }, grid: { color: '#333' } } } };
+        new Chart(document.getElementById('generalChart').getContext('2d'), { type: 'line', data: { labels, datasets: [{ label: 'Pontuação Geral', data: evaluationHistory.map(e => e.mediaGeral), borderColor: '#8A63D2', backgroundColor: 'rgba(138, 99, 210, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }] }, options: {...baseOptions, scales: {...baseOptions.scales, y: { beginAtZero: true, max: 100, ticks: { color: '#BDBDBD' }, grid: { color: '#333' } } } } });
+        new Chart(document.getElementById('bmiChart').getContext('2d'), { type: 'line', data: { labels, datasets: [{ label: 'IMC', data: evaluationHistory.map(e => e.bmi), borderColor: '#10B981', backgroundColor: 'rgba(16, 185, 129, 0.1)', borderWidth: 3, fill: true, tension: 0.4 }] }, options: {...baseOptions, scales: {...baseOptions.scales, y: { beginAtZero: false, ticks: { color: '#BDBDBD' }, grid: { color: '#333' } } } } });
+        const colors = ['#10B981', '#EF4444', '#3B82F6', '#8B5CF6', '#F59E0B', '#6366F1', '#EC4899', '#14B8A6'];
+        const areaDatasets = AREAS_DA_VIDA.map((area, index) => ({ label: area.nome, data: evaluationHistory.map(e => (e.medias && e.medias[area.nome]) || 0), borderColor: colors[index % colors.length], backgroundColor: 'transparent', borderWidth: 2, tension: 0.4 }));
+        new Chart(document.getElementById('areasChart').getContext('2d'), { type: 'line', data: { labels, datasets: areaDatasets }, options: {...baseOptions, scales: {...baseOptions.scales, y: { beginAtZero: true, max: 100, ticks: { color: '#BDBDBD' }, grid: { color: '#333' } } } } });
+    }
+
+    // =================================================================
+    //  🔧 FUNÇÃO AUXILIAR DE INTERPRETAÇÃO (MAIS COMPLETA)
+    // =================================================================
+    
+    function getBmiInterpretation(evalData) {
+        const { age, bmi, physical_activity } = evalData;
+        let result = { category: "", text: "", warning: "", color: "var(--cor-alerta)", icon: "🤔" };
+        if (age < 20) {
+            result.category = "Avaliação para Jovens";
+            result.text = "Nesta fase, o IMC é avaliado por curvas de percentil (ideal entre 5 e 85). Uma avaliação profissional é crucial para interpretar corretamente o resultado e o desenvolvimento corporal.";
+        } else if (age >= 60) {
+            if (bmi < 22) { 
+                result.category = "Atenção à Nutrição (Idosos)";
+                result.text = "IMC abaixo de 22 pode indicar risco de desnutrição e perda de massa muscular (sarcopenia), o que é um ponto de atenção importante para a saúde e autonomia.";
+                result.color = "var(--cor-erro)";
+                result.icon = "⚠️";
+            } else if (bmi <= 27) { 
+                result.category = "Faixa Saudável para a Maturidade";
+                result.text = "Excelente! Manter o IMC entre 22 e 27 está associado a uma maior reserva funcional e a um envelhecimento mais saudável.";
+                result.color = "var(--cor-sucesso)";
+                result.icon = "✅";
+            } else { 
+                result.category = "Ponto de Atenção (Idosos)";
+                result.text = "IMC acima de 27 pode aumentar o risco de condições metabólicas e sobrecarga nas articulações, sendo importante um acompanhamento.";
+            }
+        } else {
+            if (bmi < 18.5) { 
+                result.category = "Atenção à Nutrição (Adultos)";
+                result.text = "IMC abaixo de 18.5 pode indicar necessidade de maior aporte nutricional para garantir energia, imunidade e saúde óssea.";
+                result.color = "var(--cor-erro)";
+                result.icon = "⚠️";
+            } else if (bmi < 25) { 
+                result.category = "Faixa de Normalidade (Adultos)";
+                result.text = "Parabéns! Seu IMC está na faixa ideal, o que é um excelente indicador de saúde e está associado a menores riscos de doenças crônicas.";
+                result.color = "var(--cor-sucesso)";
+                result.icon = "✅";
+            } else if (bmi < 30) { 
+                result.category = "Ponto de Atenção: Sobrepeso";
+                result.text = "Seu IMC indica sobrepeso. Este é um momento oportuno para reavaliar hábitos alimentares e de atividade física para prevenir futuras complicações.";
+            } else { 
+                result.category = "Cuidado Ampliado: Obesidade";
+                result.text = "Seu IMC está na faixa de obesidade. Esta condição aumenta significativamente o risco de diversas doenças crônicas e requer atenção e cuidado profissional.";
+                result.color = "var(--cor-erro)";
+                result.icon = "🚨";
+            }
+        }
+        
+        const activityNormalized = (physical_activity || "").toLowerCase();
+        if (bmi >= 25 && (activityNormalized.includes('musculação') || activityNormalized.includes('intenso') || activityNormalized.includes('atleta'))) {
+            result.warning = '<strong>Nota (Paradoxo de Holyfield):</strong> Dado seu nível de atividade física, um IMC elevado pode refletir maior massa muscular, e não necessariamente excesso de gordura. Uma avaliação de composição corporal (bioimpedância, dobras cutâneas) é recomendada para um diagnóstico preciso.';
+        }
+        return result;
+    }
+    </script>
+</body>
+</html>

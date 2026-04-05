@@ -1,0 +1,74 @@
+u arquivo index.htmlu arquivo index.html<script>
+    const app = document.getElementById('app');
+
+    const screens = {
+        // ... (suas telas 01, 02 e 03 permanecem aqui)
+
+        interesse: () => {
+            const imc = (localStorage.getItem('prisma_p') / (Math.pow(localStorage.getItem('prisma_a'), 2))).toFixed(2);
+            
+            return `
+            <div class="card-prisma13">
+                <h1>TELA 04: SEU INTERESSE SOBERANO</h1>
+                <p class="ontologia"><b>Transformar</b> dados estáticos em Vigor Celular.</p>
+
+                <div class="welcome-text">
+                    <p>Seu Veredito (IMC ${imc.replace('.', ',')}) é o ponto de partida. O seu verdadeiro interesse é <b>Otimizar</b> a sua Idade Biológica.</p>
+                    
+                    <div style="background:#e8f4fd; padding:15px; border-radius:10px; border-left:5px solid #3498db; margin:20px 0;">
+                        <p><b>Sapiência:</b> Telômeros e Metilação do DNA definem sua saúde real. Vamos <b>Superar</b> a Normose estatística.</p>
+                    </div>
+
+                    <p><b>Escolher</b> onde aplicar sua energia vital nas próximas 13 semanas:</p>
+                    
+                    <div style="text-align:left; display:grid; gap:12px; margin:20px 0;">
+                        <label style="display:flex; align-items:center; gap:12px; cursor:pointer; background:#fff; padding:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="checkbox" name="foco" value="biologia" style="width:20px; height:20px;"> 
+                            <span><b>Fortalecer</b> Vigor Biológico (Telômeros)</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:12px; cursor:pointer; background:#fff; padding:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="checkbox" name="foco" value="emocional" style="width:20px; height:20px;"> 
+                            <span><b>Equilibrar</b> Vínculos e Prosperidade</span>
+                        </label>
+                        <label style="display:flex; align-items:center; gap:12px; cursor:pointer; background:#fff; padding:12px; border:1px solid #ddd; border-radius:10px;">
+                            <input type="checkbox" name="foco" value="mente" style="width:20px; height:20px;"> 
+                            <span><b>Conquistar</b> Soberania da Atenção</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button class="btn-navegar" onclick="salvarInteresse()">SELAR MEUS IDEAIS</button>
+
+                <div class="footer-lemas">
+                    <p><b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b></p>
+                    <p>Há braços!</p>
+                </div>
+            </div>
+            `;
+        }
+    };
+
+    // MOTOR DE NAVEGAÇÃO
+    function navegar(nomeTela) {
+        if (screens[nomeTela]) {
+            app.innerHTML = screens[nomeTela]();
+            window.scrollTo(0, 0);
+        }
+    }
+
+    // LÓGICA DE SALVAMENTO DO INTERESSE (O Engate)
+    function salvarInteresse() {
+        const checkboxes = document.querySelectorAll('input[name="foco"]:checked');
+        const escolhas = Array.from(checkboxes).map(cb => cb.value);
+        
+        if (escolhas.length > 0) {
+            // FIXAR no BD Local o interesse do usuário
+            localStorage.setItem('prisma_interesses', JSON.stringify(escolhas));
+            navegar('ideias_ideais'); // Avança para o próximo vagão
+        } else {
+            alert("Por favor, selecione ao menos um Ideal para sua r)EVOLUÇÃO.");
+        }
+    }
+
+    window.onload = () => navegar('boasvindas');
+</script>

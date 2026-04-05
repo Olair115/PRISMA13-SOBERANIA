@@ -1,0 +1,436 @@
+C:\Users\Olair\Desktop\- PRISMA12 - APP\PRISMA12_CANONICO.txt
+
+
+IA: Entendi perfeitamente o que você precisa! Vou preparar o arquivo único com as informações de propriedade intelectual do app PRISMNA12 para que seu outro ajudante possa implantá-lo no Firebase.
+
+Compreendido. O proprietário intelectual e criador do **PRISMA12** precisa de um manual consolidado para entrega direta ao desenvolvedor parceiro. 
+
+Preparei o **Documento Único de Implantação**. Você pode copiar todo o bloco abaixo na íntegra e enviar para o seu ajudante. O texto já contém as instruções exatas do painel do Firebase e os códigos prontos para o projeto Flutter.
+
+***
+
+# MANUAL DE IMPLANTAÇÃO - PRISMA12 (Módulo de Acessos e Nutrição)
+
+Este documento contém a arquitetura de bloqueio de rotas, trial de 7 dias e integração com Firebase para o aplicativo PRISMA12. Siga a ordem exata abaixo para a configuração.
+
+### PARTE 1: Configuração no Console do Firebase
+
+**1. Habilitar Autenticação Anônima**
+* Acesse o Firebase Console.
+* Vá em **Authentication** -> aba **Sign-in method**.
+* Ative a opção **Anonymous** (Anônimo) e salve.
+
+**2. Publicar as Regras do Firestore**
+* Vá em **Firestore Database** -> aba **Rules**.
+* Apague o conteúdo atual, cole o bloco abaixo e clique em **Publish**:
+
+```javascript
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isMe(uid) { return signedIn() && request.auth.uid == uid; }
+
+    match /users/{uid} {
+      allow read: if isMe(uid);
+      allow create: if isMe(uid);
+
+      // Usuário NÃO pode alterar entitlements (trial/premium)
+      allow update: if isMe(uid)
+        && !( 'premium' in request.resource.data
+           || 'trialEndsAt' in request.resource.data
+           || 'premiumUntil' in request.resource.data );
+    }
+
+    // Permite histórico por trilha
+    match /users/{uid}/{colId}/{docId} {
+      allow read, write: if isMe(uid) && colId.matches('assessments_.*');
+    }
+
+    match /hotmart_events/{docId} {
+      allow read, write: if false;
+    }
+  }
+}
+```
+
+---
+
+### PARTE 2: Código Fonte (Flutter)
+
+Execute o comando `flutterfire configure` no terminal para garantir a criação do arquivo `firebase_options.dart` atualizado. Em seguida, aplique as dependências e os arquivos abaixo.
+
+**1. pubspec.yaml** (Adicione as dependências)
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_riverpod: ^2.6.1
+  go_router: ^14.2.7
+  firebase_core: ^3.4.0
+  firebase_auth: ^5.2.0
+  cloud_firestore: ^5.4.0
+  intl: ^0.19.0
+```
+
+**2. lib/core/auth_controller.dart**
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+
+class AuthController {
+  final FirebaseAuth _auth;
+  final FirebaseFirestore _db;
+
+  AuthController({FirebaseAuth? auth, FirebaseFirestore? db})
+      : _auth = auth ?? FirebaseAuth.instance,
+        _db = db ?? FirebaseFirestore.instance;
+
+  Future ensureSignedInAndBootstrapTrial() async {
+    if (_auth.currentUser == null) {
+      await _auth.signInAnonymously();
+    }
+
+    final user = _auth.currentUser;
+    if (user == null) return;
+
+    final docRef = _db.collection('users').doc(user.uid);
+    final snap = await docRef.get();
+
+    if (!snap.exists) {
+      await docRef.set({
+        'createdAt': FieldValue.serverTimestamp(),
+        'trialEndsAt': Timestamp.fromDate(DateTime.now().add(const Duration(days: 7))),
+        'premium': false,
+      }, SetOptions(merge: true));
+    }
+  }
+}
+```
+
+**3. lib/core/entitlements_provider.dart**
+```dart
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+class Entitlements {
+  final bool premiumActive;
+  final bool trialActive;
+  final DateTime? trialEndsAt;
+
+  const Entitlements({
+    required this.premiumActive,
+    required this.trialActive,
+    this.trialEndsAt,
+  });
+
+  bool get hasAccess => premiumActive || trialActive;
+  static const none = Entitlements(premiumActive: false, trialActive: false);
+}
+
+final entitlementsProvider = StreamProvider((ref) {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) return Stream.value(Entitlements.none);
+
+  return FirebaseFirestore.instance
+      .collection('users')
+      .doc(user.uid)
+      .snapshots()
+      .map((snap) {
+    if (!snap.exists) return Entitlements.none;
+
+    final data = snap.data() ?? {};
+    final premium = (data['premium'] as bool?) ?? false;
+    final ts = data['trialEndsAt'] as Timestamp?;
+    final ends = ts?.toDate();
+    final trial = ends != null && DateTime.now().isBefore(ends);
+
+    return Entitlements(
+      premiumActive: premium,
+      trialActive: trial,
+      trialEndsAt: ends,
+    );
+  });
+});
+```
+
+**4. lib/core/routing/premium_guard.dart**
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../entitlements_provider.dart';
+import '../../features/nutrition_self_assessment/presentation/screens/paywall_screen.dart';
+
+class PremiumGuard extends ConsumerWidget {
+  final Widget child;
+  final String? requestedLocation;
+
+  const PremiumGuard({
+    super.key,
+    required this.child,
+    required this.requestedLocation,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final entAsync = ref.watch(entitlementsProvider);
+
+    return entAsync.when(
+      data: (ent) {
+        if (ent.hasAccess) return child;
+        return PaywallScreen(requestedLocation: _safe(requestedLocation));
+      },
+      loading: () => const Scaffold(body: Center(child: CircularProgressIndicator())),
+      error: (_, __) => PaywallScreen(requestedLocation: _safe(requestedLocation)),
+    );
+  }
+
+  String _safe(String? loc) {
+    final v = (loc ?? '').trim();
+    if (v.isEmpty) return '/nutricao';
+    if (!v.startsWith('/')) return '/nutricao';
+    if (v.contains('/paywall')) return '/nutricao';
+    return v;
+  }
+}
+```
+
+**5. lib/features/nutrition_self_assessment/presentation/screens/paywall_screen.dart**
+```dart
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
+import '../../../../core/entitlements_provider.dart';
+
+class PaywallScreen extends ConsumerStatefulWidget {
+  final String? requestedLocation;
+  const PaywallScreen({super.key, this.requestedLocation});
+
+  @override
+  ConsumerState createState() => _PaywallScreenState();
+}
+
+class _PaywallScreenState extends ConsumerState {
+  bool _redirected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    ref.listenManual>(entitlementsProvider, (prev, next) {
+      final ent = next.asData?.value;
+      if (ent == null || _redirected) return;
+
+      if (ent.hasAccess) {
+        _redirected = true;
+        final target = _safeTarget(widget.requestedLocation);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) context.go(target);
+        });
+      }
+    });
+  }
+
+  String _safeTarget(String? loc) {
+    final v = (loc ?? '').trim();
+    if (v.isEmpty) return '/nutricao';
+    if (!v.startsWith('/')) return '/nutricao';
+    if (v.contains('/paywall')) return '/nutricao';
+    return v;
+  }
+
+  String _featureName(String? loc) {
+    final v = loc ?? '';
+    if (v.contains('historico')) return 'seu Histórico';
+    if (v.contains('comparar')) return 'a Comparação';
+    if (v.contains('plano-detalhado')) return 'seu Plano Detalhado';
+    if (v.contains('exportar-pdf')) return 'a Exportação em PDF';
+    if (v.contains('calibrador')) return 'o Calibrador';
+    return 'este recurso';
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final feature = _featureName(widget.requestedLocation);
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Premium')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.stars_rounded, size: 80, color: Colors.amber),
+            const SizedBox(height: 20),
+            Text(
+              'Acesso restrito',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold),
+            ),
+            const SizedBox(height: 12),
+            Text('Assine para acessar $feature e os recursos avançados.', textAlign: TextAlign.center),
+            const SizedBox(height: 28),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton(
+                onPressed: () {
+                  context.push('/nutricao/link-hotmart');
+                },
+                child: const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 14),
+                  child: Text('Assinar / Vincular Hotmart'),
+                ),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.go('/nutricao'),
+              child: const Text('Voltar para o início'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+```
+
+**6. lib/core/routing/app_router.dart**
+*(O desenvolvedor deve ajustar as importações das telas de acordo com as pastas do projeto).*
+```dart
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import '../routing/premium_guard.dart';
+
+// Importações omitidas para brevidade (ajuste para as telas reais do projeto)
+// import '../../features/.../nutrition_selection_screen.dart';
+// import '../../features/.../paywall_screen.dart';
+// etc.
+
+GoRoute premiumRoute({
+  required String path,
+  required Widget Function(BuildContext, GoRouterState) builder,
+  String? name,
+}) {
+  return GoRoute(
+    path: path,
+    name: name,
+    builder: (context, state) => PremiumGuard(
+      requestedLocation: state.uri.toString(),
+      child: builder(context, state),
+    ),
+  );
+}
+
+// Para compilar este esqueleto sem os imports, substitua as chamadas por Scaffold provisórios.
+final GoRouter appRouter = GoRouter(
+  initialLocation: '/nutricao',
+  routes: [
+    GoRoute(
+      path: '/',
+      redirect: (context, state) => '/nutricao',
+    ),
+    GoRoute(
+      path: '/paywall',
+      builder: (context, state) {
+        final raw = state.uri.queryParameters['requestedLocation'];
+        final decoded = raw == null ? null : Uri.decodeComponent(raw);
+        return PaywallScreen(requestedLocation: decoded); // Requer import da PaywallScreen
+      },
+    ),
+    GoRoute(
+      path: '/nutricao',
+      name: 'nutricao_home',
+      builder: (context, state) => const Scaffold(body: Center(child: Text('Seleção de Trilha'))), // NutritionSelectionScreen()
+      routes: [
+        GoRoute(
+          path: 'questionario/:trilhaId',
+          name: 'nutricao_questionario',
+          builder: (context, state) => Scaffold(body: Center(child: Text('Questionário'))), // NutritionQuestionnaireScreen(...)
+        ),
+        GoRoute(
+          path: 'resultado/:trilhaId',
+          name: 'nutricao_resultado',
+          builder: (context, state) => Scaffold(body: Center(child: Text('Resultado'))), // NutritionResultScreen(...)
+        ),
+        GoRoute(
+          path: 'link-hotmart',
+          name: 'nutricao_link_hotmart',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Link Hotmart'))), // LinkHotmartScreen()
+        ),
+        premiumRoute(
+          path: 'historico/:trilhaId',
+          name: 'nutricao_historico',
+          builder: (context, state) => Scaffold(body: Center(child: Text('Histórico'))), // NutritionHistoryScreen(...)
+        ),
+        premiumRoute(
+          path: 'comparar',
+          name: 'nutricao_comparar',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Comparar'))), // NutritionComparisonScreen()
+        ),
+        premiumRoute(
+          path: 'plano-detalhado/:trilhaId',
+          name: 'nutricao_plano_detalhado',
+          builder: (context, state) => Scaffold(body: Center(child: Text('Plano Detalhado'))), // NutritionDetailedPlanScreen(...)
+        ),
+        premiumRoute(
+          path: 'exportar-pdf/:trilhaId',
+          name: 'nutricao_exportar_pdf',
+          builder: (context, state) => Scaffold(body: Center(child: Text('Exportar PDF'))), // NutritionExportScreen(...)
+        ),
+        premiumRoute(
+          path: 'calibrador',
+          name: 'nutricao_calibrador',
+          builder: (context, state) => const Scaffold(body: Center(child: Text('Calibrador'))), // CalibrationScreen()
+        ),
+      ],
+    ),
+  ],
+);
+```
+
+**7. lib/main.dart**
+```dart
+import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'firebase_options.dart';
+import 'core/auth_controller.dart';
+import 'core/routing/app_router.dart';
+
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  final auth = AuthController();
+  await auth.ensureSignedInAndBootstrapTrial();
+
+  runApp(const ProviderScope(child: AppRoot()));
+}
+
+class AppRoot extends StatelessWidget {
+  const AppRoot({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      title: 'PRISMA12',
+      theme: ThemeData(
+        colorSchemeSeed: Colors.blue,
+        scaffoldBackgroundColor: Colors.grey[50],
+        useMaterial3: true,
+      ),
+      routerConfig: appRouter,
+    );
+  }
+}
+```
+
+***
+
+Envie este bloco de texto. Ele garante a arquitetura solicitada pronta para ser montada e testada no console.
