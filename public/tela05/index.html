@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Ideias e Ideais</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #000; --gold: #ffd700; --text: #eee; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; text-align: center; }
+        
+        .container-estatico { max-width: 650px; width: 100%; }
+        
+        h2 { font-size: 2.2rem; letter-spacing: 6px; text-transform: uppercase; margin-bottom: 40px; font-weight: 800; color: #fff; }
+        
+        /* A FRASE LAPIDADA - ESCOLA DAS ESCOLHAS */
+        .frase-mestra {
+            border-left: 3px solid var(--primary);
+            padding: 30px;
+            margin: 50px 0;
+            background: linear-gradient(90deg, rgba(108, 92, 231, 0.1), transparent);
+            text-align: justify;
+            font-style: italic;
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #fff;
+        }
+        .frase-mestra b {
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 800;
+        }
+
+        /* BOTÃO SOBERANO EM TIMES NEW ROMAN */
+        .btn-evolucao { 
+            background: transparent; 
+            color: var(--gold); 
+            border: none; 
+            padding: 25px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-family: 'Times New Roman', Times, serif; 
+            font-size: 1.75rem; 
+            font-weight: bold; 
+            transition: 0.4s; 
+            margin-top: 20px;
+        }
+        .btn-evolucao:hover { color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        /* RODAPÉ PADRÃO SISTÊMICO */
+        .footer-padrao { margin-top: 70px; padding-top: 30px; border-top: 1px solid #222; text-align: center; }
+        .lema-principal { font-size: 0.9rem; letter-spacing: 1.5px; line-height: 1.8; color: #888; }
+        .lema-principal i { font-style: italic; color: #bbb; }
+        .lema-principal b { font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        .saudacao { display: block; margin-top: 10px; font-weight: 700; color: #fff; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container-estatico">
+        <h2>IDEIAS & IDEAIS</h2>
+        
+        <div class="frase-mestra">
+            “A idade do calendário e o vigor juvenil revelam o grau de maturidade na escola das escolhas, 
+            onde a saúde floresce pelo conhecimento e pela prática da excelência: 
+            <b>semear é livre; colher é consequência.</b>”
+        </div>
+
+        <button class="btn-evolucao" onclick="selarCompromisso()">
+            Iniciar a r)Evolução
+        </button>
+        
+        <footer class="footer-padrao">
+            <p class="lema-principal">
+                <i>Seeemmpre MelhorrrAndo...</i> <b>NUNKAKABA!</b>
+                <span class="saudacao">Há braços!</span>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        function selarCompromisso() {
+            // Registra o aceite na escola das escolhas
+            localStorage.setItem('prisma_acordo', 'firmado');
+            // Salto para a próxima etapa da jornada
+            window.location.href = '/tela06/index.html';
+        }
+    </script>
+</body>
+</html>

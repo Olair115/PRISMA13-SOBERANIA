@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Nutrição</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #000; --gold: #ffd700; --text: #eee; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; text-align: center; }
+        
+        .container-clean { max-width: 650px; width: 100%; }
+        
+        h1 { font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 5px; font-weight: 800; color: #fff; }
+        .subtitulo { font-size: 0.9rem; font-style: italic; color: var(--primary); text-decoration: underline; margin-bottom: 40px; display: block; }
+        
+        .texto-nutrologia { text-align: justify; font-size: 1.1rem; line-height: 1.7; color: #ccc; margin-bottom: 30px; }
+        .texto-nutrologia b { color: var(--gold); }
+
+        /* LISTA DOS NUTRACÊUTICOS (Baseado no seu recordatório) */
+        .diretrizes-nutri { list-style: none; padding: 0; text-align: left; margin-bottom: 40px; }
+        .diretrizes-nutri li { position: relative; padding-left: 30px; margin-bottom: 15px; font-size: 1rem; color: #fff; border-bottom: 1px solid #111; padding-bottom: 10px; }
+        .diretrizes-nutri li::before { content: "◈"; position: absolute; left: 0; color: var(--primary); }
+
+        /* CAIXA DE IMPACTO: O EXEMPLO GRITA */
+        .alerta-familiar {
+            border-left: 3px solid var(--primary);
+            padding: 20px;
+            margin: 40px 0;
+            background: linear-gradient(90deg, rgba(108, 92, 231, 0.1), transparent);
+            text-align: left;
+            font-style: italic;
+            font-size: 1.05rem;
+        }
+
+        .btn-evolucao { background: transparent; color: var(--gold); border: none; padding: 25px; cursor: pointer; width: 100%; font-family: 'Times New Roman', Times, serif; font-size: 1.7rem; font-weight: bold; transition: 0.4s; }
+        .btn-evolucao:hover { color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        .footer-padrao { margin-top: 60px; padding-top: 30px; border-top: 1px solid #222; }
+        .lema-principal { font-size: 0.9rem; letter-spacing: 1.5px; line-height: 1.8; color: #888; }
+        .lema-principal i { font-style: italic; color: #bbb; }
+        .lema-principal b { font-weight: 900; color: var(--primary); text-transform: uppercase; }
+        .saudacao { display: block; margin-top: 10px; font-weight: 700; color: #fff; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container-clean">
+        <h1>NUTRIÇÃO</h1>
+        <span class="subtitulo">A La Carte: Escolha, Prática e Consequência</span>
+        
+        <div class="texto-nutrologia">
+            <b>Nutrir</b> as células exige mais do que saciar a fome; exige a consciência de que somos o que comemos. A saúde floresce quando os nutracêuticos superam os farmacêuticos.
+        </div>
+
+        <ul class="diretrizes-nutri">
+            <li><b>Iniciar</b> pelas frutas: digestão rápida e energia fotônica.</li>
+            <li><b>Mastigar</b> com presença: a digestão começa no ver e morder.</li>
+            <li><b>Respeitar</b> o silêncio: beber líquidos 30min antes ou 1h depois.</li>
+            <li><b>Reduzir</b> o amido: trocar o excesso de pães e massas por vegetais.</li>
+        </ul>
+
+        <div class="alerta-familiar">
+            "Papai, Mamãe e Familiares: Se a palavra manda, o exemplo <b>GRITA</b>! Educai as crianças para não precisar corrigir os adultos."
+        </div>
+
+        <button class="btn-evolucao" onclick="window.location.href='/tela08/index.html'">
+            Avançar para Movimento Vital
+        </button>
+        
+        <footer class="footer-padrao">
+            <p class="lema-principal">
+                <i>Seeemmpre MelhorrrAndo...</i> <b>NUNKAKABA!</b>
+                <span class="saudacao">Há braços!</span>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

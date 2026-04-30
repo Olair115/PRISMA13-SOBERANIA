@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>PRISMA13 · Tela02 · Antropometria PUP13</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@500;700;800;900&display=swap"
+    rel="stylesheet"
+  >
+
+  <style>
+    :root {
+      --preto: #000000;
+      --ouro: #ffd700;
+      --ouro-vivo: #fff2a8;
+      --ouro-suave: rgba(255, 215, 0, 0.82);
+      --ouro-fino: rgba(255, 215, 0, 0.42);
+      --ouro-linha: rgba(255, 215, 0, 0.16);
+      --vidro: rgba(0, 0, 0, 0.48);
+      --azul-anil: #264cff;
+      --verde-vigor: #39ff5a;
+      --ambar: #ffae00;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: #000;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: "Montserrat", Arial, Helvetica, sans-serif;
+      color: var(--ouro) !important;
+    }
+
+    body,
+    body h1,
+    body h2,
+    body h3,
+    body p,
+    body div,
+    body span,
+    body label,
+    body input,
+    body select,
+    body option,
+    body button,
+    body footer,
+    body header,
+    body section,
+    body main {
+      color: var(--ouro) !important;
+    }
+
+    input,
+    select,
+    option,
+    input::placeholder {
+      color: var(--ouro) !important;
+      -webkit-text-fill-color: var(--ouro) !important;
+    }
+
+    option {
+      background: #000;
+    }
+
+    #kosmos {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      display: block;
+      background: #000;
+    }
+
+    .pagina {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      width: 100%;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 18px;
+      padding: 20px 18px 14px;
+    }
+
+    .assinatura-topo {
+      position: fixed;
+      top: 12px;
+      left: 16px;
+      z-index: 5;
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      color: var(--ouro) !important;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.26);
+    }
+
+    .topo {
+      text-align: center;
+      padding-top: 16px;
+      animation: surgir 620ms ease both;
+    }
+
+    .marca {
+      font-size: clamp(3.4rem, 8.6vw, 7.6rem);
+      font-weight: 900;
+      line-height: 0.86;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      text-shadow:
+        0 0 8px rgba(255, 215, 0, 1),
+        0 0 24px rgba(255, 215, 0, 0.72),
+        0 0 48px rgba(255, 215, 0, 0.22);
+    }
+
+    .linha-fina {
+      width: min(620px, 72vw);
+      height: 1px;
+      margin: 10px auto 8px;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 215, 0, 0.18),
+        rgba(255, 215, 0, 1),
+        rgba(255, 215, 0, 0.18),
+        transparent
+      );
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.24);
+    }
+
+    .subtitulo {
+      font-family: "Cormorant Garamond", serif;
+      font-size: clamp(1rem, 1.55vw, 1.32rem);
+      font-style: italic;
+      font-weight: 700;
+      color: var(--ouro-vivo) !important;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.18);
+    }
+
+    .conteudo {
+      width: min(1040px, 94vw);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(340px, 1.12fr) minmax(300px, 0.88fr);
+      gap: 26px;
+      align-items: stretch;
+      animation: surgir 760ms ease both 80ms;
+    }
+
+    .painel {
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255, 215, 0, 0.05), transparent 38%),
+        rgba(0, 0, 0, 0.42);
+      border: 1px solid rgba(255, 215, 0, 0.28);
+      box-shadow:
+        inset 0 0 38px rgba(255, 215, 0, 0.035),
+        0 0 42px rgba(0, 0, 0, 0.72);
+      padding: 30px;
+      min-height: 100%;
+      backdrop-filter: blur(2px);
+    }
+
+    .titulo-painel {
+      font-size: 0.92rem;
+      letter-spacing: 4px;
+      font-weight: 900;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.18);
+    }
+
+    .grid-campos {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px 24px;
+    }
+
+    .full {
+      grid-column: span 2;
+    }
+
+    .campo {
+      display: grid;
+      gap: 8px;
+    }
+
+    .campo label {
+      font-size: 0.72rem;
+      letter-spacing: 2.8px;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: var(--ouro) !important;
+    }
+
+    .campo input,
+    .campo select {
+      width: 100%;
+      background: transparent;
+      border: 0;
+      border-bottom: 1px solid rgba(255, 215, 0, 0.58);
+      outline: none;
+      padding: 4px 2px 9px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--ouro-vivo) !important;
+      -webkit-text-fill-color: var(--ouro-vivo) !important;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.10);
+      color-scheme: dark;
+    }
+
+    .campo input::placeholder {
+      color: rgba(255, 215, 0, 0.44) !important;
+      -webkit-text-fill-color: rgba(255, 215, 0, 0.44) !important;
+    }
+
+    .campo input:focus,
+    .campo select:focus {
+      border-bottom-color: rgba(255, 215, 0, 1);
+      box-shadow: 0 8px 14px -14px rgba(255, 215, 0, 0.72);
+    }
+
+    .escala {
+      grid-column: span 2;
+      display: grid;
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .controle {
+      display: grid;
+      grid-template-columns: 190px 1fr 44px;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .controle span {
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-weight: 900;
+    }
+
+    input[type="range"] {
+      appearance: none;
+      height: 8px;
+      border-radius: 999px;
+      border: 0;
+      padding: 0;
+      background: linear-gradient(
+        90deg,
+        #5a2d13 0%,
+        #a86818 25%,
+        #ffd700 50%,
+        #39ff5a 75%,
+        #264cff 100%
+      );
+      box-shadow: 0 0 16px rgba(255, 215, 0, 0.10);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--ouro-vivo);
+      background: var(--ouro);
+      box-shadow:
+        0 0 8px rgba(255, 215, 0, 1),
+        0 0 20px rgba(255, 215, 0, 0.42);
+      cursor: pointer;
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--ouro-vivo);
+      background: var(--ouro);
+      box-shadow:
+        0 0 8px rgba(255, 215, 0, 1),
+        0 0 20px rgba(255, 215, 0, 0.42);
+      cursor: pointer;
+    }
+
+    .valor-grau {
+      text-align: center;
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--ouro-vivo) !important;
+    }
+
+    .status {
+      grid-column: span 2;
+      min-height: 24px;
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      font-style: italic;
+      margin-top: 8px;
+      color: var(--ouro-vivo) !important;
+    }
+
+    .btn {
+      grid-column: span 2;
+      justify-self: center;
+      margin-top: 8px;
+      min-width: min(420px, 86vw);
+      border: 1px solid rgba(255, 215, 0, 0.44);
+      background: rgba(0, 0, 0, 0.34);
+      padding: 12px 24px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.24rem;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--ouro) !important;
+      cursor: pointer;
+      transition: 180ms ease;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.22);
+    }
+
+    .btn:hover {
+      border-color: rgba(255, 215, 0, 0.92);
+      color: var(--ouro-vivo) !important;
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.14);
+    }
+
+    .btn[disabled] {
+      opacity: 0.38;
+      cursor: default;
+    }
+
+    .resultado {
+      display: grid;
+      gap: 18px;
+    }
+
+    .cartao-numero {
+      border-left: 1px solid rgba(255, 215, 0, 0.36);
+      padding: 0 0 0 18px;
+    }
+
+    .cartao-numero .rotulo {
+      font-size: 0.68rem;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      font-weight: 900;
+      color: rgba(255, 215, 0, 0.78) !important;
+    }
+
+    .cartao-numero .numero {
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 900;
+      line-height: 1.04;
+      color: var(--ouro-vivo) !important;
+      text-shadow:
+        0 0 8px rgba(255, 215, 0, 0.38),
+        0 0 22px rgba(255, 215, 0, 0.12);
+    }
+
+    .cartao-numero .texto {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.08rem;
+      line-height: 1.38;
+      font-weight: 700;
+      font-style: italic;
+      color: var(--ouro) !important;
+    }
+
+    .isbt-box {
+      margin-top: 4px;
+      padding: 20px;
+      border: 1px solid rgba(255, 215, 0, 0.22);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .isbt-titulo {
+      font-size: 0.72rem;
+      letter-spacing: 2.6px;
+      text-transform: uppercase;
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+
+    .isbt-texto {
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.08rem;
+      line-height: 1.46;
+      font-style: italic;
+      font-weight: 700;
+      color: var(--ouro-vivo) !important;
+    }
+
+    .luz-box {
+      margin-top: 2px;
+      font-family: "Cormorant Garamond", serif;
+      font-size: 1.02rem;
+      line-height: 1.42;
+      font-style: italic;
+      font-weight: 700;
+      color: var(--ouro) !important;
+      opacity: 0.96;
+    }
+
+    .rodape {
+      width: min(920px, 96vw);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 100px 1fr 124px;
+      align-items: center;
+      gap: 16px;
+      padding-bottom: 4px;
+      animation: surgir 820ms ease both 140ms;
+    }
+
+    .selo {
+      display: grid;
+      place-items: center;
+      min-height: 72px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      color: var(--ouro) !important;
+      text-shadow: 0 0 8px rgba(255, 215, 0, 0.24);
+    }
+
+    .selo-sol {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      color: #111 !important;
+      background:
+        radial-gradient(circle, #fff8b8 0 24%, #ffd700 25% 48%, #ff7a2b 49% 68%, transparent 69%),
+        conic-gradient(from 0deg, #fff06a, #ffd700, #ff8a28, #ffd700, #fff06a);
+      box-shadow: 0 0 18px rgba(255, 215, 0, 0.18);
+    }
+
+    .selo-imc {
+      width: 114px;
+      height: 62px;
+      border-radius: 14px;
+      background: linear-gradient(90deg, #114ec4, #c41991, #ffcf27, #1baa5f);
+      display: grid;
+      place-items: center;
+      color: #fff !important;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.68);
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,0.18);
+    }
+
+    .texto-rodape {
+      text-align: center;
+      font-family: "Cormorant Garamond", serif;
+      font-style: italic;
+      font-size: clamp(1rem, 1.22vw, 1.26rem);
+      line-height: 1.3;
+      font-weight: 700;
+      color: var(--ouro) !important;
+      text-shadow:
+        0 0 7px rgba(255, 215, 0, 0.28),
+        0 0 18px rgba(255, 215, 0, 0.10);
+    }
+
+    .texto-rodape b {
+      color: var(--ouro-vivo) !important;
+      font-weight: 900;
+    }
+
+    @keyframes surgir {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 880px) {
+      .conteudo {
+        grid-template-columns: 1fr;
+      }
+
+      .painel {
+        padding: 24px 20px;
+      }
+
+      .grid-campos {
+        grid-template-columns: 1fr;
+      }
+
+      .full,
+      .escala,
+      .status,
+      .btn {
+        grid-column: span 1;
+      }
+
+      .controle {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      .valor-grau {
+        text-align: left;
+      }
+
+      .rodape {
+        grid-template-columns: 64px 1fr 88px;
+        gap: 8px;
+      }
+
+      .selo-sol {
+        width: 56px;
+        height: 56px;
+      }
+
+      .selo-imc {
+        width: 78px;
+        height: 48px;
+        font-size: 0.78rem;
+      }
+
+      .texto-rodape {
+        font-size: 0.82rem;
+        line-height: 1.22;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="kosmos" aria-hidden="true"></canvas>
+
+  <div class="assinatura-topo">PRISMA13 · TELA02 · ANTROPOMETRIA PUP13</div>
+
+  <main class="pagina">
+    <header class="topo">
+      <h1 class="marca">PRISMA13</h1>
+      <div class="linha-fina"></div>
+      <p class="subtitulo">Identificação antropométrica da PUP13.</p>
+    </header>
+
+    <section class="conteudo">
+      <div class="painel">
+        <h2 class="titulo-painel">Coleta biográfica e corporal</h2>
+
+        <div class="grid-campos">
+          <div class="campo full">
+            <label for="nome">Nome completo</label>
+            <input id="nome" type="text" placeholder="nome civil ou nome de uso" autocomplete="name">
+          </div>
+
+          <div class="campo">
+            <label for="nascimento">Nascimento</label>
+            <input id="nascimento" type="date">
+          </div>
+
+          <div class="campo">
+            <label for="genero">Gênero biológico</label>
+            <select id="genero">
+              <option value="">seleção</option>
+              <option value="feminino">feminino</option>
+              <option value="masculino">masculino</option>
+              <option value="intersexo">intersexo</option>
+            </select>
+          </div>
+
+          <div class="campo">
+            <label for="altura">Altura · cm</label>
+            <input id="altura" type="number" inputmode="decimal" min="80" max="240" step="0.1" placeholder="170">
+          </div>
+
+          <div class="campo">
+            <label for="peso">Peso · kg</label>
+            <input id="peso" type="number" inputmode="decimal" min="20" max="260" step="0.1" placeholder="70">
+          </div>
+
+          <div class="escala">
+            <div class="controle">
+              <span>atividade física</span>
+              <input id="atividadeFisica" type="range" min="1" max="5" step="1" value="3">
+              <strong class="valor-grau" id="vf">3</strong>
+            </div>
+
+            <div class="controle">
+              <span>atividade intelectual</span>
+              <input id="atividadeIntelectual" type="range" min="1" max="5" step="1" value="3">
+              <strong class="valor-grau" id="vi">3</strong>
+            </div>
+
+            <div class="controle">
+              <span>atividade social</span>
+              <input id="atividadeSocial" type="range" min="1" max="5" step="1" value="3">
+              <strong class="valor-grau" id="vs">3</strong>
+            </div>
+          </div>
+
+          <div class="status" id="status">Campos em convergência.</div>
+
+          <button class="btn" id="btnAvancar" type="button" disabled>
+            consolidar dados e seguir para análise de vigor
+          </button>
+        </div>
+      </div>
+
+      <aside class="painel resultado">
+        <h2 class="titulo-painel">Prévia dos índices</h2>
+
+        <div class="cartao-numero">
+          <div class="rotulo">idade cronológica</div>
+          <div class="numero" id="idadeOut">—</div>
+          <div class="texto">O calendário informa a duração da jornada corporal.</div>
+        </div>
+
+        <div class="cartao-numero">
+          <div class="rotulo">IMC-padrão</div>
+          <div class="numero" id="imcOut">—</div>
+          <div class="texto" id="imcTexto">Peso e altura formam a primeira razão antropométrica.</div>
+        </div>
+
+        <div class="cartao-numero">
+          <div class="rotulo">IMC-corrigido PRISMA13</div>
+          <div class="numero" id="imcCorrigidoOut">—</div>
+          <div class="texto" id="corrigidoTexto">
+            Idade e atividades modulam a leitura sistêmica inicial.
+          </div>
+        </div>
+
+        <div class="isbt-box">
+          <div class="isbt-titulo">ISBTgrafia · semente</div>
+          <div class="isbt-texto" id="isbtTexto">
+            A conformação inicial nasce da idade, do corpo e dos três níveis de atividade.
+          </div>
+        </div>
+
+        <div class="luz-box">
+          <b>Dimensão 03 · Luz.</b>
+          A Luz ilumina o caminho e constitui a seiva que organiza o ciclo vital no Solo Pulsante da existência.
+        </div>
+      </aside>
+    </section>
+
+    <footer class="rodape">
+      <div class="selo">
+        <div class="selo-sol">SOL</div>
+      </div>
+
+      <div class="texto-rodape">
+        <div>O solo fértil garante a sobrevivência.</div>
+        <div>A cultura autônoma garante a melhoria.</div>
+        <div><b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b></div>
+        <div>Prosperidade passiva floresce ao ajudar a resolver os problemas das outras pessoas.</div>
+        <div>Há braços! | Dr. Olair Rafael</div>
+      </div>
+
+      <div class="selo">
+        <div class="selo-imc">IMC22</div>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    const PROXIMA_TELA = "../tela03/index.html";
+
+    const CAMPOS = {
+      nome: document.getElementById("nome"),
+      nascimento: document.getElementById("nascimento"),
+      genero: document.getElementById("genero"),
+      altura: document.getElementById("altura"),
+      peso: document.getElementById("peso"),
+      atividadeFisica: document.getElementById("atividadeFisica"),
+      atividadeIntelectual: document.getElementById("atividadeIntelectual"),
+      atividadeSocial: document.getElementById("atividadeSocial")
+    };
+
+    const SAIDA = {
+      idade: document.getElementById("idadeOut"),
+      imc: document.getElementById("imcOut"),
+      imcCorrigido: document.getElementById("imcCorrigidoOut"),
+      imcTexto: document.getElementById("imcTexto"),
+      corrigidoTexto: document.getElementById("corrigidoTexto"),
+      isbtTexto: document.getElementById("isbtTexto"),
+      status: document.getElementById("status"),
+      btn: document.getElementById("btnAvancar"),
+      vf: document.getElementById("vf"),
+      vi: document.getElementById("vi"),
+      vs: document.getElementById("vs")
+    };
+
+    function numero(valor) {
+      return Number(String(valor).replace(",", "."));
+    }
+
+    function arredondar(valor, casas = 1) {
+      return Number(valor).toFixed(casas);
+    }
+
+    function limitar(valor, min, max) {
+      return Math.max(min, Math.min(max, valor));
+    }
+
+    function calcularIdade(dataISO) {
+      if (!dataISO) return null;
+
+      const nascimento = new Date(dataISO + "T00:00:00");
+      const hoje = new Date();
+
+      let idade = hoje.getFullYear() - nascimento.getFullYear();
+      const mes = hoje.getMonth() - nascimento.getMonth();
+
+      if (mes < 0 || (mes === 0 && hoje.getDate() < nascimento.getDate())) {
+        idade -= 1;
+      }
+
+      if (!Number.isFinite(idade) || idade < 0 || idade > 130) {
+        return null;
+      }
+
+      return idade;
+    }
+
+    function calcularIMC(pesoKg, alturaCm) {
+      const alturaM = alturaCm / 100;
+      return pesoKg / (alturaM * alturaM);
+    }
+
+    function calcularAtividadePonderada(fisica, intelectual, social) {
+      return (fisica * 0.50) + (intelectual * 0.25) + (social * 0.25);
+    }
+
+    function calcularIMCCorrigido(imc, idade, fisica, intelectual, social) {
+      const atividade = calcularAtividadePonderada(fisica, intelectual, social);
+
+      const fatorIdade = 1 + limitar((idade - 45) * 0.002, -0.04, 0.14);
+      const fatorAtividade = 1 + ((3 - atividade) * 0.035);
+
+      return imc * fatorIdade * fatorAtividade;
+    }
+
+    function classificarFaixa(imc) {
+      if (imc < 18.5) {
+        return "leveza estrutural em atenção nutricional";
+      }
+
+      if (imc < 25) {
+        return "faixa de referência antropométrica";
+      }
+
+      if (imc < 30) {
+        return "zona de ajuste metabólico";
+      }
+
+      return "zona de recomposição sistêmica";
+    }
+
+    function textoAtividade(media) {
+      if (media <= 1.7) return "atividade em base inicial";
+      if (media <= 2.7) return "atividade em fase de estruturação";
+      if (media <= 3.7) return "atividade em ritmo funcional";
+      if (media <= 4.5) return "atividade em vigor ampliado";
+      return "atividade em alta potência cotidiana";
+    }
+
+    function coletarDados() {
+      const nome = CAMPOS.nome.value.trim();
+      const nascimento = CAMPOS.nascimento.value;
+      const genero = CAMPOS.genero.value;
+      const altura = numero(CAMPOS.altura.value);
+      const peso = numero(CAMPOS.peso.value);
+
+      const fisica = numero(CAMPOS.atividadeFisica.value);
+      const intelectual = numero(CAMPOS.atividadeIntelectual.value);
+      const social = numero(CAMPOS.atividadeSocial.value);
+
+      const idade = calcularIdade(nascimento);
+
+      const valido =
+        nome.length >= 2 &&
+        nascimento &&
+        genero &&
+        Number.isFinite(altura) &&
+        altura >= 80 &&
+        altura <= 240 &&
+        Number.isFinite(peso) &&
+        peso >= 20 &&
+        peso <= 260 &&
+        idade !== null;
+
+      if (!valido) {
+        return {
+          valido,
+          nome,
+          nascimento,
+          genero,
+          altura,
+          peso,
+          idade,
+          fisica,
+          intelectual,
+          social
+        };
+      }
+
+      const imc = calcularIMC(peso, altura);
+      const imcCorrigido = calcularIMCCorrigido(imc, idade, fisica, intelectual, social);
+      const atividadeMedia = calcularAtividadePonderada(fisica, intelectual, social);
+
+      const isbtgrafia = {
+        origem: "tela02",
+        assinatura: "ISBTgrafia base antropométrica",
+        eixos: {
+          idadeCronologica: idade,
+          imcPadrao: Number(arredondar(imc, 2)),
+          imcCorrigidoPrisma13: Number(arredondar(imcCorrigido, 2)),
+          atividadeFisica: fisica,
+          atividadeIntelectual: intelectual,
+          atividadeSocial: social,
+          atividadePonderada: Number(arredondar(atividadeMedia, 2)),
+          dimensao03Luz: 3
+        },
+        fraseLuz:
+          "A Luz ilumina o caminho e constitui a seiva que organiza o ciclo vital no Solo Pulsante da existência."
+      };
+
+      return {
+        valido,
+        nome,
+        nascimento,
+        genero,
+        altura,
+        peso,
+        idade,
+        fisica,
+        intelectual,
+        social,
+        atividadeMedia,
+        imc,
+        imcCorrigido,
+        faixaIMC: classificarFaixa(imc),
+        faixaCorrigida: classificarFaixa(imcCorrigido),
+        isbtgrafia
+      };
+    }
+
+    function atualizarValoresEscalas() {
+      SAIDA.vf.textContent = CAMPOS.atividadeFisica.value;
+      SAIDA.vi.textContent = CAMPOS.atividadeIntelectual.value;
+      SAIDA.vs.textContent = CAMPOS.atividadeSocial.value;
+    }
+
+    function atualizarTela() {
+      atualizarValoresEscalas();
+
+      const dados = coletarDados();
+
+      if (!dados.valido) {
+        SAIDA.idade.textContent = dados.idade === null ? "—" : String(dados.idade);
+        SAIDA.imc.textContent = "—";
+        SAIDA.imcCorrigido.textContent = "—";
+        SAIDA.imcTexto.textContent = "Peso e altura formam a primeira razão antropométrica.";
+        SAIDA.corrigidoTexto.textContent = "Idade e atividades modulam a leitura sistêmica inicial.";
+        SAIDA.isbtTexto.textContent = "A conformação inicial nasce da idade, do corpo e dos três níveis de atividade.";
+        SAIDA.status.textContent = "Campos em convergência.";
+        SAIDA.btn.disabled = true;
+        salvarRascunho(dados);
+        return;
+      }
+
+      SAIDA.idade.textContent = String(dados.idade);
+      SAIDA.imc.textContent = arredondar(dados.imc, 1);
+      SAIDA.imcCorrigido.textContent = arredondar(dados.imcCorrigido, 1);
+
+      SAIDA.imcTexto.textContent =
+        `IMC-padrão em ${dados.faixaIMC}.`;
+
+      SAIDA.corrigidoTexto.textContent =
+        `Correção PRISMA13 em ${dados.faixaCorrigida}, com ${textoAtividade(dados.atividadeMedia)}.`;
+
+      SAIDA.isbtTexto.textContent =
+        `ISBTgrafia em conformação: idade ${dados.idade}, IMC ${arredondar(dados.imc, 1)}, IMC-corrigido ${arredondar(dados.imcCorrigido, 1)}, atividades ${dados.fisica}-${dados.intelectual}-${dados.social}.`;
+
+      SAIDA.status.textContent =
+        "Dados antropométricos consolidados. A análise de vigor está aberta.";
+
+      SAIDA.btn.disabled = false;
+      salvarRascunho(dados);
+    }
+
+    function salvarRascunho(dados) {
+      const payload = {
+        sistema: "PRISMA13",
+        tela: "tela02",
+        pup13: "Pessoa Usuária do PRISMA13",
+        atualizadoEm: new Date().toISOString(),
+        ...dados
+      };
+
+      localStorage.setItem("prisma13.tela02", JSON.stringify(payload));
+
+      localStorage.setItem("prisma_nome", dados.nome || "");
+      localStorage.setItem("prisma_dn", dados.nascimento || "");
+      localStorage.setItem("prisma_genero", dados.genero || "");
+      localStorage.setItem("prisma_altura", dados.altura || "");
+      localStorage.setItem("prisma_peso", dados.peso || "");
+
+      if (dados.valido) {
+        localStorage.setItem("prisma13.pup13", JSON.stringify(payload));
+        localStorage.setItem("prisma13.isbtgrafia", JSON.stringify(dados.isbtgrafia));
+        localStorage.setItem("prisma_imc_padrao", arredondar(dados.imc, 2));
+        localStorage.setItem("prisma_imc_corrigido", arredondar(dados.imcCorrigido, 2));
+      }
+    }
+
+    function restaurarDados() {
+      const tela02 = localStorage.getItem("prisma13.tela02");
+      const sessao = localStorage.getItem("prisma13.sessao");
+
+      if (tela02) {
+        try {
+          const dados = JSON.parse(tela02);
+
+          CAMPOS.nome.value = dados.nome || "";
+          CAMPOS.nascimento.value = dados.nascimento || "";
+          CAMPOS.genero.value = dados.genero || "";
+          CAMPOS.altura.value = dados.altura || "";
+          CAMPOS.peso.value = dados.peso || "";
+          CAMPOS.atividadeFisica.value = dados.fisica || 3;
+          CAMPOS.atividadeIntelectual.value = dados.intelectual || 3;
+          CAMPOS.atividadeSocial.value = dados.social || 3;
+
+          return;
+        } catch (_) {}
+      }
+
+      CAMPOS.nome.value = localStorage.getItem("prisma_nome") || "";
+      CAMPOS.nascimento.value = localStorage.getItem("prisma_dn") || "";
+      CAMPOS.genero.value = localStorage.getItem("prisma_genero") || "";
+      CAMPOS.altura.value = localStorage.getItem("prisma_altura") || "";
+      CAMPOS.peso.value = localStorage.getItem("prisma_peso") || "";
+
+      if (!CAMPOS.nome.value && sessao) {
+        try {
+          const dadosSessao = JSON.parse(sessao);
+          CAMPOS.nome.value = dadosSessao.login || "";
+        } catch (_) {}
+      }
+    }
+
+    function avancar() {
+      const dados = coletarDados();
+
+      if (!dados.valido) {
+        atualizarTela();
+        return;
+      }
+
+      salvarRascunho(dados);
+      window.location.href = PROXIMA_TELA;
+    }
+
+    function vincularEventos() {
+      Object.values(CAMPOS).forEach((campo) => {
+        campo.addEventListener("input", atualizarTela);
+        campo.addEventListener("change", atualizarTela);
+      });
+
+      SAIDA.btn.addEventListener("click", avancar);
+
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Enter" && !SAIDA.btn.disabled) {
+          avancar();
+        }
+      });
+    }
+
+    function iniciarKosmos() {
+      const canvas = document.getElementById("kosmos");
+      const ctx = canvas.getContext("2d");
+
+      let largura = 0;
+      let altura = 0;
+      let estrelas = [];
+      let nebulas = [];
+
+      function redimensionar() {
+        largura = canvas.width = window.innerWidth;
+        altura = canvas.height = window.innerHeight;
+
+        const totalEstrelas = Math.min(
+          320,
+          Math.floor((largura * altura) / 6200)
+        );
+
+        const totalNebulas = Math.min(
+          34,
+          Math.floor((largura * altura) / 56000)
+        );
+
+        estrelas = Array.from({ length: totalEstrelas }, () => ({
+          x: Math.random() * largura,
+          y: Math.random() * altura,
+          r: Math.random() * 1.25 + 0.22,
+          fase: Math.random() * Math.PI * 2,
+          vel: Math.random() * 0.5 + 0.12
+        }));
+
+        nebulas = Array.from({ length: totalNebulas }, () => ({
+          x: Math.random() * largura,
+          y: Math.random() * altura,
+          r: Math.random() * 150 + 54,
+          a: Math.random() * 0.052 + 0.008
+        }));
+      }
+
+      function desenhar() {
+        ctx.clearRect(0, 0, largura, altura);
+        ctx.fillStyle = "#000";
+        ctx.fillRect(0, 0, largura, altura);
+
+        nebulas.forEach((n) => {
+          const gradiente = ctx.createRadialGradient(n.x, n.y, 0, n.x, n.y, n.r);
+          gradiente.addColorStop(0, `rgba(255, 215, 0, ${n.a})`);
+          gradiente.addColorStop(1, "rgba(255, 215, 0, 0)");
+
+          ctx.fillStyle = gradiente;
+          ctx.beginPath();
+          ctx.arc(n.x, n.y, n.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+
+        estrelas.forEach((e) => {
+          e.fase += e.vel * 0.012;
+          const brilho = 0.22 + Math.abs(Math.sin(e.fase)) * 0.78;
+
+          ctx.beginPath();
+          ctx.arc(e.x, e.y, e.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255, 255, 255, ${brilho})`;
+          ctx.fill();
+        });
+
+        const t = Date.now() * 0.00015;
+        const focoX = largura * 0.50 + Math.cos(t) * 96;
+        const focoY = altura * 0.50 + Math.sin(t * 0.88) * 64;
+
+        const aura = ctx.createRadialGradient(
+          focoX,
+          focoY,
+          0,
+          focoX,
+          focoY,
+          Math.min(largura, altura) * 0.36
+        );
+
+        aura.addColorStop(0, "rgba(255, 215, 0, 0.075)");
+        aura.addColorStop(1, "rgba(255, 215, 0, 0)");
+
+        ctx.fillStyle = aura;
+        ctx.fillRect(0, 0, largura, altura);
+
+        requestAnimationFrame(desenhar);
+      }
+
+      window.addEventListener("resize", redimensionar);
+      redimensionar();
+      desenhar();
+    }
+
+    function iniciarTela02() {
+      iniciarKosmos();
+      restaurarDados();
+      vincularEventos();
+      atualizarTela();
+
+      setTimeout(() => {
+        if (!CAMPOS.nome.value) {
+          CAMPOS.nome.focus();
+        }
+      }, 260);
+    }
+
+    document.addEventListener("DOMContentLoaded", iniciarTela02);
+  </script>
+</body>
+</html>

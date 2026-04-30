@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - LUZ</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #000; --gold: #ffd700; --text: #eee; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; text-align: center; }
+        
+        .container-estatico { max-width: 600px; width: 100%; }
+        
+        h1 { font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 10px; font-weight: 800; color: #fff; }
+        .subtitulo { font-size: 0.9rem; font-style: italic; color: var(--primary); text-decoration: underline; margin-bottom: 40px; display: block; }
+        
+        .conteudo-texto { text-align: justify; font-size: 1.15rem; line-height: 1.8; color: #ccc; margin-bottom: 40px; }
+        .conteudo-texto b { color: #fff; }
+
+        /* DESTAQUE PNEI */
+        .caixa-insight {
+            border-left: 3px solid var(--primary);
+            padding: 25px;
+            margin: 40px 0;
+            background: linear-gradient(90deg, rgba(108, 92, 231, 0.1), transparent);
+            text-align: left;
+            font-style: italic;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        /* BOTÃO SOBERANO EM TIMES NEW ROMAN */
+        .btn-evolucao { 
+            background: transparent; 
+            color: var(--gold); 
+            border: none; 
+            padding: 25px; 
+            cursor: pointer; 
+            width: 100%; 
+            font-family: 'Times New Roman', Times, serif; 
+            font-size: 1.7rem; 
+            font-weight: bold; 
+            transition: 0.4s; 
+            text-transform: none;
+        }
+        .btn-evolucao:hover { color: #fff; text-shadow: 0 0 15px var(--primary); }
+
+        /* RODAPÉ PADRÃO SISTÊMICO */
+        .footer-padrao { margin-top: 60px; padding-top: 30px; border-top: 1px solid #222; }
+        .lema-principal { font-size: 0.9rem; letter-spacing: 1.5px; line-height: 1.8; color: #888; }
+        .lema-principal i { font-style: italic; color: #bbb; }
+        .lema-principal b { font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
+        .saudacao { display: block; margin-top: 10px; font-weight: 700; color: #fff; font-size: 1rem; }
+    </style>
+</head>
+<body>
+    <div class="container-estatico">
+        <h1>LUZ</h1>
+        <span class="subtitulo">A Gerentona: Regência Sistêmica da Vitalidade</span>
+        
+        <div class="conteudo-texto">
+            <b>Habitar</b> a clareza. Nesta dimensão, a Luz representa a função gerencial da consciência sobre a regência biológica.
+        </div>
+
+        <div class="caixa-insight">
+            "A empatia e a clareza mental são as energias que sustentam a regência do <b>eixo PNEI</b> e moldam a herança epigenética."
+        </div>
+
+        <button class="btn-evolucao" onclick="window.location.href='/tela07/index.html'">
+            Avançar para Nutrição Sutil
+        </button>
+        
+        <footer class="footer-padrao">
+            <p class="lema-principal">
+                <i>Seeemmpre MelhorrrAndo...</i> <b>NUNKAKABA!</b>
+                <span class="saudacao">Há braços!</span>
+            </p>
+        </footer>
+    </div>
+</body>
+</html>

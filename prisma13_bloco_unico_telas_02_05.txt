@@ -1,0 +1,1417 @@
+/* ===== patches/tela01-login-auto-patch.js ===== */
+
+
+/* PRISMA13 · patch da TELA01
+   Entrada automática: ao validar identificação + senha, salta para /tela02/index.html.
+   IDs aceitos: #login ou #identificacao para login; #senha ou #password para senha.
+*/
+(() => {
+  const CONFIG = {
+    senhaPortal: '13',
+    proximaTela: '/tela02/index.html',
+    minimoLogin: 2
+  };
+
+  const login = document.querySelector('#login, #identificacao, input[type="text"]');
+  const senha = document.querySelector('#senha, #password, input[type="password"]');
+  const status = document.querySelector('#status-login, .portal-status, [data-status="login"]');
+  let travessia = false;
+
+  function ouro(texto) {
+    if (status) status.textContent = texto;
+  }
+
+  function validarPortal() {
+    if (!login || !senha || travessia) return;
+    const nome = login.value.trim();
+    const chave = senha.value.trim();
+    const selado = nome.length >= CONFIG.minimoLogin && chave === CONFIG.senhaPortal;
+
+    localStorage.setItem('prisma_login', nome);
+
+    if (selado) {
+      travessia = true;
+      ouro('Entrada validada. Travessia iniciada.');
+      document.body.classList.add('entrada-validada');
+      setTimeout(() => location.replace(CONFIG.proximaTela), 180);
+    } else {
+      ouro('Presença em reconhecimento.');
+    }
+  }
+
+  [login, senha].forEach(campo => {
+    if (campo) {
+      campo.addEventListener('input', validarPortal);
+      campo.addEventListener('change', validarPortal);
+    }
+  });
+
+  validarPortal();
+})();
+
+
+/* ===== tela02/index.html ===== */
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISMA13 - Tela02 Identificação</title>
+<style>
+:root{
+  --bg:#000000;
+  --gold:#ffd700;
+  --gold-soft:rgba(255,215,0,.72);
+  --gold-faint:rgba(255,215,0,.18);
+  --gold-ghost:rgba(255,215,0,.08);
+  --green:#79ff6a;
+  --earth:#6b3f22;
+  --anil:#264cff;
+  --shadow:0 0 18px rgba(255,215,0,.35), 0 0 48px rgba(255,215,0,.16);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:#000;
+  color:var(--gold);
+  font-family:Georgia,'Times New Roman',serif;
+  letter-spacing:.03em;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 25%,rgba(255,215,0,.11),transparent 11%),
+    radial-gradient(circle at 79% 19%,rgba(255,215,0,.08),transparent 10%),
+    radial-gradient(circle at 66% 72%,rgba(255,215,0,.06),transparent 13%),
+    #000;
+  z-index:-3;
+}
+#kosmos{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  background:transparent;
+}
+.stage{
+  min-height:100vh;
+  width:min(980px,92vw);
+  margin:0 auto;
+  padding:clamp(26px,4vw,54px) 0 118px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.brand-mini{
+  position:fixed;
+  left:14px;
+  top:12px;
+  font:700 .62rem/1.1 Arial,sans-serif;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  opacity:.78;
+  text-shadow:var(--shadow);
+}
+.kicker{
+  font:700 .68rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.26em;
+  color:var(--gold);
+  opacity:.84;
+  text-shadow:var(--shadow);
+  margin:0 0 10px;
+}
+h1,h2,h3,p,label,small,span,li,b,i,strong,button,input,select,option{color:var(--gold)}
+h1{
+  margin:0 0 6px;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  font-size:clamp(3rem,9vw,6.9rem);
+  line-height:.85;
+  letter-spacing:.015em;
+  text-shadow:0 0 20px rgba(255,215,0,.42),0 0 68px rgba(255,215,0,.16);
+}
+.sub{
+  margin:0 0 clamp(34px,7vh,66px);
+  font-size:clamp(.85rem,1.4vw,1.08rem);
+  font-style:italic;
+  font-weight:700;
+  opacity:.93;
+  text-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 18px;
+  font-size:clamp(1.45rem,4vw,2.85rem);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  text-shadow:var(--shadow);
+}
+.card{
+  width:min(760px,100%);
+  padding:clamp(22px,4vw,42px);
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(135deg,rgba(255,215,0,.035),rgba(0,0,0,.42));
+  box-shadow:inset 0 0 42px rgba(255,215,0,.055),0 0 44px rgba(255,215,0,.045);
+  backdrop-filter:blur(2px);
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  width:100%;
+}
+.full{grid-column:1/-1}
+.field{text-align:left}
+label{
+  display:block;
+  margin:0 0 7px;
+  font:800 .7rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  opacity:.88;
+}
+input,select{
+  width:100%;
+  border:0;
+  border-bottom:1px solid var(--gold-soft);
+  background:rgba(0,0,0,.3);
+  padding:11px 2px 10px;
+  outline:0;
+  font:700 1rem/1.2 Georgia,'Times New Roman',serif;
+  text-shadow:var(--shadow);
+}
+option{background:#000}
+input::placeholder{color:rgba(255,215,0,.48)}
+input:focus,select:focus{border-bottom-color:var(--gold);box-shadow:0 9px 18px -17px var(--gold)}
+.status{
+  min-height:23px;
+  margin:18px 0 0;
+  font-size:.88rem;
+  line-height:1.5;
+  text-shadow:var(--shadow);
+}
+.btn-gold{
+  appearance:none;
+  border:1px solid var(--gold-faint);
+  background:transparent;
+  margin:28px auto 0;
+  padding:13px 24px;
+  min-width:220px;
+  cursor:pointer;
+  font:900 1.05rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, text-shadow .18s ease;
+}
+.btn-gold:hover,.btn-gold:focus{transform:translateY(-1px);border-color:var(--gold);text-shadow:0 0 16px var(--gold)}
+.text-flow{
+  font-size:clamp(1.02rem,1.7vw,1.28rem);
+  line-height:1.75;
+  text-align:left;
+  text-shadow:var(--shadow);
+}
+.text-flow.center{text-align:center}
+.dim-grid{
+  display:grid;
+  grid-template-columns:repeat(13,1fr);
+  gap:7px;
+  width:min(920px,100%);
+  margin:28px auto 8px;
+}
+.dim-pill{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  min-height:150px;
+  padding:10px 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold-faint);
+  background:rgba(255,215,0,.035);
+  font:800 .62rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:var(--shadow);
+}
+.matrix{
+  margin:20px auto 0;
+  display:inline-flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 20px;
+  background:rgba(255,215,0,.04);
+  border:1px solid var(--gold-faint);
+  text-shadow:var(--shadow);
+}
+.matrix b{font:900 1.4rem/1 Arial,sans-serif;letter-spacing:.18em}
+.footer-prisma{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:minmax(76px,130px) minmax(280px,1fr) minmax(76px,130px);
+  gap:clamp(10px,3vw,34px);
+  align-items:end;
+  width:min(920px,94vw);
+  margin:0 auto;
+  color:var(--gold);
+  pointer-events:none;
+}
+.seal{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:900 .82rem/1 Arial,sans-serif;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-shadow:var(--shadow);
+  opacity:.96;
+}
+.footer-text{
+  font-size:clamp(.86rem,1.45vw,1.05rem);
+  line-height:1.42;
+  text-align:center;
+  color:var(--gold);
+  text-shadow:var(--shadow);
+}
+.footer-text i,.footer-text b,.footer-text span{display:block;color:var(--gold)}
+.footer-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:5px auto 7px;width:min(520px,80%)}
+.chromatic{
+  width:min(720px,96%);
+  height:56px;
+  margin:24px auto 18px;
+  border-radius:999px;
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(90deg,#6b3f22,#b86a2f,#d7a328,#ffd700,#9ccc3a,#22a05a,#237a8d,#264cff);
+  box-shadow:0 0 26px rgba(255,215,0,.12);
+}
+.range-wrap{width:min(720px,96%);margin:0 auto 8px}
+input[type="range"]{accent-color:var(--gold);border:0;padding:0;background:transparent;width:100%}
+@media (max-width:720px){
+  .grid-2{grid-template-columns:1fr}
+  .dim-grid{grid-template-columns:repeat(7,1fr)}
+  .dim-pill{writing-mode:horizontal-tb;transform:none;min-height:auto;padding:9px 6px}
+  .footer-prisma{grid-template-columns:64px 1fr 64px;gap:8px;bottom:8px}
+  .footer-text{font-size:.78rem}.seal{font-size:.68rem}
+}
+</style>
+</head>
+<body>
+<canvas id="kosmos"></canvas>
+
+<div class="brand-mini">PRISMA13 · TELA02 · IDENTIFICAÇÃO</div>
+<main class="stage">
+  <p class="kicker">entrada biográfica</p>
+  <h2>Identificação</h2>
+  <p class="sub">A assinatura pessoal sela o início da travessia.</p>
+  <section class="card" aria-label="identificação biológica">
+    <div class="grid-2">
+      <div class="field full"><label for="nome">Nome completo</label><input id="nome" autocomplete="name" placeholder="nome civil ou nome de uso"></div>
+      <div class="field"><label for="dn">Nascimento</label><input id="dn" type="date"></div>
+      <div class="field"><label for="genero">Gênero biológico</label><select id="genero"><option value="">seleção</option><option value="F">feminino</option><option value="M">masculino</option><option value="I">intersexo</option></select></div>
+      <div class="field"><label for="altura">Altura · cm</label><input id="altura" type="number" min="80" max="230" inputmode="decimal" placeholder="170"></div>
+      <div class="field"><label for="peso">Peso · kg</label><input id="peso" type="number" min="20" max="260" inputmode="decimal" placeholder="70"></div>
+    </div>
+    <div class="status" id="status">Campos em convergência.</div>
+  </section>
+</main>
+<script>document.body.insertAdjacentHTML('beforeend',prismaFooter())</script>
+
+<script>
+(function kosmos(){
+  const c=document.getElementById('kosmos');
+  if(!c) return;
+  const ctx=c.getContext('2d',{alpha:true});
+  let w,h,stars=[];
+  function reset(){
+    w=c.width=innerWidth*devicePixelRatio;
+    h=c.height=innerHeight*devicePixelRatio;
+    stars=Array.from({length:Math.floor(Math.min(420, innerWidth*.28))},()=>({
+      x:Math.random()*w,y:Math.random()*h,r:(Math.random()*1.15+.25)*devicePixelRatio,
+      a:Math.random()*.65+.18,s:Math.random()*.28+.04
+    }));
+  }
+  addEventListener('resize',reset,{passive:true}); reset();
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    stars.forEach(p=>{
+      const glow=p.a+Math.sin(t*.001*p.s+p.x)*.18;
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,245,185,${Math.max(.08,glow)})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+function prismaFooter(){return `
+  <footer class="footer-prisma" aria-label="rodapé padrão PRISMA13">
+    <div class="seal">SOL</div>
+    <div class="footer-text">
+      <i>O solo fértil garante a sobrevivência.</i>
+      <span>A cultura autônoma garante a melhoria.</span>
+      <b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b>
+      <span>Há braços! | Dr. Olair Rafael</span>
+      <div class="footer-line"></div>
+    </div>
+    <div class="seal">IMC22</div>
+  </footer>`}
+
+
+const campos=['nome','dn','genero','altura','peso'];
+const rota='/tela03/index.html';
+let indo=false;
+function v(id){return document.getElementById(id).value.trim()}
+function idadeValida(){const d=new Date(v('dn'));return d instanceof Date && !Number.isNaN(d) && d.getFullYear()>1900 && d<new Date()}
+function entradaSelada(){return v('nome').length>=3 && idadeValida() && v('genero') && Number(v('altura'))>=80 && Number(v('peso'))>=20}
+function salvar(){campos.forEach(id=>localStorage.setItem('prisma_'+id,v(id)))}
+function avaliar(){
+  salvar();
+  const status=document.getElementById('status');
+  if(entradaSelada() && !indo){
+    indo=true; status.textContent='Entrada validada. Travessia iniciada.';
+    setTimeout(()=>location.replace(rota),520);
+  } else if(!indo){ status.textContent='Campos em convergência.'; }
+}
+window.addEventListener('DOMContentLoaded',()=>{
+  campos.forEach(id=>{const el=document.getElementById(id); const salvo=localStorage.getItem('prisma_'+id); if(salvo) el.value=salvo; el.addEventListener('input',avaliar); el.addEventListener('change',avaliar);});
+  avaliar();
+});
+</script>
+</body>
+</html>
+
+
+/* ===== tela03/index.html ===== */
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISMA13 - Tela03 Análise de Vigor</title>
+<style>
+:root{
+  --bg:#000000;
+  --gold:#ffd700;
+  --gold-soft:rgba(255,215,0,.72);
+  --gold-faint:rgba(255,215,0,.18);
+  --gold-ghost:rgba(255,215,0,.08);
+  --green:#79ff6a;
+  --earth:#6b3f22;
+  --anil:#264cff;
+  --shadow:0 0 18px rgba(255,215,0,.35), 0 0 48px rgba(255,215,0,.16);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:#000;
+  color:var(--gold);
+  font-family:Georgia,'Times New Roman',serif;
+  letter-spacing:.03em;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 25%,rgba(255,215,0,.11),transparent 11%),
+    radial-gradient(circle at 79% 19%,rgba(255,215,0,.08),transparent 10%),
+    radial-gradient(circle at 66% 72%,rgba(255,215,0,.06),transparent 13%),
+    #000;
+  z-index:-3;
+}
+#kosmos{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  background:transparent;
+}
+.stage{
+  min-height:100vh;
+  width:min(980px,92vw);
+  margin:0 auto;
+  padding:clamp(26px,4vw,54px) 0 118px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.brand-mini{
+  position:fixed;
+  left:14px;
+  top:12px;
+  font:700 .62rem/1.1 Arial,sans-serif;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  opacity:.78;
+  text-shadow:var(--shadow);
+}
+.kicker{
+  font:700 .68rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.26em;
+  color:var(--gold);
+  opacity:.84;
+  text-shadow:var(--shadow);
+  margin:0 0 10px;
+}
+h1,h2,h3,p,label,small,span,li,b,i,strong,button,input,select,option{color:var(--gold)}
+h1{
+  margin:0 0 6px;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  font-size:clamp(3rem,9vw,6.9rem);
+  line-height:.85;
+  letter-spacing:.015em;
+  text-shadow:0 0 20px rgba(255,215,0,.42),0 0 68px rgba(255,215,0,.16);
+}
+.sub{
+  margin:0 0 clamp(34px,7vh,66px);
+  font-size:clamp(.85rem,1.4vw,1.08rem);
+  font-style:italic;
+  font-weight:700;
+  opacity:.93;
+  text-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 18px;
+  font-size:clamp(1.45rem,4vw,2.85rem);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  text-shadow:var(--shadow);
+}
+.card{
+  width:min(760px,100%);
+  padding:clamp(22px,4vw,42px);
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(135deg,rgba(255,215,0,.035),rgba(0,0,0,.42));
+  box-shadow:inset 0 0 42px rgba(255,215,0,.055),0 0 44px rgba(255,215,0,.045);
+  backdrop-filter:blur(2px);
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  width:100%;
+}
+.full{grid-column:1/-1}
+.field{text-align:left}
+label{
+  display:block;
+  margin:0 0 7px;
+  font:800 .7rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  opacity:.88;
+}
+input,select{
+  width:100%;
+  border:0;
+  border-bottom:1px solid var(--gold-soft);
+  background:rgba(0,0,0,.3);
+  padding:11px 2px 10px;
+  outline:0;
+  font:700 1rem/1.2 Georgia,'Times New Roman',serif;
+  text-shadow:var(--shadow);
+}
+option{background:#000}
+input::placeholder{color:rgba(255,215,0,.48)}
+input:focus,select:focus{border-bottom-color:var(--gold);box-shadow:0 9px 18px -17px var(--gold)}
+.status{
+  min-height:23px;
+  margin:18px 0 0;
+  font-size:.88rem;
+  line-height:1.5;
+  text-shadow:var(--shadow);
+}
+.btn-gold{
+  appearance:none;
+  border:1px solid var(--gold-faint);
+  background:transparent;
+  margin:28px auto 0;
+  padding:13px 24px;
+  min-width:220px;
+  cursor:pointer;
+  font:900 1.05rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, text-shadow .18s ease;
+}
+.btn-gold:hover,.btn-gold:focus{transform:translateY(-1px);border-color:var(--gold);text-shadow:0 0 16px var(--gold)}
+.text-flow{
+  font-size:clamp(1.02rem,1.7vw,1.28rem);
+  line-height:1.75;
+  text-align:left;
+  text-shadow:var(--shadow);
+}
+.text-flow.center{text-align:center}
+.dim-grid{
+  display:grid;
+  grid-template-columns:repeat(13,1fr);
+  gap:7px;
+  width:min(920px,100%);
+  margin:28px auto 8px;
+}
+.dim-pill{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  min-height:150px;
+  padding:10px 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold-faint);
+  background:rgba(255,215,0,.035);
+  font:800 .62rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:var(--shadow);
+}
+.matrix{
+  margin:20px auto 0;
+  display:inline-flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 20px;
+  background:rgba(255,215,0,.04);
+  border:1px solid var(--gold-faint);
+  text-shadow:var(--shadow);
+}
+.matrix b{font:900 1.4rem/1 Arial,sans-serif;letter-spacing:.18em}
+.footer-prisma{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:minmax(76px,130px) minmax(280px,1fr) minmax(76px,130px);
+  gap:clamp(10px,3vw,34px);
+  align-items:end;
+  width:min(920px,94vw);
+  margin:0 auto;
+  color:var(--gold);
+  pointer-events:none;
+}
+.seal{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:900 .82rem/1 Arial,sans-serif;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-shadow:var(--shadow);
+  opacity:.96;
+}
+.footer-text{
+  font-size:clamp(.86rem,1.45vw,1.05rem);
+  line-height:1.42;
+  text-align:center;
+  color:var(--gold);
+  text-shadow:var(--shadow);
+}
+.footer-text i,.footer-text b,.footer-text span{display:block;color:var(--gold)}
+.footer-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:5px auto 7px;width:min(520px,80%)}
+.chromatic{
+  width:min(720px,96%);
+  height:56px;
+  margin:24px auto 18px;
+  border-radius:999px;
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(90deg,#6b3f22,#b86a2f,#d7a328,#ffd700,#9ccc3a,#22a05a,#237a8d,#264cff);
+  box-shadow:0 0 26px rgba(255,215,0,.12);
+}
+.range-wrap{width:min(720px,96%);margin:0 auto 8px}
+input[type="range"]{accent-color:var(--gold);border:0;padding:0;background:transparent;width:100%}
+@media (max-width:720px){
+  .grid-2{grid-template-columns:1fr}
+  .dim-grid{grid-template-columns:repeat(7,1fr)}
+  .dim-pill{writing-mode:horizontal-tb;transform:none;min-height:auto;padding:9px 6px}
+  .footer-prisma{grid-template-columns:64px 1fr 64px;gap:8px;bottom:8px}
+  .footer-text{font-size:.78rem}.seal{font-size:.68rem}
+}
+</style>
+</head>
+<body>
+<canvas id="kosmos"></canvas>
+
+<div class="brand-mini">PRISMA13 · TELA03 · VIGOR</div>
+<main class="stage">
+  <p class="kicker">calibragem biológica</p>
+  <h2>Análise de Vigor</h2>
+  <p class="sub">O corpo revela a geometria inicial da jornada.</p>
+  <section class="card text-flow" id="output">
+    <p>Dados biográficos em leitura.</p>
+  </section>
+  <button class="btn-gold" type="button" onclick="location.href='/tela04/index.html'">Avançar</button>
+</main>
+<script>document.body.insertAdjacentHTML('beforeend',prismaFooter())</script>
+
+<script>
+(function kosmos(){
+  const c=document.getElementById('kosmos');
+  if(!c) return;
+  const ctx=c.getContext('2d',{alpha:true});
+  let w,h,stars=[];
+  function reset(){
+    w=c.width=innerWidth*devicePixelRatio;
+    h=c.height=innerHeight*devicePixelRatio;
+    stars=Array.from({length:Math.floor(Math.min(420, innerWidth*.28))},()=>({
+      x:Math.random()*w,y:Math.random()*h,r:(Math.random()*1.15+.25)*devicePixelRatio,
+      a:Math.random()*.65+.18,s:Math.random()*.28+.04
+    }));
+  }
+  addEventListener('resize',reset,{passive:true}); reset();
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    stars.forEach(p=>{
+      const glow=p.a+Math.sin(t*.001*p.s+p.x)*.18;
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,245,185,${Math.max(.08,glow)})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+function prismaFooter(){return `
+  <footer class="footer-prisma" aria-label="rodapé padrão PRISMA13">
+    <div class="seal">SOL</div>
+    <div class="footer-text">
+      <i>O solo fértil garante a sobrevivência.</i>
+      <span>A cultura autônoma garante a melhoria.</span>
+      <b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b>
+      <span>Há braços! | Dr. Olair Rafael</span>
+      <div class="footer-line"></div>
+    </div>
+    <div class="seal">IMC22</div>
+  </footer>`}
+
+
+function idade(dn){const n=new Date(dn), h=new Date(); let a=h.getFullYear()-n.getFullYear(); const m=h.getMonth()-n.getMonth(); if(m<0 || (m===0 && h.getDate()<n.getDate())) a--; return a;}
+function faixaImc(x){
+  if(x<18.5) return 'estrutura leve';
+  if(x<22.9) return 'zona IMC22 de esbelteza funcional';
+  if(x<25) return 'zona de transição metabólica';
+  if(x<30) return 'zona de recomposição corporal';
+  return 'zona de cuidado intensivo do vigor';
+}
+function render(){
+ const nome=localStorage.getItem('prisma_nome')||'PUP13';
+ const dn=localStorage.getItem('prisma_dn')||'';
+ const altura=Number(localStorage.getItem('prisma_altura')||0)/100;
+ const peso=Number(localStorage.getItem('prisma_peso')||0);
+ const imc=altura>0 ? peso/(altura*altura) : 0;
+ const anos=dn?idade(dn):0;
+ document.getElementById('output').innerHTML=`
+  <p><b>${nome}</b></p>
+  <p>Idade cronológica registrada: <b>${anos || 'em leitura'}</b>.</p>
+  <p>IMC inicial: <b>${imc?imc.toFixed(1):'em leitura'}</b> · ${imc?faixaImc(imc):'registro em convergência'}.</p>
+  <p>A idade do calendário e o vigor juvenil revelam o grau de maturidade na escola das escolhas.</p>
+  <p><b>Semear é livre; colher é consequência.</b></p>`;
+}
+render();
+</script>
+</body>
+</html>
+
+
+/* ===== tela04/index.html ===== */
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISMA13 - Tela04 Matriz Canônica</title>
+<style>
+:root{
+  --bg:#000000;
+  --gold:#ffd700;
+  --gold-soft:rgba(255,215,0,.72);
+  --gold-faint:rgba(255,215,0,.18);
+  --gold-ghost:rgba(255,215,0,.08);
+  --green:#79ff6a;
+  --earth:#6b3f22;
+  --anil:#264cff;
+  --shadow:0 0 18px rgba(255,215,0,.35), 0 0 48px rgba(255,215,0,.16);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:#000;
+  color:var(--gold);
+  font-family:Georgia,'Times New Roman',serif;
+  letter-spacing:.03em;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 25%,rgba(255,215,0,.11),transparent 11%),
+    radial-gradient(circle at 79% 19%,rgba(255,215,0,.08),transparent 10%),
+    radial-gradient(circle at 66% 72%,rgba(255,215,0,.06),transparent 13%),
+    #000;
+  z-index:-3;
+}
+#kosmos{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  background:transparent;
+}
+.stage{
+  min-height:100vh;
+  width:min(980px,92vw);
+  margin:0 auto;
+  padding:clamp(26px,4vw,54px) 0 118px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.brand-mini{
+  position:fixed;
+  left:14px;
+  top:12px;
+  font:700 .62rem/1.1 Arial,sans-serif;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  opacity:.78;
+  text-shadow:var(--shadow);
+}
+.kicker{
+  font:700 .68rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.26em;
+  color:var(--gold);
+  opacity:.84;
+  text-shadow:var(--shadow);
+  margin:0 0 10px;
+}
+h1,h2,h3,p,label,small,span,li,b,i,strong,button,input,select,option{color:var(--gold)}
+h1{
+  margin:0 0 6px;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  font-size:clamp(3rem,9vw,6.9rem);
+  line-height:.85;
+  letter-spacing:.015em;
+  text-shadow:0 0 20px rgba(255,215,0,.42),0 0 68px rgba(255,215,0,.16);
+}
+.sub{
+  margin:0 0 clamp(34px,7vh,66px);
+  font-size:clamp(.85rem,1.4vw,1.08rem);
+  font-style:italic;
+  font-weight:700;
+  opacity:.93;
+  text-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 18px;
+  font-size:clamp(1.45rem,4vw,2.85rem);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  text-shadow:var(--shadow);
+}
+.card{
+  width:min(760px,100%);
+  padding:clamp(22px,4vw,42px);
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(135deg,rgba(255,215,0,.035),rgba(0,0,0,.42));
+  box-shadow:inset 0 0 42px rgba(255,215,0,.055),0 0 44px rgba(255,215,0,.045);
+  backdrop-filter:blur(2px);
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  width:100%;
+}
+.full{grid-column:1/-1}
+.field{text-align:left}
+label{
+  display:block;
+  margin:0 0 7px;
+  font:800 .7rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  opacity:.88;
+}
+input,select{
+  width:100%;
+  border:0;
+  border-bottom:1px solid var(--gold-soft);
+  background:rgba(0,0,0,.3);
+  padding:11px 2px 10px;
+  outline:0;
+  font:700 1rem/1.2 Georgia,'Times New Roman',serif;
+  text-shadow:var(--shadow);
+}
+option{background:#000}
+input::placeholder{color:rgba(255,215,0,.48)}
+input:focus,select:focus{border-bottom-color:var(--gold);box-shadow:0 9px 18px -17px var(--gold)}
+.status{
+  min-height:23px;
+  margin:18px 0 0;
+  font-size:.88rem;
+  line-height:1.5;
+  text-shadow:var(--shadow);
+}
+.btn-gold{
+  appearance:none;
+  border:1px solid var(--gold-faint);
+  background:transparent;
+  margin:28px auto 0;
+  padding:13px 24px;
+  min-width:220px;
+  cursor:pointer;
+  font:900 1.05rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, text-shadow .18s ease;
+}
+.btn-gold:hover,.btn-gold:focus{transform:translateY(-1px);border-color:var(--gold);text-shadow:0 0 16px var(--gold)}
+.text-flow{
+  font-size:clamp(1.02rem,1.7vw,1.28rem);
+  line-height:1.75;
+  text-align:left;
+  text-shadow:var(--shadow);
+}
+.text-flow.center{text-align:center}
+.dim-grid{
+  display:grid;
+  grid-template-columns:repeat(13,1fr);
+  gap:7px;
+  width:min(920px,100%);
+  margin:28px auto 8px;
+}
+.dim-pill{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  min-height:150px;
+  padding:10px 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold-faint);
+  background:rgba(255,215,0,.035);
+  font:800 .62rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:var(--shadow);
+}
+.matrix{
+  margin:20px auto 0;
+  display:inline-flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 20px;
+  background:rgba(255,215,0,.04);
+  border:1px solid var(--gold-faint);
+  text-shadow:var(--shadow);
+}
+.matrix b{font:900 1.4rem/1 Arial,sans-serif;letter-spacing:.18em}
+.footer-prisma{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:minmax(76px,130px) minmax(280px,1fr) minmax(76px,130px);
+  gap:clamp(10px,3vw,34px);
+  align-items:end;
+  width:min(920px,94vw);
+  margin:0 auto;
+  color:var(--gold);
+  pointer-events:none;
+}
+.seal{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:900 .82rem/1 Arial,sans-serif;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-shadow:var(--shadow);
+  opacity:.96;
+}
+.footer-text{
+  font-size:clamp(.86rem,1.45vw,1.05rem);
+  line-height:1.42;
+  text-align:center;
+  color:var(--gold);
+  text-shadow:var(--shadow);
+}
+.footer-text i,.footer-text b,.footer-text span{display:block;color:var(--gold)}
+.footer-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:5px auto 7px;width:min(520px,80%)}
+.chromatic{
+  width:min(720px,96%);
+  height:56px;
+  margin:24px auto 18px;
+  border-radius:999px;
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(90deg,#6b3f22,#b86a2f,#d7a328,#ffd700,#9ccc3a,#22a05a,#237a8d,#264cff);
+  box-shadow:0 0 26px rgba(255,215,0,.12);
+}
+.range-wrap{width:min(720px,96%);margin:0 auto 8px}
+input[type="range"]{accent-color:var(--gold);border:0;padding:0;background:transparent;width:100%}
+@media (max-width:720px){
+  .grid-2{grid-template-columns:1fr}
+  .dim-grid{grid-template-columns:repeat(7,1fr)}
+  .dim-pill{writing-mode:horizontal-tb;transform:none;min-height:auto;padding:9px 6px}
+  .footer-prisma{grid-template-columns:64px 1fr 64px;gap:8px;bottom:8px}
+  .footer-text{font-size:.78rem}.seal{font-size:.68rem}
+}
+</style>
+</head>
+<body>
+<canvas id="kosmos"></canvas>
+
+<div class="brand-mini">PRISMA13 · TELA04 · MATRIZ</div>
+<main class="stage">
+  <p class="kicker">matriz canônica booleana/cantoreana</p>
+  <h2>Dimensões de Evolução</h2>
+  <p class="sub">Conjunto, intersecção, circuito e destino em arquitetura viva.</p>
+  <section class="card">
+    <div class="text-flow center">
+      <p>O PRISMA13 organiza variáveis biológicas, afetivas, simbólicas e metafísicas em células de leitura evolutiva.</p>
+      <div class="matrix"><b>3 × 4 × 4 × 4 × 13 × 14</b><span>34.944 células canônicas</span></div>
+    </div>
+    <div class="dim-grid" id="dims" aria-label="treze dimensões"></div>
+  </section>
+  <button class="btn-gold" type="button" onclick="location.href='/tela05/index.html'">Avançar</button>
+</main>
+<script>document.body.insertAdjacentHTML('beforeend',prismaFooter())</script>
+
+<script>
+(function kosmos(){
+  const c=document.getElementById('kosmos');
+  if(!c) return;
+  const ctx=c.getContext('2d',{alpha:true});
+  let w,h,stars=[];
+  function reset(){
+    w=c.width=innerWidth*devicePixelRatio;
+    h=c.height=innerHeight*devicePixelRatio;
+    stars=Array.from({length:Math.floor(Math.min(420, innerWidth*.28))},()=>({
+      x:Math.random()*w,y:Math.random()*h,r:(Math.random()*1.15+.25)*devicePixelRatio,
+      a:Math.random()*.65+.18,s:Math.random()*.28+.04
+    }));
+  }
+  addEventListener('resize',reset,{passive:true}); reset();
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    stars.forEach(p=>{
+      const glow=p.a+Math.sin(t*.001*p.s+p.x)*.18;
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,245,185,${Math.max(.08,glow)})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+function prismaFooter(){return `
+  <footer class="footer-prisma" aria-label="rodapé padrão PRISMA13">
+    <div class="seal">SOL</div>
+    <div class="footer-text">
+      <i>O solo fértil garante a sobrevivência.</i>
+      <span>A cultura autônoma garante a melhoria.</span>
+      <b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b>
+      <span>Há braços! | Dr. Olair Rafael</span>
+      <div class="footer-line"></div>
+    </div>
+    <div class="seal">IMC22</div>
+  </footer>`}
+
+
+const dimensoes=['Saúde Física','Saúde Mental','Relacionamentos','Carreira','Finanças','Espiritualidade','Lazer','Aprendizado','Contribuição','Meio Ambiente','Família','Comunidade','Criatividade'];
+document.getElementById('dims').innerHTML=dimensoes.map(d=>`<div class="dim-pill">${d}</div>`).join('');
+</script>
+</body>
+</html>
+
+
+/* ===== tela05/index.html ===== */
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PRISMA13 - Tela05 Escola das Escolhas</title>
+<style>
+:root{
+  --bg:#000000;
+  --gold:#ffd700;
+  --gold-soft:rgba(255,215,0,.72);
+  --gold-faint:rgba(255,215,0,.18);
+  --gold-ghost:rgba(255,215,0,.08);
+  --green:#79ff6a;
+  --earth:#6b3f22;
+  --anil:#264cff;
+  --shadow:0 0 18px rgba(255,215,0,.35), 0 0 48px rgba(255,215,0,.16);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  min-height:100vh;
+  overflow-x:hidden;
+  background:#000;
+  color:var(--gold);
+  font-family:Georgia,'Times New Roman',serif;
+  letter-spacing:.03em;
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 25%,rgba(255,215,0,.11),transparent 11%),
+    radial-gradient(circle at 79% 19%,rgba(255,215,0,.08),transparent 10%),
+    radial-gradient(circle at 66% 72%,rgba(255,215,0,.06),transparent 13%),
+    #000;
+  z-index:-3;
+}
+#kosmos{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:-2;
+  background:transparent;
+}
+.stage{
+  min-height:100vh;
+  width:min(980px,92vw);
+  margin:0 auto;
+  padding:clamp(26px,4vw,54px) 0 118px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+}
+.brand-mini{
+  position:fixed;
+  left:14px;
+  top:12px;
+  font:700 .62rem/1.1 Arial,sans-serif;
+  color:var(--gold);
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  opacity:.78;
+  text-shadow:var(--shadow);
+}
+.kicker{
+  font:700 .68rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.26em;
+  color:var(--gold);
+  opacity:.84;
+  text-shadow:var(--shadow);
+  margin:0 0 10px;
+}
+h1,h2,h3,p,label,small,span,li,b,i,strong,button,input,select,option{color:var(--gold)}
+h1{
+  margin:0 0 6px;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  font-size:clamp(3rem,9vw,6.9rem);
+  line-height:.85;
+  letter-spacing:.015em;
+  text-shadow:0 0 20px rgba(255,215,0,.42),0 0 68px rgba(255,215,0,.16);
+}
+.sub{
+  margin:0 0 clamp(34px,7vh,66px);
+  font-size:clamp(.85rem,1.4vw,1.08rem);
+  font-style:italic;
+  font-weight:700;
+  opacity:.93;
+  text-shadow:var(--shadow);
+}
+h2{
+  margin:0 0 18px;
+  font-size:clamp(1.45rem,4vw,2.85rem);
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  font-family:Arial Black,Impact,Arial,sans-serif;
+  text-shadow:var(--shadow);
+}
+.card{
+  width:min(760px,100%);
+  padding:clamp(22px,4vw,42px);
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(135deg,rgba(255,215,0,.035),rgba(0,0,0,.42));
+  box-shadow:inset 0 0 42px rgba(255,215,0,.055),0 0 44px rgba(255,215,0,.045);
+  backdrop-filter:blur(2px);
+}
+.grid-2{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:18px;
+  width:100%;
+}
+.full{grid-column:1/-1}
+.field{text-align:left}
+label{
+  display:block;
+  margin:0 0 7px;
+  font:800 .7rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.18em;
+  opacity:.88;
+}
+input,select{
+  width:100%;
+  border:0;
+  border-bottom:1px solid var(--gold-soft);
+  background:rgba(0,0,0,.3);
+  padding:11px 2px 10px;
+  outline:0;
+  font:700 1rem/1.2 Georgia,'Times New Roman',serif;
+  text-shadow:var(--shadow);
+}
+option{background:#000}
+input::placeholder{color:rgba(255,215,0,.48)}
+input:focus,select:focus{border-bottom-color:var(--gold);box-shadow:0 9px 18px -17px var(--gold)}
+.status{
+  min-height:23px;
+  margin:18px 0 0;
+  font-size:.88rem;
+  line-height:1.5;
+  text-shadow:var(--shadow);
+}
+.btn-gold{
+  appearance:none;
+  border:1px solid var(--gold-faint);
+  background:transparent;
+  margin:28px auto 0;
+  padding:13px 24px;
+  min-width:220px;
+  cursor:pointer;
+  font:900 1.05rem/1 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.16em;
+  box-shadow:var(--shadow);
+  transition:transform .18s ease, border-color .18s ease, text-shadow .18s ease;
+}
+.btn-gold:hover,.btn-gold:focus{transform:translateY(-1px);border-color:var(--gold);text-shadow:0 0 16px var(--gold)}
+.text-flow{
+  font-size:clamp(1.02rem,1.7vw,1.28rem);
+  line-height:1.75;
+  text-align:left;
+  text-shadow:var(--shadow);
+}
+.text-flow.center{text-align:center}
+.dim-grid{
+  display:grid;
+  grid-template-columns:repeat(13,1fr);
+  gap:7px;
+  width:min(920px,100%);
+  margin:28px auto 8px;
+}
+.dim-pill{
+  writing-mode:vertical-rl;
+  transform:rotate(180deg);
+  min-height:150px;
+  padding:10px 5px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid var(--gold-faint);
+  background:rgba(255,215,0,.035);
+  font:800 .62rem/1.2 Arial,sans-serif;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  text-shadow:var(--shadow);
+}
+.matrix{
+  margin:20px auto 0;
+  display:inline-flex;
+  flex-direction:column;
+  gap:4px;
+  padding:14px 20px;
+  background:rgba(255,215,0,.04);
+  border:1px solid var(--gold-faint);
+  text-shadow:var(--shadow);
+}
+.matrix b{font:900 1.4rem/1 Arial,sans-serif;letter-spacing:.18em}
+.footer-prisma{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:12px;
+  display:grid;
+  grid-template-columns:minmax(76px,130px) minmax(280px,1fr) minmax(76px,130px);
+  gap:clamp(10px,3vw,34px);
+  align-items:end;
+  width:min(920px,94vw);
+  margin:0 auto;
+  color:var(--gold);
+  pointer-events:none;
+}
+.seal{
+  min-height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font:900 .82rem/1 Arial,sans-serif;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  text-shadow:var(--shadow);
+  opacity:.96;
+}
+.footer-text{
+  font-size:clamp(.86rem,1.45vw,1.05rem);
+  line-height:1.42;
+  text-align:center;
+  color:var(--gold);
+  text-shadow:var(--shadow);
+}
+.footer-text i,.footer-text b,.footer-text span{display:block;color:var(--gold)}
+.footer-line{height:1px;background:linear-gradient(90deg,transparent,var(--gold-soft),transparent);margin:5px auto 7px;width:min(520px,80%)}
+.chromatic{
+  width:min(720px,96%);
+  height:56px;
+  margin:24px auto 18px;
+  border-radius:999px;
+  border:1px solid var(--gold-faint);
+  background:linear-gradient(90deg,#6b3f22,#b86a2f,#d7a328,#ffd700,#9ccc3a,#22a05a,#237a8d,#264cff);
+  box-shadow:0 0 26px rgba(255,215,0,.12);
+}
+.range-wrap{width:min(720px,96%);margin:0 auto 8px}
+input[type="range"]{accent-color:var(--gold);border:0;padding:0;background:transparent;width:100%}
+@media (max-width:720px){
+  .grid-2{grid-template-columns:1fr}
+  .dim-grid{grid-template-columns:repeat(7,1fr)}
+  .dim-pill{writing-mode:horizontal-tb;transform:none;min-height:auto;padding:9px 6px}
+  .footer-prisma{grid-template-columns:64px 1fr 64px;gap:8px;bottom:8px}
+  .footer-text{font-size:.78rem}.seal{font-size:.68rem}
+}
+</style>
+</head>
+<body>
+<canvas id="kosmos"></canvas>
+
+<div class="brand-mini">PRISMA13 · TELA05 · ESCOLHAS</div>
+<main class="stage">
+  <p class="kicker">escola das escolhas</p>
+  <h2>Impressão · Circuito · Hábito</h2>
+  <p class="sub">Em 3″, o mundo te lê. Em 1/3″, você escolhe quem/como responder. Aproveita, pois.</p>
+  <section class="card text-flow">
+    <p>O tamanho da impressão física, afetiva, simbólica e metafísica reforça a via por onde a vida passa com maior frequência.</p>
+    <p>Aquilo que impressiona forte, repete. Aquilo que repete, treina. Aquilo que treina, vira trilha. Aquilo que vira trilha, começa a parecer eu.</p>
+    <p><b>Fórmula PRISMA13</b></p>
+    <p><b>Impressão forte + repetição = circuito robusto.</b></p>
+    <div class="chromatic" aria-label="retângulo cromático da métrica consciente"></div>
+    <div class="range-wrap"><input id="pup13" type="range" min="1" max="13" value="7"></div>
+    <p class="center" id="leitura">PUP13 em matiz central de observação.</p>
+  </section>
+  <button class="btn-gold" type="button" onclick="selar()">Avançar</button>
+</main>
+<script>document.body.insertAdjacentHTML('beforeend',prismaFooter())</script>
+
+<script>
+(function kosmos(){
+  const c=document.getElementById('kosmos');
+  if(!c) return;
+  const ctx=c.getContext('2d',{alpha:true});
+  let w,h,stars=[];
+  function reset(){
+    w=c.width=innerWidth*devicePixelRatio;
+    h=c.height=innerHeight*devicePixelRatio;
+    stars=Array.from({length:Math.floor(Math.min(420, innerWidth*.28))},()=>({
+      x:Math.random()*w,y:Math.random()*h,r:(Math.random()*1.15+.25)*devicePixelRatio,
+      a:Math.random()*.65+.18,s:Math.random()*.28+.04
+    }));
+  }
+  addEventListener('resize',reset,{passive:true}); reset();
+  function draw(t){
+    ctx.clearRect(0,0,w,h);
+    stars.forEach(p=>{
+      const glow=p.a+Math.sin(t*.001*p.s+p.x)*.18;
+      ctx.beginPath(); ctx.fillStyle=`rgba(255,245,185,${Math.max(.08,glow)})`;
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2); ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+})();
+function prismaFooter(){return `
+  <footer class="footer-prisma" aria-label="rodapé padrão PRISMA13">
+    <div class="seal">SOL</div>
+    <div class="footer-text">
+      <i>O solo fértil garante a sobrevivência.</i>
+      <span>A cultura autônoma garante a melhoria.</span>
+      <b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b>
+      <span>Há braços! | Dr. Olair Rafael</span>
+      <div class="footer-line"></div>
+    </div>
+    <div class="seal">IMC22</div>
+  </footer>`}
+
+
+const leitura=['terra profunda','barro aquecido','âmbar vital','ouro solar','verde-limão','verde vivo','eixo central','azul-verde','azul sutil','azul anil','violeta sutil','violeta profundo','coroa luminosa'];
+const pup=document.getElementById('pup13'), out=document.getElementById('leitura');
+function atualizar(){const n=Number(pup.value);localStorage.setItem('prisma_pup13_matiz',String(n));out.textContent=`PUP13 em matiz ${n}: ${leitura[n-1]}.`}
+pup.addEventListener('input',atualizar); atualizar();
+function selar(){localStorage.setItem('prisma_acordo','firmado');location.href='/tela06/index.html'}
+</script>
+</body>
+</html>
+
+
+/* ===== README.txt ===== */
+
+PRISMA13 · pacote telas 02-05
+
+Estrutura para Firebase Hosting:
+/tela02/index.html
+/tela03/index.html
+/tela04/index.html
+/tela05/index.html
+/patches/tela01-login-auto-patch.js
+
+Tela01:
+- Inserir o patch antes de </body> ou incorporar o conteúdo ao script existente.
+- Login com 2+ caracteres + senha 13 dispara location.replace('/tela02/index.html').
+
+Estética:
+- Todas as letras foram colocadas em amarelo ouro.
+- Rodapé ampliado e espaçado.
+- Fundo kosmos em canvas leve.
+- Frases assertivas, sem formato de pergunta.

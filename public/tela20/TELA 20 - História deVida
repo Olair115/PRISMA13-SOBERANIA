@@ -1,0 +1,62 @@
+<script>
+    // ... (configurações do firebase mantidas)
+
+    const screens = {
+        // ... (boasVindas e vigor mantidos)
+
+        veredito: () => {
+            const imc = parseFloat(localStorage.getItem('prisma_imc')) || 0;
+            return `
+            <div class="card-prisma13">
+                <h1>REGÊNCIA VITAL</h1>
+                <div class="result-box">
+                    <h2 style="margin:0; color:var(--gold);">IMC PONDERADO: ${imc.toFixed(2).replace('.',',')}</h2>
+                </div>
+                <div class="sap-frase">"O IMC-Ponderado reflete a harmonia entre a Matéria e a Energia, fundamental para ascender ao sétimo-céu."</div>
+                <button class="btn-navegar" onclick="navegar('historia')">REGISTRAR HISTÓRIA DE VIDA</button>
+            </div>`;
+        },
+
+        historia: () => `
+            <div class="card-prisma13">
+                <h1>TELA 20: HISTÓRIA DE VIDA</h1>
+                <div class="welcome-text">
+                    <p><b>O Sopro registra o caminho do Barro.</b></p>
+                    <textarea id="bio" rows="10" 
+                        placeholder="Consolidar o lastro vital: vitórias que forjaram o Barro e elevaram o Sopro até o estágio atual."></textarea>
+                    <button class="btn-navegar" id="btnFixar" onclick="salvarBioFirebase()">FIXAR MEMÓRIA NO PRISMA</button>
+                </div>
+                <div class="footer-lemas">A história é o fundamento da soberania.<br>Há braços!</div>
+            </div>`
+    };
+
+    async function salvarBioFirebase() {
+        const bio = document.getElementById('bio').value;
+        const imc = localStorage.getItem('prisma_imc') || "Não calibrado";
+        const btn = document.getElementById('btnFixar');
+        
+        if(!bio) return alert("Registrar a história é essencial para a soberania!");
+
+        btn.innerText = "SINCRONIZANDO...";
+        btn.disabled = true;
+
+        try {
+            await db.collection("SOBERANIA_VITAL").add({
+                imc: imc,
+                historia: bio,
+                data: firebase.firestore.FieldValue.serverTimestamp(),
+                versao: "PRISMA13-V20"
+            });
+            
+            // FEEDBACK FUNCIONAL E EVOLUTIVO
+            alert("Sincronia concluída. Sua oficina de reparo e regeneração opera em alta frequência.");
+            navegar('boasVindas');
+        } catch (e) {
+            alert("Erro na conexão! O Sopro aguarda nova tentativa.");
+            btn.innerText = "TENTAR NOVAMENTE";
+            btn.disabled = false;
+        }
+    }
+
+    // ... (restante do código mantido)
+</script>
