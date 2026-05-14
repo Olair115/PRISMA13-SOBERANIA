@@ -1,97 +1,421 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="pt">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>PRISMA13 — a imPRECISÃO da Vida.</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    :root { --preto: #000000; --ouro: #ffd700; --ouro-vivo: #fff2a8; --primary: #6c5ce7; }
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; min-height: 100%; background: #000; overflow: hidden; color: var(--ouro) !important; font-family: "Montserrat", sans-serif; }
-    
-    #kosmos { position: fixed; inset: 0; z-index: 0; display: block; background: #000; }
-    
-    .tela01 { position: relative; z-index: 2; width: 100%; min-height: 100vh; display: grid; grid-template-rows: auto 1fr auto; align-items: center; justify-items: center; padding: 20px; }
-    
-    .marca { font-size: clamp(3rem, 8vw, 6rem); font-weight: 900; letter-spacing: 5px; text-transform: uppercase; text-shadow: 0 0 15px var(--ouro); text-align: center; }
-    .subtitulo { font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 700; font-size: 1.4rem; margin-top: 10px; text-align: center; }
-
-    .mandala-wrap { width: min(600px, 70vmin); aspect-ratio: 1 / 1; display: grid; place-items: center; }
-    .mandala-svg { width: 100%; height: 100%; overflow: visible; filter: drop-shadow(0 0 12px rgba(255, 215, 0, 0.2)); }
-    
-    .slogan-solo { font-family: "Cormorant Garamond", serif; font-size: 1.35rem; font-weight: 700; font-style: italic; margin: 20px 0; line-height: 1.4; text-align: left; width: 100%; max-width: 450px; }
-    
-    .entrada { width: 100%; max-width: 400px; display: grid; gap: 15px; margin-top: 10px; }
-    input { background: transparent; border: 0; border-bottom: 1px solid var(--ouro); color: var(--ouro) !important; padding: 10px; text-align: left; font-size: 1.1rem; outline: none; }
-    input::placeholder { color: rgba(255, 215, 0, 0.4); }
-
-    .footer-prisma { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 20px; padding: 20px; border-top: 1px solid rgba(255,215,0,0.1); }
-    .lema-ouro { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1rem; text-align: center; color: var(--ouro) !important; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TEIA HOLOSSISTÊMICA CORRIGIDA COM IMPERMANÊNCIA E CICLOS TEMPORAIS</title>
+    <style>
+        body {
+            margin: 0;
+            background: black;
+            color: gold;
+            font-family: serif;
+            overflow: hidden;
+        }
+        canvas {
+            display: block;
+        }
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            z-index: 10;
+            color: gold;
+            font-size: 1.2em;
+            text-align: left;
+            text-shadow: 0 0 10px gold;
+        }
+        #narrative {
+            position: absolute;
+            bottom: 120px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1.4em;
+            text-align: center;
+            max-width: 90%;
+            opacity: 0;
+            transition: opacity 0.3s ease-out;
+            text-shadow: 0 0 10px white;
+            font-style: italic;
+        }
+        #next {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 30px;
+            background: linear-gradient(gold, #FFD700);
+            color: black;
+            border: none;
+            font-size: 1.2em;
+            font-family: serif;
+            cursor: pointer;
+            border-radius: 25px;
+            box-shadow: 0 5px 15px rgba(255,215,0,0.5);
+            transition: transform 0.2s;
+        }
+        #next:hover {
+            transform: scale(1.05);
+        }
+        #footer {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9em;
+            padding: 10px;
+            font-style: italic;
+        }
+    </style>
 </head>
 <body>
-  <canvas id="kosmos"></canvas>
-  <main class="tela01">
-    <header>
-      <h1 class="marca">PRISMA13</h1>
-      <p class="subtitulo">a imPRECISÃO da Vida.</p>
-    </header>
+    <canvas id="canvas"></canvas>
+    <div id="ui">TEIA HOLOSSISTÊMICA<br>CORRIGIDA COM IMPERMANÊNCIA E CICLOS TEMPORAIS</div>
+    <div id="narrative"></div>
+    <button id="next">Próxima</button>
+    <div id="footer">Seeemmpre melhorrrAndo... NUNKAKABA.<br>Há braços.<br>Link-se: @drolairrafael</div>
 
-    <section class="mandala-wrap">
-       <svg id="mandala" class="mandala-svg" viewBox="0 0 760 760"></svg>
-    </section>
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        let cx, cy, scale;
+        let now, prevTime = 0;
+        let stars = [];
+        let shootingStars = [];
+        let narrativeText = '';
+        let narrativeStart = 0;
 
-    <div class="entrada">
-      <div class="slogan-solo">
-        O solo, fértil, garante a sobrevivência.<br>
-        A cultura, autônoma, garante a melhoria.
-      </div>
-      <input id="login" type="text" placeholder="IDENTIFICAÇÃO">
-      <input id="senha" type="password" placeholder="SENHA (13)">
-      <div id="status" style="font-size: 0.8rem; height: 1.2rem;"></div>
-    </div>
+        const NUM_DIMS = 13;
+        const JUMP_MS = 333;
+        const TRAIL_LIFE = 8 * JUMP_MS;
+        const LEVELS = 5;
+        const levelRadii = [130, 165, 200, 235, 270];
+        const levelColors = ['#0066FF', '#00FF99', '#9966FF', '#FFD700', '#FFFFFF'];
+        const dimensions = [
+            'AR LIMPO', 'ÁGUA PURA', 'FOGO VIVO', 'TERRA FÉRTIL', 'ÉTER',
+            'AMOR', 'CONSCIÊNCIA', 'INTENÇÃO', 'HARMONIA', 'UNIDADE',
+            'INFINITO', 'ETERNIDADE', 'SOBERANIA'
+        ];
+        const narratives = [
+            'O corpo denso se move, absorvendo energias terrestres...',
+            'Sentimentos fluem livremente, dançam em cores vivas...',
+            'A forma física se desfaz, agora o cometa viaja como energia pura de pensamento...',
+            'A realidade se reconstrói a partir de intenções puras...',
+            'A separação dissolve-se, tudo é Um, infinito e eterno...'
+        ];
 
-    <footer class="footer-prisma">
-      <div style="text-align:right">SOL</div>
-      <div class="lema-ouro">
-        Seeemmpre melhorrrAndo... <b>NUNKAKABA!</b><br>
-        Há braços! | Dr. Olair Rafael
-      </div>
-      <div style="text-align:left">IMC22</div>
-    </footer>
-  </main>
+        const cycles = [
+            {interval: 333, offset: 0},
+            {interval: 1250, offset: Math.PI / 2},
+            {interval: 7500, offset: Math.PI}
+        ];
 
-  <script>
-    // Iniciar Kosmos (Fundo Estelar)
-    const c = document.getElementById('kosmos');
-    const ctx = c.getContext('2d');
-    let w, h, stars = [];
-    function resize() { w = c.width = innerWidth; h = c.height = innerHeight; }
-    window.onresize = resize; resize();
-    for(let i=0; i<200; i++) stars.push({x:Math.random()*w, y:Math.random()*h, r:Math.random()*1.5});
-    function draw() {
-      ctx.clearRect(0,0,w,h); ctx.fillStyle="#fff";
-      stars.forEach(s => { ctx.beginPath(); ctx.arc(s.x, s.y, s.r, 0, Math.PI*2); ctx.fill(); });
-      requestAnimationFrame(draw);
-    }
-    draw();
+        class TrailManager {
+            constructor(interval, offset) {
+                this.interval = interval;
+                this.offset = offset;
+                this.nextJumpTime = performance.now() + interval;
+                this.currentIndex = Math.floor(Math.random() * NUM_DIMS);
+                this.currentAngle = (this.currentIndex * 2 * Math.PI / NUM_DIMS) + offset;
+                this.currentLevel = Math.floor(Math.random() * LEVELS);
+                this.trails = [];
+                this.justJumped = false;
+            }
 
-    // Lógica de Travessia Automática
-    const login = document.getElementById('login');
-    const senha = document.getElementById('senha');
-    const status = document.getElementById('status');
-    
-    function validar() {
-      if (login.value.length >= 2 && senha.value === '13') {
-        status.textContent = "Entrada reconhecida. Travessia iniciada.";
-        localStorage.setItem('prisma_login', login.value);
-        setTimeout(() => { window.location.href = "tela02/index.html"; }, 500);
-      }
-    }
-    login.oninput = validar; senha.oninput = validar;
-  </script>
+            update(now) {
+                if (now >= this.nextJumpTime) {
+                    this.currentIndex = (this.currentIndex + NUM_DIMS - 1) % NUM_DIMS;
+                    this.currentLevel = Math.floor(Math.random() * LEVELS);
+                    this.currentAngle = (this.currentIndex * 2 * Math.PI / NUM_DIMS) + this.offset;
+                    this.trails.push({
+                        angle: this.currentAngle,
+                        level: this.currentLevel,
+                        start: now
+                    });
+                    this.nextJumpTime = now + this.interval;
+                    this.justJumped = true;
+                }
+                this.trails = this.trails.filter(t => now - t.start < TRAIL_LIFE);
+                return { angle: this.currentAngle, level: this.currentLevel };
+            }
+
+            draw(ctx, now, scale, cx, cy) {
+                for (let trail of this.trails) {
+                    let ageFrac = (now - trail.start) / TRAIL_LIFE;
+                    let alpha = Math.max(0, 1 - ageFrac);
+                    let r = levelRadii[trail.level] * scale;
+                    let x = cx + Math.cos(trail.angle) * r;
+                    let y = cy + Math.sin(trail.angle) * r;
+                    ctx.save();
+                    ctx.globalAlpha = alpha;
+                    let glowSize = (20 + 15 * Math.sin(ageFrac * Math.PI)) * scale * alpha;
+                    ctx.shadowColor = levelColors[trail.level];
+                    ctx.shadowBlur = glowSize;
+                    ctx.fillStyle = levelColors[trail.level];
+                    ctx.beginPath();
+                    ctx.arc(x, y, 7 * scale * alpha, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.shadowBlur = 0;
+                    ctx.globalAlpha *= 0.6;
+                    ctx.fillStyle = 'white';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 3 * scale, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.restore();
+                }
+            }
+        }
+
+        let managers;
+        let mainManager;
+
+        function resize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            cx = canvas.width / 2;
+            cy = canvas.height / 2;
+            generateStars();
+            shootingStars = [];
+        }
+
+        function generateStars() {
+            stars = [];
+            for (let i = 0; i < 500; i++) {
+                stars.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    twinkle: Math.random() * Math.PI * 2,
+                    speed: 0.01 + Math.random() * 0.02
+                });
+            }
+        }
+
+        function spawnShooting(now, cx, cy, scale) {
+            let startAng = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI / 3;
+            let dist = 150 * scale;
+            let sx = cx + Math.cos(startAng) * dist;
+            let sy = cy + Math.sin(startAng) * dist;
+            let dirAng = startAng + Math.PI / 2.2;
+            shootingStars.push({
+                x: sx,
+                y: sy,
+                vx: Math.cos(dirAng) * 800 * scale,
+                vy: Math.sin(dirAng) * 800 * scale,
+                start: now,
+                life: 3000
+            });
+        }
+
+        function init() {
+            managers = cycles.map(c => new TrailManager(c.interval, c.offset));
+            mainManager = managers[0];
+            resize();
+            window.addEventListener('resize', resize);
+
+            // localStorage login
+            let user = localStorage.getItem('holossistemica_user');
+            if (!user) {
+                user = 'Nodo_' + Date.now().toString(36).slice(-5).toUpperCase();
+                localStorage.setItem('holossistemica_user', user);
+            }
+            document.getElementById('ui').innerHTML += `<br><small>Bem-vindo, ${user}</small>`;
+
+            // next button
+            document.getElementById('next').onclick = () => {
+                window.location.href = '/tela02/index.html';
+            };
+
+            requestAnimationFrame(animate);
+        }
+
+        function animate(time) {
+            if (prevTime === 0) prevTime = time;
+            let dt = (time - prevTime) / 1000;
+            prevTime = time;
+            now = time;
+
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            scale = Math.min(cx, cy) / 350;
+
+            // stars
+            ctx.globalAlpha = 1;
+            stars.forEach(s => {
+                s.twinkle += s.speed;
+                let alpha = 0.3 + 0.7 * (Math.sin(s.twinkle) + 1) / 2;
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.fillStyle = 'white';
+                ctx.beginPath();
+                ctx.arc(s.x, s.y, 1.5, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            });
+
+            // shooting stars
+            if (Math.random() < 0.004) spawnShooting(now, cx, cy, scale);
+            for (let i = shootingStars.length - 1; i >= 0; i--) {
+                let s = shootingStars[i];
+                s.x += s.vx * dt;
+                s.y += s.vy * dt;
+                let age = now - s.start;
+                if (age > s.life) {
+                    shootingStars.splice(i, 1);
+                    continue;
+                }
+                let alpha = 1 - age / s.life;
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 2;
+                ctx.lineCap = 'round';
+                ctx.shadowColor = 'cyan';
+                ctx.shadowBlur = 20;
+                ctx.beginPath();
+                ctx.moveTo(s.x - s.vx * dt * 5, s.y - s.vy * dt * 5);
+                ctx.lineTo(s.x, s.y);
+                ctx.stroke();
+                ctx.restore();
+            }
+
+            // teia concentric
+            for (let lv = 0; lv < 7; lv++) {
+                let r = 50 + lv * 45 * scale;
+                let alpha = 0.15 - lv * 0.015;
+                ctx.strokeStyle = `rgba(0, 102, 255, ${alpha})`;
+                ctx.lineWidth = 1.2;
+                ctx.beginPath();
+                ctx.arc(cx, cy, r, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+
+            // radial teia
+            for (let i = 0; i < 26; i++) {
+                let ang = i * Math.PI / 13;
+                let rmax = 340 * scale;
+                let ex = cx + rmax * Math.cos(ang);
+                let ey = cy + rmax * Math.sin(ang);
+                ctx.strokeStyle = 'rgba(0, 102, 255, 0.12)';
+                ctx.lineWidth = 0.8;
+                ctx.beginPath();
+                ctx.moveTo(cx, cy);
+                ctx.lineTo(ex, ey);
+                ctx.stroke();
+            }
+
+            // dimension names
+            ctx.font = `${22 * scale}px serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.shadowColor = '#FFD700';
+            ctx.shadowBlur = 10 * scale;
+            ctx.fillStyle = '#FFD700';
+            for (let i = 0; i < NUM_DIMS; i++) {
+                let ang = i * 2 * Math.PI / NUM_DIMS;
+                let rx = 320 * scale;
+                let px = cx + rx * Math.cos(ang);
+                let py = cy + rx * Math.sin(ang);
+                ctx.save();
+                ctx.translate(px, py);
+                ctx.rotate(ang - Math.PI / 2);
+                ctx.fillText(dimensions[i], 0, 0);
+                ctx.restore();
+            }
+            ctx.shadowBlur = 0;
+
+            // center pulse
+            let pulsePhase = now * 0.003;
+            let pulseSize = 25 * scale * (0.8 + 0.2 * Math.sin(pulsePhase));
+            ctx.save();
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 50 * scale;
+            ctx.fillStyle = 'rgba(255,255,255,0.5)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, pulseSize, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 25 * scale;
+            ctx.fillStyle = 'rgba(255,255,255,0.8)';
+            ctx.beginPath();
+            ctx.arc(cx, cy, pulseSize * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // update managers
+            let mainCurr = mainManager.update(now);
+            managers.slice(1).forEach(m => m.update(now));
+
+            // narrative
+            if (mainManager.justJumped) {
+                narrativeText = narratives[mainCurr.level];
+                narrativeStart = now;
+                mainManager.justJumped = false;
+            }
+            let narrAlpha = 0;
+            if (now - narrativeStart < TRAIL_LIFE) {
+                narrAlpha = 1 - (now - narrativeStart) / TRAIL_LIFE;
+            }
+            let narrEl = document.getElementById('narrative');
+            narrEl.style.opacity = narrAlpha;
+            if (narrAlpha > 0) {
+                narrEl.textContent = narrativeText;
+            }
+
+            // draw trails
+            managers.forEach(m => m.draw(ctx, now, scale, cx, cy));
+
+            // main comet
+            let cometAngle = mainCurr.angle;
+            let cometLevel = mainCurr.level;
+            let cometRad = levelRadii[cometLevel] * scale;
+            let comx = cx + cometRad * Math.cos(cometAngle);
+            let comy = cy + cometRad * Math.sin(cometAngle);
+            let cometPulse = 0.6 + 0.4 * Math.sin(now * 0.012);
+            ctx.save();
+            ctx.shadowColor = levelColors[cometLevel];
+            ctx.shadowBlur = 70 * scale * cometPulse;
+            ctx.fillStyle = levelColors[cometLevel];
+            ctx.globalAlpha = 0.85;
+            ctx.beginPath();
+            ctx.arc(comx, comy, 22 * scale * cometPulse, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 100 * scale * cometPulse;
+            ctx.globalAlpha = 0.4;
+            ctx.beginPath();
+            ctx.arc(comx, comy, 35 * scale * cometPulse, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+            ctx.globalAlpha = 1;
+            ctx.fillStyle = 'white';
+            ctx.shadowColor = 'white';
+            ctx.shadowBlur = 20 * scale;
+            ctx.beginPath();
+            ctx.arc(comx, comy, 6 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            // next point preview
+            let nextIndex = (mainManager.currentIndex + NUM_DIMS - 1) % NUM_DIMS;
+            let nextAngle = (nextIndex * 2 * Math.PI / NUM_DIMS) + mainManager.offset;
+            let nextLevel = Math.floor(Math.random() * LEVELS);
+            let nextRad = levelRadii[nextLevel] * scale;
+            let nx = cx + nextRad * Math.cos(nextAngle);
+            let ny = cy + nextRad * Math.sin(nextAngle);
+            ctx.save();
+            ctx.globalAlpha = 0.4;
+            ctx.shadowColor = levelColors[nextLevel];
+            ctx.shadowBlur = 25 * scale;
+            ctx.fillStyle = levelColors[nextLevel];
+            ctx.beginPath();
+            ctx.arc(nx, ny, 10 * scale, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+
+            requestAnimationFrame(animate);
+        }
+
+        window.addEventListener('load', init);
+    </script>
 </body>
 </html>

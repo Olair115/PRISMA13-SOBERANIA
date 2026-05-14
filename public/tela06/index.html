@@ -1,80 +1,205 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRISMA13 - LUZ</title>
-    <style>
-        :root { --primary: #6c5ce7; --bg: #000; --gold: #ffd700; --text: #eee; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; padding: 20px; text-align: center; }
-        
-        .container-estatico { max-width: 600px; width: 100%; }
-        
-        h1 { font-size: 2.5rem; letter-spacing: 8px; text-transform: uppercase; margin-bottom: 10px; font-weight: 800; color: #fff; }
-        .subtitulo { font-size: 0.9rem; font-style: italic; color: var(--primary); text-decoration: underline; margin-bottom: 40px; display: block; }
-        
-        .conteudo-texto { text-align: justify; font-size: 1.15rem; line-height: 1.8; color: #ccc; margin-bottom: 40px; }
-        .conteudo-texto b { color: #fff; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PRISMA13 - Luz</title>
+  <style>
+    :root {
+      --primary: #6c5ce7;
+      --bg: #000;
+      --gold: #ffd700;
+      --line: rgba(255, 215, 0, 0.18);
+      --text: #f5f0d6;
+    }
 
-        /* DESTAQUE PNEI */
-        .caixa-insight {
-            border-left: 3px solid var(--primary);
-            padding: 25px;
-            margin: 40px 0;
-            background: linear-gradient(90deg, rgba(108, 92, 231, 0.1), transparent);
-            text-align: left;
-            font-style: italic;
-            font-size: 1.1rem;
-            line-height: 1.6;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        /* BOTÃO SOBERANO EM TIMES NEW ROMAN */
-        .btn-evolucao { 
-            background: transparent; 
-            color: var(--gold); 
-            border: none; 
-            padding: 25px; 
-            cursor: pointer; 
-            width: 100%; 
-            font-family: 'Times New Roman', Times, serif; 
-            font-size: 1.7rem; 
-            font-weight: bold; 
-            transition: 0.4s; 
-            text-transform: none;
-        }
-        .btn-evolucao:hover { color: #fff; text-shadow: 0 0 15px var(--primary); }
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      background: var(--bg);
+      overflow-x: hidden;
+    }
 
-        /* RODAPÉ PADRÃO SISTÊMICO */
-        .footer-padrao { margin-top: 60px; padding-top: 30px; border-top: 1px solid #222; }
-        .lema-principal { font-size: 0.9rem; letter-spacing: 1.5px; line-height: 1.8; color: #888; }
-        .lema-principal i { font-style: italic; color: #bbb; }
-        .lema-principal b { font-weight: 900; color: var(--primary); text-transform: uppercase; letter-spacing: 2px; }
-        .saudacao { display: block; margin-top: 10px; font-weight: 700; color: #fff; font-size: 1rem; }
-    </style>
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: "Segoe UI", Arial, sans-serif;
+      color: var(--text);
+      text-align: center;
+    }
+
+    .container-estatico {
+      width: min(680px, 100%);
+      display: grid;
+      gap: 22px;
+    }
+
+    .eyebrow {
+      color: var(--gold);
+      font-size: 0.72rem;
+      font-weight: 900;
+      letter-spacing: 2.4px;
+      text-transform: uppercase;
+      opacity: 0.82;
+    }
+
+    h1 {
+      color: var(--gold);
+      font-size: clamp(2.25rem, 12vw, 3.4rem);
+      letter-spacing: 6px;
+      line-height: 1;
+      text-transform: uppercase;
+      font-weight: 900;
+      text-shadow: 0 0 14px rgba(255, 215, 0, 0.22);
+    }
+
+    .subtitulo {
+      width: min(560px, 100%);
+      margin: 0 auto;
+      color: #ddd;
+      font-size: clamp(0.98rem, 3.8vw, 1.08rem);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .conteudo-texto {
+      text-align: left;
+      color: var(--text);
+      font-size: clamp(1.02rem, 4vw, 1.16rem);
+      line-height: 1.68;
+    }
+
+    .conteudo-texto b {
+      color: var(--gold);
+    }
+
+    .caixa-insight {
+      border-left: 3px solid var(--primary);
+      padding: 24px;
+      background: linear-gradient(90deg, rgba(108, 92, 231, 0.12), transparent);
+      text-align: left;
+      font-style: italic;
+      font-size: clamp(1.02rem, 4vw, 1.12rem);
+      line-height: 1.65;
+      color: #fff;
+    }
+
+    .caixa-insight b {
+      color: var(--gold);
+    }
+
+    .btn-evolucao {
+      width: 100%;
+      min-height: 60px;
+      background: transparent;
+      color: var(--gold);
+      border: 1px solid var(--line);
+      padding: 16px 18px;
+      cursor: pointer;
+      font-family: "Times New Roman", Times, serif;
+      font-size: clamp(1.22rem, 6vw, 1.7rem);
+      font-weight: bold;
+      line-height: 1.16;
+      transition: 0.28s ease;
+    }
+
+    .btn-evolucao:hover {
+      color: #fff;
+      border-color: rgba(255, 215, 0, 0.46);
+      text-shadow: 0 0 15px var(--primary);
+    }
+
+    .footer-padrao {
+      padding-top: 24px;
+      border-top: 1px solid #222;
+      text-align: center;
+    }
+
+    .lema-principal {
+      font-size: clamp(0.82rem, 3.5vw, 0.95rem);
+      letter-spacing: 1px;
+      line-height: 1.65;
+      color: #aaa;
+    }
+
+    .lema-principal i {
+      font-style: italic;
+      color: #ddd;
+    }
+
+    .lema-principal b {
+      font-weight: 900;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+    }
+
+    .saudacao {
+      display: block;
+      margin-top: 8px;
+      font-weight: 700;
+      color: #fff;
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        align-items: start;
+        padding: 22px 16px;
+      }
+
+      .container-estatico {
+        gap: 20px;
+      }
+
+      .eyebrow {
+        letter-spacing: 1.8px;
+      }
+
+      h1 {
+        letter-spacing: 4px;
+      }
+
+      .caixa-insight {
+        padding: 18px 0 18px 16px;
+        line-height: 1.58;
+      }
+
+      .conteudo-texto {
+        line-height: 1.58;
+      }
+    }
+  </style>
 </head>
 <body>
-    <div class="container-estatico">
-        <h1>LUZ</h1>
-        <span class="subtitulo">A Gerentona: Regência Sistêmica da Vitalidade</span>
-        
-        <div class="conteudo-texto">
-            <b>Habitar</b> a clareza. Nesta dimensão, a Luz representa a função gerencial da consciência sobre a regência biológica.
-        </div>
+  <div class="container-estatico">
+    <div class="eyebrow">Tela06 · dimensão 03</div>
+    <h1>Luz</h1>
+    <p class="subtitulo">A Gerentona: regência sistêmica da vitalidade.</p>
 
-        <div class="caixa-insight">
-            "A empatia e a clareza mental são as energias que sustentam a regência do <b>eixo PNEI</b> e moldam a herança epigenética."
-        </div>
-
-        <button class="btn-evolucao" onclick="window.location.href='/tela07/index.html'">
-            Avançar para Nutrição Sutil
-        </button>
-        
-        <footer class="footer-padrao">
-            <p class="lema-principal">
-                <i>Seeemmpre MelhorrrAndo...</i> <b>NUNKAKABA!</b>
-                <span class="saudacao">Há braços!</span>
-            </p>
-        </footer>
+    <div class="conteudo-texto">
+      <b>Habitar a clareza.</b> Nesta dimensão, a Luz representa a função gerencial da consciência sobre a regência biológica.
     </div>
+
+    <div class="caixa-insight">
+      “Empatia e clareza mental sustentam a regência do <b>eixo PNEI</b> e influenciam a herança epigenética.”
+    </div>
+
+    <button class="btn-evolucao" onclick="window.location.href='/tela07/index.html'">
+      Avançar para nutrição sutil
+    </button>
+
+    <footer class="footer-padrao">
+      <p class="lema-principal">
+        <i>Seeemmpre MelhorrrAndo...</i> <b>NUNKAKABA!</b>
+        <span class="saudacao">Há braços!</span>
+      </p>
+    </footer>
+  </div>
 </body>
 </html>
