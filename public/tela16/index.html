@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 - FAMÍLIA E LAÇOS</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PRISMA13" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../prisma13-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../prisma13-icon.svg" />
+  <link rel="stylesheet" href="../mobile-shell.css" />
+  <style>
+    :root{
+      --bg:#000;
+      --gold:#ffe600;
+      --white:#fff;
+      --line:rgba(255,255,255,.18);
+      --pos:50%;
+      --tone:#ffff00;
+    }
+
+    *{ box-sizing:border-box; margin:0; padding:0; }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+      background:var(--bg);
+      color:var(--gold);
+      font-family:Arial, Helvetica, sans-serif;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 13% 18%, rgba(255,255,255,.28) 0 1px, transparent 2px),
+        radial-gradient(circle at 23% 78%, rgba(255,230,0,.30) 0 1px, transparent 2px),
+        radial-gradient(circle at 57% 22%, rgba(255,255,255,.18) 0 1px, transparent 2px),
+        radial-gradient(circle at 84% 67%, rgba(255,230,0,.24) 0 1px, transparent 2px),
+        radial-gradient(circle at center, rgba(255,230,0,.035), transparent 60%);
+      background-size:320px 320px,380px 380px,300px 300px,360px 360px,100% 100%;
+      opacity:.55;
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(1040px, calc(100% - 32px));
+      min-height:100svh;
+      margin:0 auto;
+      padding:52px 0 18px;
+      display:grid;
+      grid-template-rows:1fr auto;
+      gap:36px;
+    }
+
+    main{
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      gap:42px;
+      padding:26px 0;
+    }
+
+    h1{
+      color:#fff;
+      font-size:clamp(42px, 5.8vw, 74px);
+      line-height:1;
+      font-weight:950;
+      letter-spacing:.30em;
+      text-transform:uppercase;
+      text-indent:.30em;
+    }
+
+    .frases{
+      width:min(980px,100%);
+      display:grid;
+      gap:34px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(24px, 2.7vw, 38px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.35;
+    }
+
+    .controle{
+      width:min(760px,100%);
+      display:grid;
+      gap:16px;
+      justify-items:center;
+    }
+
+    .nivel{
+      display:grid;
+      gap:10px;
+      min-height:86px;
+      align-content:end;
+    }
+
+    .nivel-nome{
+      color:var(--tone);
+      font-size:clamp(24px, 3vw, 36px);
+      font-weight:950;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      text-indent:.22em;
+      text-shadow:0 0 16px color-mix(in srgb, var(--tone), transparent 48%);
+    }
+
+    .nivel-frase{
+      max-width:760px;
+      color:var(--gold);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.55vw, 21px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.35;
+    }
+
+    .croma{
+      position:relative;
+      width:100%;
+      height:26px;
+      border:1px solid rgba(255,255,255,.82);
+      border-radius:2px;
+      background:linear-gradient(90deg,
+        #0000ff 0%,
+        #007fff 8.333%,
+        #00ffff 16.666%,
+        #00ff7f 25%,
+        #00ff00 33.333%,
+        #7fff00 41.666%,
+        #ffff00 50%,
+        #ffbf00 58.333%,
+        #ff7f00 66.666%,
+        #ff3f00 75%,
+        #ff0000 83.333%,
+        #bf003f 91.666%,
+        #7f007f 100%);
+      box-shadow:0 0 28px rgba(255,230,0,.13);
+    }
+
+    .marcador{
+      position:absolute;
+      top:50%;
+      left:var(--pos);
+      width:36px;
+      height:36px;
+      border:4px solid #fff;
+      border-radius:50%;
+      background:#000;
+      transform:translate(-50%,-50%);
+      pointer-events:none;
+      box-shadow:0 0 0 2px rgba(0,0,0,.85), 0 0 18px rgba(255,255,255,.45);
+    }
+
+    input[type=range]{
+      width:100%;
+      height:30px;
+      margin-top:4px;
+      appearance:none;
+      background:transparent;
+      cursor:pointer;
+      accent-color:var(--gold);
+    }
+
+    input[type=range]::-webkit-slider-runnable-track{
+      height:4px;
+      background:rgba(255,255,255,.82);
+      border-radius:999px;
+    }
+
+    input[type=range]::-webkit-slider-thumb{
+      appearance:none;
+      width:24px;
+      height:24px;
+      margin-top:-10px;
+      border:3px solid #fff;
+      border-radius:50%;
+      background:#000;
+      box-shadow:0 0 18px rgba(255,255,255,.38);
+    }
+
+    .degraus{
+      width:100%;
+      display:grid;
+      grid-template-columns:repeat(13,1fr);
+      color:rgba(255,230,0,.72);
+      font-size:10px;
+      font-weight:950;
+      text-align:center;
+    }
+
+    .btn{
+      width:min(420px,100%);
+      min-height:70px;
+      margin-top:30px;
+      border:1px solid var(--gold);
+      border-radius:0;
+      background:transparent;
+      color:var(--gold);
+      cursor:pointer;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      text-indent:.34em;
+      transition:.18s ease;
+    }
+
+    .btn:hover{
+      background:var(--gold);
+      color:#000;
+      box-shadow:0 0 34px rgba(255,230,0,.20);
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:22px 0 0;
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      opacity:.78;
+    }
+
+    .footer-mark{
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-mark img{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      border-radius:50%;
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+    }
+
+    footer .footer-mark:first-child{ justify-self:start; }
+
+    .footer-mark.right{ justify-self:end; }
+
+    .footer-mark.right img{ border-radius:8px; }
+
+    .footer-text{
+      color:var(--gold);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.2;
+      text-align:center;
+    }
+
+    @media(max-width:760px){
+      .page{
+        width:min(100% - 24px, 560px);
+        padding:34px 0 calc(100px + env(safe-area-inset-bottom, 0px));
+      }
+
+      main{ gap:30px; }
+
+      h1{
+        font-size:clamp(34px, 10vw, 50px);
+        letter-spacing:.18em;
+        text-indent:.18em;
+      }
+
+      .frases{ gap:24px; }
+
+      footer{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:12px;
+      }
+
+      footer .footer-mark:first-child,
+      .footer-mark.right{ justify-self:center; }
+    }
+
+    /* PRISMA13 footer padrao */
+    footer.prisma-footer{
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:auto minmax(280px, 520px) auto;
+      justify-content:center;
+      align-items:center;
+      column-gap:clamp(18px, 3.2vw, 42px);
+      color:#fff;
+      opacity:.92;
+    }
+
+    .prisma-footer .footer-side{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .prisma-footer .footer-side-left{
+      justify-self:end;
+    }
+
+    .prisma-footer .footer-side-right{
+      justify-self:start;
+    }
+
+    .prisma-footer .footer-seal{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+      flex:0 0 auto;
+    }
+
+    .prisma-footer .footer-seal-left{
+      border-radius:50%;
+    }
+
+    .prisma-footer .footer-seal-right{
+      border-radius:8px;
+    }
+
+    .prisma-footer .footer-label{
+      color:var(--gold, #ffe600);
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .prisma-footer .footer-text{
+      display:grid;
+      gap:1px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.45vw, 24px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
+      justify-self:center;
+    }
+
+    .prisma-footer .footer-text span:last-child{
+      font-style:normal;
+      font-weight:500;
+    }
+
+    @media(max-width:760px){
+      footer.prisma-footer{
+        grid-template-columns:1fr;
+        justify-items:center;
+        row-gap:12px;
+        text-align:center;
+      }
+
+      .prisma-footer .footer-side-left,
+      .prisma-footer .footer-side-right{
+        justify-self:center;
+      }
+
+      .prisma-footer .footer-text{
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="page">
+    <main>
+      <h1>FAMÍLIA E LAÇOS</h1>
+
+      <section class="frases" aria-label="Frases">
+        <p>Familia e campo de origem, nao sentenca.</p>
+        <p>Lacos cuidados libertam sem apagar historia.</p>
+      </section>
+
+      <section class="controle" aria-label="Evolucao cromatica em 13 niveis">
+        <div class="nivel" aria-live="polite">
+          <div class="nivel-nome" id="nivelNome">Distancia</div>
+          <div class="nivel-frase" id="nivelFrase">Laços frios ou interrompidos.</div>
+        </div>
+
+        <div class="croma" aria-hidden="true">
+          <div class="marcador"></div>
+        </div>
+
+        <input id="slider" type="range" min="1" max="13" value="1" aria-label="Nivel de 1 a 13" />
+
+        <div class="degraus" aria-hidden="true">
+          <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+          <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+        </div>
+      </section>
+
+      <button class="btn" type="button" onclick="seguir()">REPARAR LACOS</button>
+    </main>
+
+    <footer class="prisma-footer">
+      <div class="footer-side footer-side-left">
+        <img class="footer-seal footer-seal-left" src="../assets/sol-1985.jpg" alt="SOL 1984" />
+        <span class="footer-label">SOL 1984</span>
+      </div>
+
+      <div class="footer-text" aria-label="Rodape padrao PRISMA13">
+        <span>Seeemmpre melhorrrAndo... <b>NUNKAKABA.</b></span>
+        <span>Há braços.</span>
+        <span>Dr. Olair Rafael – @drolairrafael</span>
+      </div>
+
+      <div class="footer-side footer-side-right">
+        <span class="footer-label">ESBELTEZA</span>
+        <img class="footer-seal footer-seal-right" src="../assets/esbelteza-imc22.jpg" alt="ESBELTEZA" />
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "PRISMA13_MEMORIA";
+    const DIMENSAO = 16;
+    const PROXIMA = "../tela17/index.html";
+    const niveis = [["Distancia","Laços frios ou interrompidos."],["Ressentimento","Memoria pesa mais que presenca."],["Contato Minimo","Um fio de relacao permanece."],["Reconhecimento","A historia e vista com menos defesa."],["Limite","Cuidado inclui fronteira clara."],["Escuta","A palavra encontra lugar."],["Presenca","O laco sustenta encontro possivel."],["Reparacao","Gestos pequenos reduzem dano."],["Afeto","Calor retorna ao campo familiar."],["Lealdade Livre","Pertencer sem se aprisionar."],["Memoria Curada","A origem vira recurso."],["Casa Interna","O vinculo fortalece identidade."],["Ancestralidade Viva","Historia, escolha e futuro se integram."]];
+    const cores = ["#0000ff","#007fff","#00ffff","#00ff7f","#00ff00","#7fff00","#ffff00","#ffbf00","#ff7f00","#ff3f00","#ff0000","#bf003f","#7f007f"];
+    const slider = document.getElementById("slider");
+
+    function memoria(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      }catch(e){
+        return {};
+      }
+    }
+
+    function gravar(valor){
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        ...memoria(),
+        ["dimensao_" + DIMENSAO]: valor
+      }));
+    }
+
+    function atualizar(){
+      const valor = Number(slider.value || 1);
+      const index = Math.max(0, Math.min(12, valor - 1));
+      const item = niveis[index];
+      const cor = cores[index];
+      const pos = (index / 12) * 100;
+
+      document.documentElement.style.setProperty("--pos", pos + "%");
+      document.documentElement.style.setProperty("--tone", cor);
+      document.getElementById("nivelNome").textContent = item[0];
+      document.getElementById("nivelFrase").textContent = item[1];
+      gravar({ nivel: valor, nome: item[0], frase: item[1], cor, atualizadoEm: new Date().toISOString() });
+    }
+
+    function seguir(){
+      atualizar();
+      window.location.href = PROXIMA;
+    }
+
+    slider.addEventListener("input", atualizar);
+    window.addEventListener("load", atualizar);
+  </script>
+  <script src="../mobile-shell.js" defer></script>
+</body>
+</html>

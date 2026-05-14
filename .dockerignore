@@ -1,0 +1,11 @@
+.git
+.firebase
+functions/node_modules
+node_modules
+*.log
+*.local
+*.doc
+*.docx
+*.pdf
+*.pptx
+Z_ARQUIVO_MORTO_PRISMA

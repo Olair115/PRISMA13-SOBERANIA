@@ -1,0 +1,8 @@
+{
+  "projects": {
+    "default": "prisma12-21b6d",
+    "mini": "prisma13-e339b"
+  },
+  "targets": {},
+  "etags": {}
+}

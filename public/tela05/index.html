@@ -1,0 +1,1435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 · Poder e Identidade</title>
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../prisma13-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../mobile-shell.css" />
+
+  <style>
+    :root{
+      --bg:#000;
+      --fg:#ffe600;
+      --muted:rgba(255,255,255,.56);
+      --soft:rgba(255,255,255,.20);
+      --gold:#ffe600;
+      --gold2:#fff27a;
+      --blue:#00b7ff;
+      --violet:#7b5cff;
+      --green:#31d66b;
+      --orange:#ff8a00;
+      --red:#ff2456;
+      --p:58.333%;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+      background:#000;
+      color:var(--gold);
+      font-family:Arial, Helvetica, sans-serif;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      opacity:.38;
+      background:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,.50) 0 1px, transparent 2px),
+        radial-gradient(circle at 20% 78%, rgba(255,230,0,.38) 0 1px, transparent 2px),
+        radial-gradient(circle at 42% 16%, rgba(255,255,255,.30) 0 1px, transparent 2px),
+        radial-gradient(circle at 68% 72%, rgba(255,230,0,.42) 0 1px, transparent 2px),
+        radial-gradient(circle at 90% 28%, rgba(255,255,255,.42) 0 1px, transparent 2px),
+        radial-gradient(circle at center, rgba(255,230,0,.035), transparent 58%);
+      background-size:300px 300px,360px 360px,280px 280px,340px 340px,310px 310px,100% 100%;
+      animation:estrelas 7s ease-in-out infinite alternate;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      top:19vh;
+      left:-45vw;
+      width:38vw;
+      height:2px;
+      opacity:0;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.32), var(--gold), transparent);
+      filter:drop-shadow(0 0 14px rgba(255,230,0,.82));
+      transform:rotate(-18deg);
+      animation:cadente 17s linear infinite;
+      z-index:0;
+      pointer-events:none;
+    }
+
+    @keyframes estrelas{
+      from{opacity:.24}
+      to{opacity:.62}
+    }
+
+    @keyframes cadente{
+      0%,66%{opacity:0; transform:translate(-10vw,-12vh) rotate(-18deg);}
+      72%{opacity:.95;}
+      88%{opacity:0; transform:translate(150vw,76vh) rotate(-18deg);}
+      100%{opacity:0;}
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(1040px, calc(100% - 32px));
+      min-height:100svh;
+      margin:0 auto;
+      padding-top:24px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      min-height:auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding-bottom:14px;
+      gap:18px;
+      border-bottom:1px solid rgba(255,230,0,.16);
+      opacity:.76;
+    }
+
+    .brand strong{
+      display:block;
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:900;
+    }
+
+    .brand span{
+      display:block;
+      margin-top:5px;
+      color:rgba(255,255,255,.58);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:12px;
+      font-style:italic;
+    }
+
+    nav{
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+
+    nav a{
+      color:#9d96ff;
+      text-decoration:none;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:34px 0 54px;
+    }
+
+    .grid{
+      width:100%;
+      display:grid;
+      grid-template-columns:.86fr 1.14fr;
+      gap:clamp(42px, 7vw, 82px);
+      align-items:center;
+    }
+
+    .hero{
+      min-width:0;
+    }
+
+    .kicker{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:11px;
+      font-weight:900;
+      margin-bottom:14px;
+    }
+
+    h1{
+      font-size:clamp(42px, 7vw, 76px);
+      line-height:.94;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+
+    .sub{
+      max-width:460px;
+      color:rgba(255,255,255,.78);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:20px;
+      line-height:1.34;
+      font-style:italic;
+    }
+
+    .selo{
+      margin-top:36px;
+      display:grid;
+      gap:9px;
+      color:rgba(255,255,255,.58);
+      font-size:12px;
+      line-height:1.45;
+    }
+
+    .selo b{
+      color:#fff;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+    }
+
+    form{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px 30px;
+      width:100%;
+      padding-top:26px;
+      border-top:1px solid rgba(255,230,0,.30);
+    }
+
+    .campo{
+      min-width:0;
+    }
+
+    .campo.full{
+      grid-column:1 / -1;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.72);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.13em;
+      text-transform:uppercase;
+    }
+
+    input,
+    select,
+    textarea{
+      width:100%;
+      border:0;
+      border-bottom:1px solid var(--gold);
+      outline:0;
+      background:transparent;
+      color:#fff;
+      font-size:18px;
+      font-weight:500;
+      min-height:52px;
+      padding:12px 2px 13px;
+      resize:none;
+      border-radius:0;
+    }
+
+    textarea{
+      min-height:70px;
+      line-height:1.35;
+    }
+
+    select{
+      cursor:pointer;
+      appearance:auto;
+    }
+
+    select option{
+      background:#000;
+      color:#fff;
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+      color:rgba(255,255,255,.36);
+    }
+
+    small{
+      display:block;
+      margin-top:6px;
+      color:rgba(255,255,255,.34);
+      font-size:10px;
+      line-height:1.3;
+    }
+
+    .termometro{
+      grid-column:1 / -1;
+      margin-top:10px;
+      padding-top:16px;
+    }
+
+    .dial{
+      min-height:112px;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:flex-end;
+      margin-bottom:16px;
+    }
+
+    .dial .numero{
+      font-size:54px;
+      line-height:.96;
+      font-weight:900;
+      letter-spacing:.04em;
+    }
+
+    .dial .nome{
+      margin-top:12px;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:18px;
+      font-weight:900;
+    }
+
+    .dial .faixa{
+      margin-top:9px;
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .croma-frase{
+      max-width:520px;
+      margin:12px auto 0;
+      text-align:center;
+      color:rgba(255,255,255,.84);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:18px;
+      line-height:1.35;
+      font-style:italic;
+    }
+
+    .croma-wrap{
+      position:relative;
+      width:min(760px,100%);
+      margin:0 auto;
+      padding-top:18px;
+    }
+
+    .croma{
+      position:relative;
+      height:24px;
+      width:100%;
+      border-radius:999px;
+      overflow:hidden;
+      background:
+        linear-gradient(90deg,
+          #164eff 0%,
+          #3424b7 9%,
+          #6734c8 18%,
+          #009bd6 27%,
+          #00b884 36%,
+          #55d33f 45%,
+          #d6e900 54%,
+          #ffe600 63%,
+          #ffba00 72%,
+          #ff8300 81%,
+          #ff4b1f 90%,
+          #ff2456 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.22),
+        0 0 28px rgba(255,230,0,.10);
+    }
+
+    .croma::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%, rgba(0,0,0,.18));
+      pointer-events:none;
+    }
+
+    .marcador-croma{
+      position:absolute;
+      top:2px;
+      left:var(--p);
+      transform:translateX(-50%);
+      width:26px;
+      height:48px;
+      pointer-events:none;
+    }
+
+    .marcador-croma::before{
+      content:"";
+      position:absolute;
+      top:4px;
+      left:50%;
+      transform:translateX(-50%);
+      width:20px;
+      height:20px;
+      border:4px solid #fff;
+      border-radius:50%;
+      background:#000;
+      box-shadow:0 0 0 2px rgba(0,0,0,.76), 0 0 20px rgba(255,255,255,.46);
+    }
+
+    .marcador-croma::after{
+      content:"";
+      position:absolute;
+      top:26px;
+      left:50%;
+      width:1px;
+      height:24px;
+      background:rgba(255,255,255,.62);
+    }
+
+    .range{
+      width:min(760px,100%);
+      margin:18px auto 0;
+      display:block;
+      accent-color:var(--gold);
+      cursor:pointer;
+    }
+
+    .range input[type="range"]{
+      width:100%;
+      padding:0;
+      border:0;
+      appearance:none;
+      height:24px;
+      background:transparent;
+    }
+
+    input[type="range"]::-webkit-slider-runnable-track{
+      height:4px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+    }
+
+    input[type="range"]::-webkit-slider-thumb{
+      appearance:none;
+      width:24px;
+      height:24px;
+      margin-top:-10px;
+      border:3px solid #fff;
+      border-radius:50%;
+      background:#000;
+      box-shadow:0 0 0 2px rgba(0,0,0,.72), 0 0 18px rgba(255,255,255,.44);
+    }
+
+    input[type="range"]::-moz-range-track{
+      height:4px;
+      border-radius:999px;
+      background:rgba(255,255,255,.82);
+    }
+
+    input[type="range"]::-moz-range-thumb{
+      width:22px;
+      height:22px;
+      border:3px solid #fff;
+      border-radius:50%;
+      background:#000;
+      box-shadow:0 0 0 2px rgba(0,0,0,.72), 0 0 18px rgba(255,255,255,.44);
+    }
+
+    .numeros{
+      width:min(760px,100%);
+      margin:10px auto 0;
+      display:grid;
+      grid-template-columns:repeat(13,1fr);
+      text-align:center;
+      color:#fff;
+      font-size:10px;
+      font-weight:900;
+    }
+
+    .status{
+      grid-column:1 / -1;
+      min-height:22px;
+      text-align:center;
+      color:rgba(255,255,255,.55);
+      font-size:12px;
+      margin-top:2px;
+    }
+
+    .status.ok{
+      color:#9cffb5;
+    }
+
+    .acoes{
+      grid-column:1 / -1;
+      display:grid;
+      grid-template-columns:.55fr 1fr;
+      gap:14px;
+      margin-top:12px;
+    }
+
+    button{
+      min-height:54px;
+      border:1px solid var(--gold);
+      border-radius:8px;
+      background:var(--gold);
+      color:#000;
+      cursor:pointer;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:12px;
+      font-weight:900;
+      transition:.22s ease;
+    }
+
+    button:hover{
+      background:var(--gold);
+      color:#000;
+      box-shadow:0 0 28px rgba(255,230,0,.18);
+      transform:translateY(-1px);
+    }
+
+    .acoes button:first-child{
+      border-color:transparent;
+      background:transparent;
+      color:rgba(255,255,255,.62);
+      box-shadow:none;
+    }
+
+    .acoes button:first-child:hover{
+      background:rgba(255,255,255,.12);
+      color:#fff;
+      transform:none;
+    }
+
+    .manual{
+      grid-column:1 / -1;
+      text-align:center;
+      margin-top:6px;
+    }
+
+    .manual button{
+      min-height:auto;
+      border:0;
+      color:var(--gold);
+      background:transparent;
+      font-size:10px;
+      letter-spacing:.13em;
+      text-decoration:none;
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,.18);
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      padding:22px 0 0;
+      opacity:.78;
+    }
+
+    .footer-mark{
+      color:#fff;
+      font-size:13px;
+      text-transform:uppercase;
+      font-weight:950;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-mark img{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      border-radius:50%;
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+    }
+
+    .footer-mark.right img{
+      border-radius:8px;
+    }
+
+    footer .footer-mark:first-child{
+      justify-self:start;
+      margin-right:0;
+    }
+
+    .footer-mark.right{
+      justify-self:end;
+      margin-left:0;
+      text-align:right;
+    }
+
+    .footer-text{
+      text-align:center;
+      color:rgba(255,255,255,.74);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.2;
+    }
+
+    .modal{
+      position:fixed;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      z-index:20;
+      background:rgba(0,0,0,.88);
+      backdrop-filter:blur(8px);
+      padding:24px;
+    }
+
+    .modal.oculto{
+      display:none;
+    }
+
+    .modal-box{
+      width:min(620px,100%);
+      text-align:center;
+      padding:10px;
+      background:
+        radial-gradient(circle at 50% 0%, rgba(255,230,0,.10), transparent 62%),
+        radial-gradient(circle at 20% 30%, rgba(255,255,255,.20) 0 1px, transparent 2px),
+        radial-gradient(circle at 86% 72%, rgba(255,230,0,.26) 0 1px, transparent 2px),
+        #000;
+    }
+
+    .modal-top{
+      color:var(--gold);
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:10px;
+      font-weight:900;
+      margin-bottom:18px;
+    }
+
+    .modal-box h2{
+      font-size:32px;
+      line-height:1.1;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:20px;
+    }
+
+    .modal-box p{
+      max-width:500px;
+      margin:0 auto 16px;
+      color:rgba(255,255,255,.82);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:18px;
+      line-height:1.45;
+      font-style:italic;
+    }
+
+    .modal-box .fechar{
+      width:min(320px,100%);
+      margin-top:8px;
+    }
+
+    @media(max-width:900px){
+      .grid{
+        grid-template-columns:1fr;
+        gap:34px;
+      }
+
+      .hero{
+        text-align:center;
+      }
+
+      .sub,
+      .selo{
+        margin-left:auto;
+        margin-right:auto;
+      }
+    }
+
+    @media(max-width:680px){
+      .page{
+        width:min(100% - 24px, 560px);
+        padding-bottom:calc(100px + env(safe-area-inset-bottom, 0px));
+      }
+
+      header{
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+      }
+
+      nav{
+        justify-content:center;
+      }
+
+      h1{
+        font-size:54px;
+      }
+
+      form{
+        grid-template-columns:1fr;
+      }
+
+      .campo.full,
+      .termometro,
+      .status,
+      .acoes,
+      .manual{
+        grid-column:auto;
+      }
+
+      .acoes,
+      footer{
+        grid-template-columns:1fr;
+      }
+
+      footer,
+      .footer-mark.right{
+        text-align:center;
+      }
+
+      footer .footer-mark:first-child,
+      .footer-mark.right{
+        justify-self:center;
+        margin-left:0;
+        margin-right:0;
+      }
+
+      .dial .numero{
+        font-size:44px;
+      }
+
+      .dial .nome{
+        font-size:15px;
+      }
+    }
+
+    body,
+    header,
+    h1,
+    .brand strong,
+    .brand span,
+    nav a,
+    .sub,
+    .selo,
+    .selo b,
+    label,
+    input,
+    select,
+    textarea,
+    small,
+    .dial .numero,
+    .dial .nome,
+    .dial .faixa,
+    .croma-frase,
+    .numeros,
+    .status,
+    .acoes button:first-child,
+    .footer-mark,
+    .footer-text{
+      color:var(--gold);
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+      color:rgba(255,230,0,.42);
+    }
+
+    form{
+      border-top:0;
+    }
+
+    .croma{
+      border-radius:2px;
+      box-shadow:0 0 28px rgba(255,230,0,.12);
+    }
+
+    .range{
+      margin-top:16px;
+    }
+
+    button,
+    .acoes button:first-child{
+      background:transparent;
+      color:var(--gold);
+    }
+
+    footer{
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      opacity:.78;
+    }
+
+    .footer-mark{
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-text{
+      color:var(--gold);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.2;
+      text-align:center;
+    }
+
+    @media(max-width:680px){
+      footer{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:12px;
+      }
+    }
+
+    /* PRISMA13 footer padrao */
+    footer.prisma-footer{
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:auto minmax(280px, 520px) auto;
+      justify-content:center;
+      align-items:center;
+      column-gap:clamp(18px, 3.2vw, 42px);
+      color:#fff;
+      opacity:.92;
+    }
+
+    .prisma-footer .footer-side{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .prisma-footer .footer-side-left{
+      justify-self:end;
+    }
+
+    .prisma-footer .footer-side-right{
+      justify-self:start;
+    }
+
+    .prisma-footer .footer-seal{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+      flex:0 0 auto;
+    }
+
+    .prisma-footer .footer-seal-left{
+      border-radius:50%;
+    }
+
+    .prisma-footer .footer-seal-right{
+      border-radius:8px;
+    }
+
+    .prisma-footer .footer-label{
+      color:var(--gold, #ffe600);
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .prisma-footer .footer-text{
+      display:grid;
+      gap:1px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.45vw, 24px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
+      justify-self:center;
+    }
+
+    .prisma-footer .footer-text span:last-child{
+      font-style:normal;
+      font-weight:500;
+    }
+
+    @media(max-width:760px){
+      footer.prisma-footer{
+        grid-template-columns:1fr;
+        justify-items:center;
+        row-gap:12px;
+        text-align:center;
+      }
+
+      .prisma-footer .footer-side-left,
+      .prisma-footer .footer-side-right{
+        justify-self:center;
+      }
+
+      .prisma-footer .footer-text{
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <strong>PRISMA13</strong>
+        <span>poder · identidade · interesse · direção vital</span>
+      </div>
+
+      <nav>
+        <a href="../index.html">Portal</a>
+        <a href="../tela04/index.html">IMC Corrigido</a>
+        <a href="../tela03/index.html">Dados Vitais</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="grid">
+        <div class="hero">
+          <div class="kicker">Coleta identitária</div>
+
+          <h1>Poder<br>e Identidade</h1>
+
+          <p class="sub">
+            A PUP13 nomeia sua direção e fixa o grau de comprometimento deste ciclo.
+          </p>
+
+          <div class="selo">
+            <span><b>Registro local.</b> Última visita preservada no navegador.</span>
+            <span><b>Parecer futuro.</b> Base para sínteses do dia, semana, 3, 6 e 12 semanas.</span>
+          </div>
+        </div>
+
+        <form id="formTela05">
+          <div class="campo">
+            <label for="nomePUP13">Nome identitário</label>
+            <input id="nomePUP13" type="text" placeholder="Nome da PUP13" />
+            <small>Nome usado nos ResultADOS.</small>
+          </div>
+
+          <div class="campo">
+            <label for="cpfPUP13">CPF / identidade civil</label>
+            <input id="cpfPUP13" type="text" placeholder="Somente números" />
+            <small>Campo sigiloso local.</small>
+          </div>
+
+          <div class="campo">
+            <label for="desejoVitalidade">Desejo de vitalidade</label>
+            <select id="desejoVitalidade">
+              <option value="">Selecione...</option>
+              <option value="Vitalidade integrada">Vitalidade integrada</option>
+              <option value="Vigor físico">Vigor físico</option>
+              <option value="Clareza mental">Clareza mental</option>
+              <option value="Estabilidade emocional">Estabilidade emocional</option>
+              <option value="Sono regenerativo">Sono regenerativo</option>
+              <option value="Peso saudável">Peso saudável</option>
+              <option value="Autonomia cultural">Autonomia cultural</option>
+              <option value="Direção de vida">Direção de vida</option>
+            </select>
+            <small>Foco central do ciclo.</small>
+          </div>
+
+          <div class="campo">
+            <label for="interessePrincipal">Interesse principal</label>
+            <select id="interessePrincipal">
+              <option value="">Selecione...</option>
+              <option value="Vigor · corpo">Vigor · corpo</option>
+              <option value="Clareza · mente">Clareza · mente</option>
+              <option value="Vínculo · comunhão">Vínculo · comunhão</option>
+              <option value="Regeneração · sono">Regeneração · sono</option>
+              <option value="Território · solo">Território · solo</option>
+              <option value="Sentido · direção">Sentido · direção</option>
+              <option value="Pertencimento · comunidade">Pertencimento · comunidade</option>
+              <option value="Expressão · criatividade">Expressão · criatividade</option>
+            </select>
+            <small>Primeira dimensão de atenção.</small>
+          </div>
+
+          <div class="campo">
+            <label for="estadoIdentitario">Estado identitário atual</label>
+            <select id="estadoIdentitario">
+              <option value="">Selecione...</option>
+              <option value="Em recolhimento">Em recolhimento</option>
+              <option value="Em reorganização">Em reorganização</option>
+              <option value="Em cultivo">Em cultivo</option>
+              <option value="Em afirmação">Em afirmação</option>
+              <option value="Em expansão">Em expansão</option>
+            </select>
+            <small>Como a PUP13 se percebe agora.</small>
+          </div>
+
+          <div class="campo">
+            <label for="palavraCiclo">Palavra-chave do ciclo</label>
+            <input id="palavraCiclo" type="text" placeholder="Ex.: presença" />
+            <small>Uma palavra para ancorar a direção.</small>
+          </div>
+
+          <div class="campo full">
+            <label for="declaracaoBreve">Declaração breve</label>
+            <textarea id="declaracaoBreve" placeholder="Ex.: sigo em concentração, presença e melhora permanente."></textarea>
+            <small>Síntese livre do momento atual.</small>
+          </div>
+
+          <div class="termometro">
+            <div class="dial">
+              <div class="numero" id="dialNumero">8/13</div>
+              <div class="nome" id="dialNome">Centro funcional</div>
+              <div class="faixa" id="dialFaixa">Compromisso estável · morno</div>
+            </div>
+
+            <div class="croma-frase" id="dialFrase">A intenção já sustenta escolhas mais conscientes.</div>
+            <div class="croma-wrap" id="cromaWrap">
+              <div class="marcador-croma"></div>
+              <div class="croma"></div>
+            </div>
+
+            <div class="range">
+              <input id="comprometimento" type="range" min="1" max="13" step="1" value="8" />
+            </div>
+
+            <div class="numeros">
+              <span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span>
+              <span>8</span><span>9</span><span>10</span><span>11</span><span>12</span><span>13</span>
+            </div>
+          </div>
+
+          <div class="status" id="statusTela05">
+            Última visita será preservada automaticamente.
+          </div>
+
+          <div class="acoes">
+            <button type="button" onclick="limparTela05()">Limpar</button>
+            <button type="submit">Salvar e gerar ResultADOS</button>
+          </div>
+
+          <div class="manual">
+            <button type="button" onclick="abrirManual()">Esclarecimentos · Manual PUP13</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="prisma-footer">
+      <div class="footer-side footer-side-left">
+        <img class="footer-seal footer-seal-left" src="../assets/sol-1985.jpg" alt="SOL 1984" />
+        <span class="footer-label">SOL 1984</span>
+      </div>
+
+      <div class="footer-text" aria-label="Rodape padrao PRISMA13">
+        <span>Seeemmpre melhorrrAndo... <b>NUNKAKABA.</b></span>
+        <span>Há braços.</span>
+        <span>Dr. Olair Rafael – @drolairrafael</span>
+      </div>
+
+      <div class="footer-side footer-side-right">
+        <span class="footer-label">ESBELTEZA</span>
+        <img class="footer-seal footer-seal-right" src="../assets/esbelteza-imc22.jpg" alt="ESBELTEZA" />
+      </div>
+    </footer>
+  </div>
+
+  <div id="modalManual" class="modal oculto">
+    <div class="modal-box">
+      <div class="modal-top">SINTONIA INICIAL</div>
+
+      <h2>Manual da PUP13</h2>
+
+      <p>
+        O compromisso não é cobrança: é presença escolhida.
+      </p>
+
+      <p>
+        Deslize pelo retângulo cromático e sinta onde sua energia deseja manifestar a situação atual.
+      </p>
+
+      <p>
+        Cada registro compõe a memória da jornada e prepara os pareceres de evolução.
+      </p>
+
+      <button class="fechar" onclick="fecharManual()">Fechar</button>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = "PRISMA13_MEMORIA";
+
+    const grausCompromisso = [
+      {
+        nivel:1,
+        nome:"Vibração mínima",
+        faixa:"Retração · gélido",
+        frase:"A energia quase não se move, mas ainda pode ser percebida."
+      },
+      {
+        nivel:2,
+        nome:"Pulso inicial",
+        faixa:"Sinal frágil · frio",
+        frase:"Um pequeno sinal começa a pedir cuidado e direção."
+      },
+      {
+        nivel:3,
+        nome:"Sinal presente",
+        faixa:"Retomada tênue · fresco",
+        frase:"A presença retorna em baixa intensidade, sem pressa."
+      },
+      {
+        nivel:4,
+        nome:"Abertura leve",
+        faixa:"Retomada leve · brando",
+        frase:"O campo se abre para uma escolha simples e possível."
+      },
+      {
+        nivel:5,
+        nome:"Compromisso brando",
+        faixa:"Cultivo inicial · ameno",
+        frase:"A intenção começa a ganhar forma e continuidade."
+      },
+      {
+        nivel:6,
+        nome:"Direção clara",
+        faixa:"Organização · tépido",
+        frase:"A energia encontra eixo e começa a orientar a ação."
+      },
+      {
+        nivel:7,
+        nome:"Presença estável",
+        faixa:"Centro funcional · morno",
+        frase:"O gesto se sustenta com equilíbrio, escuta e reciprocidade."
+      },
+      {
+        nivel:8,
+        nome:"Centro funcional",
+        faixa:"Compromisso estável · morno",
+        frase:"A intenção já sustenta escolhas mais conscientes."
+      },
+      {
+        nivel:9,
+        nome:"Entrega crescente",
+        faixa:"Ativação · quente",
+        frase:"A energia aumenta e chama movimento, foco e continuidade."
+      },
+      {
+        nivel:10,
+        nome:"Força ativa",
+        faixa:"Engajamento · quente",
+        frase:"O compromisso passa a organizar o ritmo da jornada."
+      },
+      {
+        nivel:11,
+        nome:"Engajamento intenso",
+        faixa:"Ardente · alta presença",
+        frase:"A vontade se firma e transforma intenção em prática."
+      },
+      {
+        nivel:12,
+        nome:"Incandescência",
+        faixa:"Expansão · alta vitalidade",
+        frase:"A direção ganha brilho, força e potência de manifestação."
+      },
+      {
+        nivel:13,
+        nome:"Manifestação solar",
+        faixa:"Integração · prisma",
+        frase:"A presença se integra e irradia escolha, vigor e sentido."
+      }
+    ];
+
+    function lerMemoria(){
+      try{
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "{}");
+      }catch(e){
+        return {};
+      }
+    }
+
+    function gravarMemoria(obj){
+      const atual = lerMemoria();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        ...atual,
+        ...obj
+      }));
+    }
+
+    function $(id){
+      return document.getElementById(id);
+    }
+
+    function valor(id){
+      return $(id).value.trim();
+    }
+
+    function grauAtual(){
+      const nivel = Number($("comprometimento").value || 8);
+      return grausCompromisso.find(g => g.nivel === nivel) || grausCompromisso[7];
+    }
+
+    function atualizarDial(){
+      const grau = grauAtual();
+      const percent = ((grau.nivel - 1) / 12) * 100;
+
+      document.documentElement.style.setProperty("--p", `${percent}%`);
+
+      $("dialNumero").textContent = `${grau.nivel}/13`;
+      $("dialNome").textContent = grau.nome;
+      $("dialFaixa").textContent = grau.faixa;
+      $("dialFrase").textContent = grau.frase;
+
+      salvarUltimaVisita(false);
+    }
+
+    function dadosTela05(){
+      const grau = grauAtual();
+
+      return {
+        tela:"05",
+        nomeTela:"Poder e Identidade",
+        nomePUP13:valor("nomePUP13"),
+        cpfPUP13:valor("cpfPUP13"),
+        desejoVitalidade:valor("desejoVitalidade"),
+        interessePrincipal:valor("interessePrincipal"),
+        estadoIdentitario:valor("estadoIdentitario"),
+        palavraCiclo:valor("palavraCiclo"),
+        declaracaoBreve:valor("declaracaoBreve"),
+        comprometimento:{
+          nivel:grau.nivel,
+          nome:grau.nome,
+          faixa:grau.faixa,
+          frase:grau.frase
+        },
+        atualizadoEm:new Date().toISOString()
+      };
+    }
+
+    function salvarUltimaVisita(mostrarStatus = true){
+      const dados = dadosTela05();
+
+      gravarMemoria({
+        tela05_ultima_visita:dados,
+        identidadePUP13:dados
+      });
+
+      if(mostrarStatus){
+        $("statusTela05").className = "status ok";
+        $("statusTela05").textContent = "Última visita preservada.";
+      }
+    }
+
+    function registrarHistorico(){
+      const mem = lerMemoria();
+      const historico = Array.isArray(mem.prisma13_historico) ? mem.prisma13_historico : [];
+      const dados = dadosTela05();
+
+      const registro = {
+        ...dados,
+        tipo:"poder_identidade",
+        dataISO:new Date().toISOString(),
+        dia:new Date().toLocaleDateString("pt-BR"),
+        hora:new Date().toLocaleTimeString("pt-BR", { hour:"2-digit", minute:"2-digit" })
+      };
+
+      historico.push(registro);
+
+      const historicoLimpo = historico.slice(-500);
+
+      gravarMemoria({
+        tela05_resultado:registro,
+        prisma13_historico:historicoLimpo,
+        prisma13_pareceres:gerarPareceres(historicoLimpo)
+      });
+
+      $("statusTela05").className = "status ok";
+      $("statusTela05").textContent = "Registro gravado para parecer diário, semanal, 3, 6 e 12 semanas.";
+    }
+
+    function gerarPareceres(historico){
+      const agora = Date.now();
+
+      const periodos = [
+        { chave:"dia", dias:1 },
+        { chave:"semana", dias:7 },
+        { chave:"tresSemanas", dias:21 },
+        { chave:"seisSemanas", dias:42 },
+        { chave:"dozeSemanas", dias:84 }
+      ];
+
+      const pareceres = {};
+
+      periodos.forEach(periodo => {
+        const limite = agora - periodo.dias * 24 * 60 * 60 * 1000;
+
+        const registros = historico.filter(r => {
+          const t = new Date(r.dataISO || r.atualizadoEm || 0).getTime();
+          return t >= limite;
+        });
+
+        const total = registros.length;
+        const soma = registros.reduce((acc, r) => acc + Number(r.comprometimento?.nivel || 0), 0);
+        const media = total ? Number((soma / total).toFixed(2)) : 0;
+
+        const desejos = contarCampo(registros, "desejoVitalidade");
+        const interesses = contarCampo(registros, "interessePrincipal");
+        const estados = contarCampo(registros, "estadoIdentitario");
+
+        pareceres[periodo.chave] = {
+          dias:periodo.dias,
+          registros:total,
+          mediaComprometimento:media,
+          desejoPredominante:maisFrequente(desejos),
+          interessePredominante:maisFrequente(interesses),
+          estadoPredominante:maisFrequente(estados),
+          atualizadoEm:new Date().toISOString()
+        };
+      });
+
+      return pareceres;
+    }
+
+    function contarCampo(registros, campo){
+      return registros.reduce((acc, r) => {
+        const v = r[campo];
+        if(v){
+          acc[v] = (acc[v] || 0) + 1;
+        }
+        return acc;
+      }, {});
+    }
+
+    function maisFrequente(obj){
+      const entradas = Object.entries(obj);
+      if(!entradas.length) return "";
+      entradas.sort((a,b) => b[1] - a[1]);
+      return entradas[0][0];
+    }
+
+    function carregarTela05(){
+      const mem = lerMemoria();
+      const d = mem.tela05_ultima_visita || mem.tela05_resultado || {};
+
+      $("nomePUP13").value = d.nomePUP13 || mem.compromissoPUP13?.nomePUP13 || "";
+      $("cpfPUP13").value = d.cpfPUP13 || "";
+      $("desejoVitalidade").value = d.desejoVitalidade || "";
+      $("interessePrincipal").value = d.interessePrincipal || "";
+      $("estadoIdentitario").value = d.estadoIdentitario || "";
+      $("palavraCiclo").value = d.palavraCiclo || "";
+      $("declaracaoBreve").value = d.declaracaoBreve || "";
+
+      if(d.comprometimento && d.comprometimento.nivel){
+        $("comprometimento").value = d.comprometimento.nivel;
+      }
+
+      atualizarDial();
+
+      if(d.atualizadoEm || d.dataISO){
+        $("statusTela05").textContent = "Última visita recuperada.";
+      }
+    }
+
+    function limparTela05(){
+      [
+        "nomePUP13",
+        "cpfPUP13",
+        "desejoVitalidade",
+        "interessePrincipal",
+        "estadoIdentitario",
+        "palavraCiclo",
+        "declaracaoBreve"
+      ].forEach(id => $(id).value = "");
+
+      $("comprometimento").value = 8;
+
+      gravarMemoria({
+        tela05_ultima_visita:null,
+        tela05_resultado:null,
+        identidadePUP13:null
+      });
+
+      atualizarDial();
+
+      $("statusTela05").className = "status";
+      $("statusTela05").textContent = "Campos limpos. Última visita removida.";
+    }
+
+    function abrirManual(){
+      $("modalManual").classList.remove("oculto");
+    }
+
+    function fecharManual(){
+      $("modalManual").classList.add("oculto");
+    }
+
+    $("comprometimento").addEventListener("input", atualizarDial);
+
+    [
+      "nomePUP13",
+      "cpfPUP13",
+      "desejoVitalidade",
+      "interessePrincipal",
+      "estadoIdentitario",
+      "palavraCiclo",
+      "declaracaoBreve"
+    ].forEach(id => {
+      $(id).addEventListener("input", () => salvarUltimaVisita(false));
+      $(id).addEventListener("change", () => salvarUltimaVisita(false));
+    });
+
+    $("formTela05").addEventListener("submit", function(e){
+      e.preventDefault();
+      salvarUltimaVisita(false);
+      registrarHistorico();
+
+      setTimeout(() => {
+        window.location.href = "../tela03/index.html";
+      }, 450);
+    });
+
+    window.addEventListener("keydown", function(e){
+      if(e.key === "Escape") fecharManual();
+    });
+
+    window.addEventListener("beforeunload", function(){
+      salvarUltimaVisita(false);
+    });
+
+    window.addEventListener("load", carregarTela05);
+  </script>
+</body>
+</html>

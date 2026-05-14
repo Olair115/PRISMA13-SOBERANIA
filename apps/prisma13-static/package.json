@@ -1,0 +1,11 @@
+{
+  "name": "@prisma13/static",
+  "version": "0.21.0",
+  "private": true,
+  "description": "Wrapper de workspace para o app estatico PRISMA13 publicado em public/.",
+  "scripts": {
+    "dev": "node ../../public/dev-server.js",
+    "validate": "node ../../scripts/validate-static.js",
+    "deploy": "firebase deploy --only hosting"
+  }
+}

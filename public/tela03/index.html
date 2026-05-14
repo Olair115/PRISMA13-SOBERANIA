@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 · Dados Vitais</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PRISMA13" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../prisma13-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../prisma13-icon.svg" />
+  <link rel="stylesheet" href="../mobile-shell.css" />
+
+  <style>
+    :root {
+      --bg: #000;
+      --fg: #fff;
+      --soft: rgba(255,255,255,.72);
+      --muted: rgba(255,255,255,.46);
+      --faint: rgba(255,255,255,.14);
+      --line: rgba(255,255,255,.24);
+      --gold: #ffea00;
+      --violet: #8a79ff;
+      --cyan: #7ffcff;
+      --danger: #ff6b6b;
+      --panel: rgba(255,255,255,.045);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 16%, rgba(255,255,255,.22) 0 1px, transparent 2px),
+        radial-gradient(circle at 78% 10%, rgba(255,234,0,.20) 0 1px, transparent 2px),
+        radial-gradient(circle at 88% 68%, rgba(127,252,255,.13) 0 1px, transparent 2px),
+        radial-gradient(circle at 28% 82%, rgba(255,234,0,.12) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 28%, rgba(255,234,0,.055), transparent 42%);
+      opacity: .62;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: min(1040px, calc(100% - 28px));
+      min-height: 100vh;
+      margin: 0 auto;
+      padding: 24px 0 30px;
+    }
+
+    header {
+      position: relative;
+      z-index: 12;
+      margin: 0 0 32px;
+      padding: 0 0 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      background: transparent;
+      border-bottom: 1px solid rgba(255,234,0,.16);
+      backdrop-filter: none;
+      opacity: .76;
+    }
+
+    .brand {
+      min-width: 0;
+    }
+
+    .brand strong {
+      display: block;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .16em;
+    }
+
+    .brand span {
+      display: block;
+      margin-top: 5px;
+      color: var(--soft);
+      font-family: Georgia, serif;
+      font-size: 12px;
+      font-style: italic;
+    }
+
+    .top-actions {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    .icon-btn,
+    .nav-link,
+    button {
+      min-height: 48px;
+      border: 1px solid rgba(255,234,0,.38);
+      background: rgba(255,234,0,.035);
+      color: var(--gold);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      text-decoration: none;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+
+    .nav-link {
+      display: grid;
+      place-items: center;
+      padding: 0 14px;
+    }
+
+    .icon-btn {
+      width: 48px;
+      padding: 0;
+      border-radius: 50%;
+      font-size: 17px;
+      letter-spacing: 0;
+    }
+
+    .icon-btn:hover,
+    .nav-link:hover,
+    button:hover {
+      background: var(--gold);
+      color: #000;
+    }
+
+    main {
+      display: grid;
+      gap: 34px;
+      padding-bottom: 24px;
+    }
+
+    .intro {
+      display: grid;
+      gap: 10px;
+      padding-top: 8px;
+    }
+
+    .eyebrow {
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 7vw, 76px);
+      line-height: .92;
+      font-weight: 950;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .lede {
+      margin: 0;
+      max-width: 36rem;
+      color: var(--soft);
+      font-family: Georgia, serif;
+      font-size: 18px;
+      font-style: italic;
+      line-height: 1.35;
+    }
+
+    .result-focus {
+      display: grid;
+      gap: 20px;
+      padding: 22px;
+      border: 1px solid rgba(255,234,0,.42);
+      background:
+        linear-gradient(135deg, rgba(255,234,0,.12), transparent 38%),
+        var(--panel);
+      box-shadow: 0 0 34px rgba(255,234,0,.10);
+      margin-bottom: 34px;
+    }
+
+    .imc-primary {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .metric-label,
+    label {
+      display: block;
+      color: var(--fg);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .imc-value {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    .imc-value strong {
+      font-size: clamp(48px, 12vw, 76px);
+      line-height: .9;
+      font-weight: 950;
+      letter-spacing: 0;
+    }
+
+    .imc-value span {
+      color: var(--soft);
+      font-size: clamp(22px, 7vw, 38px);
+      font-weight: 950;
+      line-height: 1;
+    }
+
+    .metric-sub {
+      margin: 8px 0 0;
+      color: var(--soft);
+      font-size: 13px;
+      line-height: 1.35;
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .mini-metric {
+      min-height: 88px;
+      padding: 12px;
+      border: 1px solid var(--faint);
+      background: rgba(0,0,0,.32);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .mini-metric strong {
+      font-size: 18px;
+      line-height: 1.15;
+      font-weight: 900;
+    }
+
+    .safety {
+      color: rgba(255,255,255,.78);
+      font-size: 12px;
+      line-height: 1.45;
+      border-left: 3px solid var(--danger);
+      padding: 2px 0 2px 12px;
+    }
+
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .chips span {
+      min-height: 32px;
+      display: inline-grid;
+      place-items: center;
+      padding: 0 11px;
+      border: 1px solid rgba(127,252,255,.30);
+      color: rgba(127,252,255,.88);
+      background: rgba(127,252,255,.045);
+      font-size: 11px;
+      font-weight: 950;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    form {
+      display: grid;
+      gap: 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      gap: 22px;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    input,
+    select,
+    textarea {
+      width: 100%;
+      min-height: 52px;
+      margin-top: 8px;
+      padding: 12px 4px 13px;
+      border: 0;
+      border-bottom: 1px solid var(--gold);
+      outline: 0;
+      background: transparent;
+      color: var(--fg);
+      font-size: 18px;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: rgba(255,255,255,.40);
+    }
+
+    select {
+      appearance: auto;
+      cursor: pointer;
+    }
+
+    select option {
+      background: #000;
+      color: #fff;
+    }
+
+    textarea {
+      min-height: 82px;
+      resize: vertical;
+      line-height: 1.35;
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.35;
+    }
+
+    .status {
+      min-height: 26px;
+      color: rgba(255,255,255,.72);
+      font-size: 12px;
+      line-height: 1.35;
+      text-align: center;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: .55fr 1fr;
+      gap: 14px;
+      z-index: 11;
+    }
+
+    button {
+      width: 100%;
+      padding: 0 16px;
+    }
+
+    button.secondary {
+      border-color: transparent;
+      color: rgba(255,255,255,.62);
+      background: transparent;
+    }
+
+    button.secondary:hover {
+      background: rgba(255,255,255,.12);
+      color: #000;
+    }
+
+    button[type="submit"] {
+      background: var(--gold);
+      color: #000;
+      border-color: var(--gold);
+    }
+
+    footer {
+      margin-top: 20px;
+      padding: 22px 0 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 1fr minmax(260px, 420px) 1fr;
+      align-items: center;
+      gap: 0;
+      opacity: .78;
+    }
+
+    .footer-mark {
+      color: #fff;
+      font-size: 13px;
+      font-weight: 950;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      white-space: nowrap;
+    }
+
+    .footer-mark img {
+      width: 42px;
+      height: 42px;
+      border: 1px solid rgba(255,234,0,.28);
+      border-radius: 50%;
+      background: #000;
+      object-fit: cover;
+      box-shadow: 0 0 14px rgba(255,234,0,.12);
+    }
+
+    .footer-mark.right img {
+      border-radius: 8px;
+    }
+
+    footer .footer-mark:first-child {
+      justify-self: start;
+      margin-right: 0;
+    }
+
+    .footer-mark.right {
+      justify-self: end;
+      margin-left: 0;
+      text-align: right;
+    }
+
+    .footer-text {
+      text-align: center;
+      color: rgba(255,255,255,.76);
+      font-family: Georgia, serif;
+      font-size: 14px;
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .panel {
+      display: grid;
+      gap: 0;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .sheet-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background: rgba(0,0,0,.62);
+      backdrop-filter: blur(8px);
+    }
+
+    .sheet {
+      position: fixed;
+      left: 50%;
+      bottom: 0;
+      z-index: 31;
+      width: min(560px, 100%);
+      transform: translateX(-50%);
+      padding: 22px 20px calc(22px + env(safe-area-inset-bottom, 0px));
+      border: 1px solid rgba(255,234,0,.38);
+      border-bottom: 0;
+      background: #050505;
+      box-shadow: 0 -18px 44px rgba(0,0,0,.76);
+    }
+
+    .sheet h2 {
+      margin: 0 0 12px;
+      font-size: 18px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .sheet p {
+      margin: 0 0 12px;
+      color: var(--soft);
+      font-size: 14px;
+      line-height: 1.48;
+    }
+
+    .sheet-close {
+      margin-top: 8px;
+    }
+
+    @media (min-width: 880px) {
+      .page {
+        padding-top: 26px;
+      }
+
+      main {
+        grid-template-columns: .82fr 1.18fr;
+        align-items: start;
+        gap: clamp(36px, 6vw, 72px);
+      }
+
+      .intro {
+        position: relative;
+        top: auto;
+        padding-top: 42px;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .field.full {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        width: min(100% - 22px, 560px) !important;
+        padding-bottom: calc(108px + env(safe-area-inset-bottom, 0px));
+      }
+
+      .brand strong {
+        font-size: 12px;
+        letter-spacing: .13em;
+      }
+
+      .brand span {
+        font-size: 12px;
+      }
+
+      .nav-link {
+        display: none;
+      }
+
+      h1 {
+        text-align: left !important;
+        font-size: clamp(38px, 14vw, 56px) !important;
+        letter-spacing: .08em !important;
+      }
+
+      .result-focus {
+        padding: 16px;
+      }
+
+      .metric-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .mini-metric {
+        min-height: 72px;
+      }
+
+      .actions {
+        position: static;
+        grid-template-columns: 1fr;
+        padding: 0;
+        margin: 0;
+        background: transparent;
+        border: 0;
+        backdrop-filter: none;
+      }
+
+      footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .footer-mark.right {
+        text-align: center;
+      }
+
+      footer .footer-mark:first-child,
+      .footer-mark.right {
+        justify-self: center;
+        margin-left: 0;
+        margin-right: 0;
+      }
+    }
+
+    @media (max-width: 390px) {
+      .imc-value strong {
+        font-size: 54px;
+      }
+
+      .imc-value span {
+        font-size: 20px;
+      }
+
+      .actions {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    body,
+    header,
+    h1,
+    .brand strong,
+    .brand span,
+    .eyebrow,
+    .lede,
+    .metric-label,
+    .metric-sub,
+    .mini-metric strong,
+    .safety,
+    label,
+    input,
+    select,
+    textarea,
+    .hint,
+    .status,
+    .chips span,
+    .footer-mark,
+    .footer-text{
+      color:var(--gold);
+    }
+
+    input::placeholder,
+    textarea::placeholder{
+      color:rgba(255,234,0,.42);
+    }
+
+    .result-focus,
+    .mini-metric,
+    .chips span{
+      border:0;
+      background:transparent;
+      box-shadow:none;
+    }
+
+    .result-focus{
+      padding:18px 0;
+      margin-bottom:28px;
+    }
+
+    .mini-metric{
+      padding:8px 0;
+    }
+
+    .chips span{
+      min-height:auto;
+      padding:0;
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:22px 0 0;
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      opacity:.78;
+    }
+
+    .footer-mark{
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-text{
+      color:var(--gold);
+      font-family:Georgia, serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.2;
+      text-align:center;
+    }
+
+    @media (max-width: 760px) {
+      footer {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap:12px;
+      }
+    }
+
+    /* PRISMA13 footer padrao */
+    footer.prisma-footer{
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:auto minmax(280px, 520px) auto;
+      justify-content:center;
+      align-items:center;
+      column-gap:clamp(18px, 3.2vw, 42px);
+      color:#fff;
+      opacity:.92;
+    }
+
+    .prisma-footer .footer-side{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .prisma-footer .footer-side-left{
+      justify-self:end;
+    }
+
+    .prisma-footer .footer-side-right{
+      justify-self:start;
+    }
+
+    .prisma-footer .footer-seal{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+      flex:0 0 auto;
+    }
+
+    .prisma-footer .footer-seal-left{
+      border-radius:50%;
+    }
+
+    .prisma-footer .footer-seal-right{
+      border-radius:8px;
+    }
+
+    .prisma-footer .footer-label{
+      color:var(--gold, #ffe600);
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .prisma-footer .footer-text{
+      display:grid;
+      gap:1px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.45vw, 24px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
+      justify-self:center;
+    }
+
+    .prisma-footer .footer-text span:last-child{
+      font-style:normal;
+      font-weight:500;
+    }
+
+    @media(max-width:760px){
+      footer.prisma-footer{
+        grid-template-columns:1fr;
+        justify-items:center;
+        row-gap:12px;
+        text-align:center;
+      }
+
+      .prisma-footer .footer-side-left,
+      .prisma-footer .footer-side-right{
+        justify-self:center;
+      }
+
+      .prisma-footer .footer-text{
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <div class="brand">
+        <strong>PRISMA13</strong>
+        <span>dados vitais da PUP13</span>
+      </div>
+
+      <div class="top-actions">
+        <a class="nav-link" href="../tela02/index.html">Identificação</a>
+        <a class="nav-link" href="../tela04/index.html">IMC Corrigido</a>
+        <button class="icon-btn" type="button" id="ajuda" aria-label="Abrir esclarecimentos">?</button>
+      </div>
+    </header>
+
+    <main>
+      <section class="intro" aria-labelledby="tituloTela">
+        <div class="eyebrow">Facticidade</div>
+        <h1 id="tituloTela">Dados<br>Vitais</h1>
+        <p class="lede">Corpo, idade e meta central.</p>
+      </section>
+
+      <section class="panel" aria-label="Dados vitais">
+        <section class="result-focus" aria-label="Resultado do IMC">
+          <div class="imc-primary">
+            <div>
+              <span class="metric-label">IMC estimado</span>
+              <div class="imc-value">
+                <strong id="imcEstimado">0,0</strong>
+                <span>kg/m²</span>
+              </div>
+              <p class="metric-sub" id="faixaIMC">Informe altura e peso.</p>
+            </div>
+          </div>
+
+          <div class="metric-grid">
+            <div class="mini-metric">
+              <span class="metric-label">Idade</span>
+              <strong id="idadeValor">—</strong>
+            </div>
+
+            <div class="mini-metric">
+              <span class="metric-label">Ajuste etário</span>
+              <strong id="ajusteEtario">Contextual</strong>
+            </div>
+
+            <div class="mini-metric">
+              <span class="metric-label">Meta</span>
+              <strong id="metaResumo">—</strong>
+            </div>
+          </div>
+
+          <div class="safety">
+            IMC é triagem inicial, não diagnóstico. Interprete junto com idade, histórico, composição corporal e orientação profissional quando necessário.
+          </div>
+
+          <div class="chips" aria-label="Conexões PRISMA13">
+            <span>Vigor</span>
+            <span>Esbelteza IMC22</span>
+            <span>Meta central</span>
+            <span>Solo corporal</span>
+          </div>
+        </section>
+
+        <form id="formDados">
+          <div class="form-grid">
+            <div class="field">
+              <label for="nome">Nome</label>
+              <input id="nome" name="nome" autocomplete="name" placeholder="Nome da PUP13" />
+              <div class="hint">Identificação preservada na jornada.</div>
+            </div>
+
+            <div class="field">
+              <label for="nascimento">Nascimento</label>
+              <input id="nascimento" name="nascimento" type="date" />
+              <div class="hint">Base da idade cronológica.</div>
+            </div>
+
+            <div class="field">
+              <label for="origem">Origem</label>
+              <input id="origem" name="origem" placeholder="Cidade/Estado" />
+              <div class="hint">Local de nascimento.</div>
+            </div>
+
+            <div class="field">
+              <label for="referencia">Referência</label>
+              <select id="referencia" name="referencia">
+                <option value="">Selecione...</option>
+                <option value="Feminino">Feminino</option>
+                <option value="Masculino">Masculino</option>
+                <option value="Outra">Outra</option>
+                <option value="Prefiro não informar">Prefiro não informar</option>
+              </select>
+              <div class="hint">Dado opcional para leitura inicial.</div>
+            </div>
+
+            <div class="field">
+              <label for="altura">Altura</label>
+              <input id="altura" name="altura" inputmode="decimal" placeholder="1,64 ou 164" />
+              <div class="hint">Aceita metro ou centímetro.</div>
+            </div>
+
+            <div class="field">
+              <label for="peso">Peso</label>
+              <input id="peso" name="peso" inputmode="decimal" placeholder="75,8" />
+              <div class="hint">Em quilogramas.</div>
+            </div>
+
+            <div class="field full">
+              <label for="meta">Meta</label>
+              <select id="meta" name="meta">
+                <option value="">Selecione...</option>
+                <option value="VIGOR JUVENIL">Vigor juvenil</option>
+                <option value="ESBELTEZA IMC22">Esbelteza IMC22</option>
+                <option value="REGENERAÇÃO PROFUNDA">Regeneração profunda</option>
+                <option value="CLAREZA MENTAL">Clareza mental</option>
+                <option value="PRESENÇA VITAL">Presença vital</option>
+                <option value="VITALIDADE INTEGRADA">Vitalidade integrada</option>
+              </select>
+              <div class="hint">Intenção central da PUP13.</div>
+            </div>
+
+            <div class="field full">
+              <label for="observacao">Momento</label>
+              <textarea id="observacao" name="observacao" placeholder="Uma frase do momento."></textarea>
+              <div class="hint">Breve, sem explicar demais.</div>
+            </div>
+          </div>
+
+          <div class="status" id="status">Informe nascimento, altura e peso para concluir a leitura.</div>
+
+          <div class="actions">
+            <button type="button" class="secondary" id="limpar">Limpar</button>
+            <button type="submit">Salvar e seguir</button>
+          </div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="prisma-footer">
+      <div class="footer-side footer-side-left">
+        <img class="footer-seal footer-seal-left" src="../assets/sol-1985.jpg" alt="SOL 1984" />
+        <span class="footer-label">SOL 1984</span>
+      </div>
+
+      <div class="footer-text" aria-label="Rodape padrao PRISMA13">
+        <span>Seeemmpre melhorrrAndo... <b>NUNKAKABA.</b></span>
+        <span>Há braços.</span>
+        <span>Dr. Olair Rafael – @drolairrafael</span>
+      </div>
+
+      <div class="footer-side footer-side-right">
+        <span class="footer-label">ESBELTEZA</span>
+        <img class="footer-seal footer-seal-right" src="../assets/esbelteza-imc22.jpg" alt="ESBELTEZA" />
+      </div>
+    </footer>
+  </div>
+
+  <div class="sheet-backdrop" id="sheetBackdrop" hidden></div>
+
+  <section class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheetTitle" hidden>
+    <h2 id="sheetTitle">Leitura vital</h2>
+    <p>O IMC aqui entra como estimativa simples: peso dividido pela altura ao quadrado.</p>
+    <p>O ajuste etário é uma leitura contextual para evitar uma conclusão clínica automática. O registro marca ponto de partida, não sentença sobre saúde.</p>
+    <p>Origem, meta e momento ajudam a conectar corpo, intenção e trajetória da PUP13.</p>
+    <button type="button" class="sheet-close" id="fecharSheet">Entendi</button>
+  </section>
+
+  <script>
+    const STORAGE_KEY = "prisma13_tela03_dados_vitais";
+
+    const $ = (id) => document.getElementById(id);
+
+    const fields = [
+      "nome",
+      "nascimento",
+      "origem",
+      "referencia",
+      "altura",
+      "peso",
+      "meta",
+      "observacao"
+    ];
+
+    function parseNumero(valor) {
+      if (!valor) return 0;
+      return Number(
+        String(valor)
+          .replace(/\s/g, "")
+          .replace(",", ".")
+          .replace(/[^\d.]/g, "")
+      ) || 0;
+    }
+
+    function normalizarAltura(valor) {
+      let altura = parseNumero(valor);
+      if (!altura) return 0;
+      if (altura > 3) altura = altura / 100;
+      return altura;
+    }
+
+    function formatDecimal(valor) {
+      if (!Number.isFinite(valor) || valor <= 0) return "0,0";
+      return valor.toFixed(1).replace(".", ",");
+    }
+
+    function calcularIdade(dataISO) {
+      if (!dataISO) return null;
+
+      const nascimento = new Date(dataISO + "T00:00:00");
+      const hoje = new Date();
+
+      if (Number.isNaN(nascimento.getTime()) || nascimento > hoje) return null;
+
+      let anos = hoje.getFullYear() - nascimento.getFullYear();
+      let meses = hoje.getMonth() - nascimento.getMonth();
+      let dias = hoje.getDate() - nascimento.getDate();
+
+      if (dias < 0) {
+        meses--;
+        const ultimoMes = new Date(hoje.getFullYear(), hoje.getMonth(), 0);
+        dias += ultimoMes.getDate();
+      }
+
+      if (meses < 0) {
+        anos--;
+        meses += 12;
+      }
+
+      return { anos, meses, dias };
+    }
+
+    function textoIdade(idade) {
+      if (!idade) return "—";
+      return `${idade.anos}a ${idade.meses}m ${idade.dias}d`;
+    }
+
+    function calcularIMC() {
+      const altura = normalizarAltura($("altura").value);
+      const peso = parseNumero($("peso").value);
+      if (!altura || !peso) return 0;
+      return peso / (altura * altura);
+    }
+
+    function classificarIMC(imc) {
+      if (!imc) return "Informe altura e peso.";
+      if (imc < 18.5) return "Abaixo da faixa adulta de referência.";
+      if (imc < 25) return "Faixa adulta de referência.";
+      if (imc < 30) return "Acima da faixa adulta de referência.";
+      return "Faixa elevada para triagem inicial.";
+    }
+
+    function contextoEtario(idade) {
+      if (!idade) return "Contextual";
+      if (idade.anos >= 60) return "Maior peso do histórico";
+      if (idade.anos >= 40) return "Observar tendência";
+      if (idade.anos >= 18) return "Adulto";
+      return "Em desenvolvimento";
+    }
+
+    function atualizarIndicadores() {
+      const idade = calcularIdade($("nascimento").value);
+      const imc = calcularIMC();
+      const meta = $("meta").value || "—";
+
+      $("idadeValor").textContent = textoIdade(idade);
+      $("imcEstimado").textContent = formatDecimal(imc);
+      $("faixaIMC").textContent = classificarIMC(imc);
+      $("ajusteEtario").textContent = contextoEtario(idade);
+      $("metaResumo").textContent = meta;
+
+      if (!idade || !imc) {
+        $("status").textContent = "Informe nascimento, altura e peso para concluir a leitura.";
+        return;
+      }
+
+      $("status").textContent = `Leitura registrada: IMC ${formatDecimal(imc)} kg/m², idade ${textoIdade(idade)}.`;
+    }
+
+    function salvarLocal() {
+      const dados = {};
+      fields.forEach((field) => {
+        dados[field] = $(field).value || "";
+      });
+
+      const idade = calcularIdade(dados.nascimento);
+      const imc = calcularIMC();
+
+      dados.idadeCronologica = idade ? textoIdade(idade) : "";
+      dados.imcEstimado = formatDecimal(imc);
+      dados.imcPadrao = dados.imcEstimado;
+      dados.imcCorrigido = dados.imcEstimado;
+      dados.leituraIMC = classificarIMC(imc);
+      dados.ajusteEtario = contextoEtario(idade);
+      dados.atualizadoEm = new Date().toISOString();
+
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(dados));
+      localStorage.setItem("prisma13_pup13_dados_vitais", JSON.stringify(dados));
+
+      return dados;
+    }
+
+    function carregarLocal() {
+      const bruto = localStorage.getItem(STORAGE_KEY);
+      if (!bruto) return;
+
+      try {
+        const dados = JSON.parse(bruto);
+        fields.forEach((field) => {
+          if (dados[field] !== undefined) $(field).value = dados[field];
+        });
+      } catch (error) {
+        console.warn("Nao foi possivel carregar dados da Tela03.", error);
+      }
+    }
+
+    function limpar() {
+      fields.forEach((field) => {
+        $(field).value = "";
+      });
+
+      localStorage.removeItem(STORAGE_KEY);
+      atualizarIndicadores();
+      $("status").textContent = "Campos limpos. Refaça a leitura vital.";
+    }
+
+    function abrirSheet() {
+      $("sheetBackdrop").hidden = false;
+      $("sheet").hidden = false;
+      $("fecharSheet").focus();
+    }
+
+    function fecharSheet() {
+      $("sheetBackdrop").hidden = true;
+      $("sheet").hidden = true;
+      $("ajuda").focus();
+    }
+
+    document.addEventListener("input", (event) => {
+      if (fields.includes(event.target.id)) {
+        atualizarIndicadores();
+        salvarLocal();
+      }
+    });
+
+    document.addEventListener("change", (event) => {
+      if (fields.includes(event.target.id)) {
+        atualizarIndicadores();
+        salvarLocal();
+      }
+    });
+
+    $("limpar").addEventListener("click", limpar);
+    $("ajuda").addEventListener("click", abrirSheet);
+    $("fecharSheet").addEventListener("click", fecharSheet);
+    $("sheetBackdrop").addEventListener("click", fecharSheet);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !$("sheet").hidden) fecharSheet();
+    });
+
+    $("formDados").addEventListener("submit", (event) => {
+      event.preventDefault();
+      salvarLocal();
+      window.location.href = "../tela04/index.html";
+    });
+
+    carregarLocal();
+    atualizarIndicadores();
+  </script>
+  <script src="../mobile-shell.js" defer></script>
+</body>
+</html>

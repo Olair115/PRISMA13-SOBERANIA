@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Estação de Partida</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #000; --card: #111; --gold: #ffd700; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; overflow-x: hidden; }
+        .card-prisma13 { background: var(--card); max-width: 650px; width: 98%; padding: 25px; border-radius: 25px; box-shadow: 0 0 50px rgba(108, 92, 231, 0.3); border: 1px solid #333; text-align: center; }
+        h1 { color: #fff; letter-spacing: 5px; margin: 0; text-transform: uppercase; font-size: 2.2rem; font-weight: 800; }
+        
+        .relogio-container { position: relative; width: 100%; max-width: 500px; margin: 5px auto; aspect-ratio: 1/1; }
+        svg { width: 100%; height: 100%; filter: drop-shadow(0 0 5px var(--primary)); overflow: visible; }
+        
+        .dim-label { font-size: 2.6px; fill: #bbb; font-weight: bold; text-transform: uppercase; letter-spacing: 0.2px; }
+        .urdidura { stroke: rgba(108, 92, 231, 0.2); stroke-width: 0.3; }
+        .teia-linha { fill: rgba(108, 92, 231, 0.15); stroke: var(--primary); stroke-width: 0.8; transition: all 1s ease-in-out; }
+        
+        input { width: 100%; padding: 15px; margin: 8px 0; border-radius: 12px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; font-size: 1rem; }
+        label { display: block; text-align: left; margin-top: 10px; color: var(--primary); font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
+        .btn-navegar { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; margin-top: 15px; transition: 0.3s; }
+        .btn-navegar:hover { background: #5849be; transform: scale(1.02); }
+        .footer-lemas { margin-top: 20px; font-size: 0.9rem; color: var(--primary); font-weight: bold; border-top: 1px solid #333; padding-top: 15px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="card-prisma13">
+            <h1>PRISMA13</h1>
+            <div class="relogio-container" id="relogio">
+                </div>
+            <p style="margin-top:5px;"><b>Com as minhas Boas-Vindas!</b></p>
+            <div style="text-align:left;">
+                <label>Protagonista:</label>
+                <input type="text" id="nome" placeholder="Seu nome ou apelido...">
+                <label>Cronobiologia (Nascimento):</label>
+                <input type="date" id="dn">
+            </div>
+            <button class="btn-navegar" onclick="partirParaVigor()">INICIAR r)EVOLUÇÃO</button>
+            <div class="footer-lemas">Seeemmpre MelhorrrAndo... NUNKAKABA!</div>
+        </div>
+    </div>
+
+    <script>
+        const dimensoes = ["Ar Limpo", "Água Viva", "Luz Solar", "Sono", "Movimento", "Nutrição", "Jejum", "Pensamento", "Sentimento", "Ações", "Trabalho", "Espírito", "Ação"];
+        
+        // Gerar a Teia Visual na Entrada
+        const svgHTML = `
+            <svg viewBox="0 0 140 140">
+                ${dimensoes.map((d, i) => {
+                    const a = (i * 360 / 13 - 90) * (Math.PI / 180);
+                    const x2 = 70 + 38 * Math.cos(a), y2 = 70 + 38 * Math.sin(a);
+                    const tx = 70 + 46 * Math.cos(a), ty = 70 + 46 * Math.sin(a);
+                    let anchor = Math.cos(a) > 0.2 ? "start" : (Math.cos(a) < -0.2 ? "end" : "middle");
+                    return `
+                        <line x1="70" y1="70" x2="${x2}" y2="${y2}" class="urdidura" />
+                        <text x="${tx}" y="${ty}" text-anchor="${anchor}" class="dim-label" dominant-baseline="middle">${d}</text>`;
+                }).join('')}
+                <circle cx="70" cy="70" r="15" fill="none" stroke="rgba(108,92,231,0.1)" stroke-width="0.2" />
+                <circle cx="70" cy="70" r="25" fill="none" stroke="rgba(108,92,231,0.2)" stroke-width="0.2" />
+                <circle cx="70" cy="70" r="35" fill="none" stroke="rgba(108,92,231,0.3)" stroke-width="0.2" />
+                <polygon points="70,35 88,45 98,65 92,85 70,105 48,85 42,65 52,45" class="teia-linha" />
+                <circle cx="70" cy="70" r="4" fill="#ffd700" />
+            </svg>`;
+        document.getElementById('relogio').innerHTML = svgHTML;
+
+        function partirParaVigor() {
+            const n = document.getElementById('nome').value;
+            const d = document.getElementById('dn').value;
+            
+            if(!n || !d) {
+                alert("Zelar pela identificação inicial.");
+                return;
+            }
+            
+            // Fixar Dados na Memória da Locomotiva
+            localStorage.setItem('p_nome', n);
+            localStorage.setItem('p_dn', d);
+            
+            // DISPARAR O PRIMEIRO VAGÃO (A TELA 02)
+            // Certifique-se que o nome da pasta abaixo seja EXATAMENTE igual ao seu Explorer
+            window.location.href = "./TELA 02/index.html";
+        }
+
+        // Carregar dados se já existirem
+        window.onload = () => {
+            if(localStorage.getItem('p_nome')) document.getElementById('nome').value = localStorage.getItem('p_nome');
+            if(localStorage.getItem('p_dn')) document.getElementById('dn').value = localStorage.getItem('p_dn');
+        };
+    </script>
+</body>
+</htm

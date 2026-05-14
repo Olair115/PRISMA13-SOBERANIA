@@ -1,0 +1,72 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PRISMA13: rodar app estatico",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "public/dev-server.js"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": [],
+      "isBackground": true
+    },
+    {
+      "label": "PRISMA13: validar 20 telas",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "scripts/validate-static.js"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "PRISMA13: testar core",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "functions/node_modules/jest/bin/jest.js",
+        "packages/core/__tests__",
+        "--runInBand"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "PRISMA13: testar functions",
+      "type": "shell",
+      "command": "node",
+      "args": [
+        "node_modules/jest/bin/jest.js",
+        "test",
+        "--runInBand"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/functions"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "PRISMA13: npm oficial",
+      "type": "shell",
+      "command": "C:\\Program Files\\nodejs\\node.exe",
+      "args": [
+        "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js",
+        "run",
+        "validate:static"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Interesse</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #0a0f1d; --card: #111; --gold: #ffd700; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card-prisma13 { background: var(--card); max-width: 500px; width: 92%; padding: 30px; border-radius: 25px; border: 1px solid #333; text-align: center; }
+        .btn-prisma { background: var(--primary); transition: 0.3s; }
+        .btn-prisma:hover { background: #5849be; transform: translateY(-2px); }
+        input[type="checkbox"] { accent-color: var(--primary); width: 20px; height: 20px; }
+    </style>
+</head>
+<body>
+    <div id="app">
+        <div class="card-prisma13">
+            <h1 class="text-2xl font-black text-white tracking-widest uppercase">r)EVOLUÇÃO SISTÊMICA</h1>
+            
+            <p class="text-sm text-gray-400 mt-4 italic">
+                <b>Aquilatar</b> o interesse é o primeiro passo para <b>Superar</b> a normose.
+            </p>
+
+            <div class="mt-8 space-y-4 text-left">
+                <label class="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl border border-gray-700 cursor-pointer hover:bg-gray-700 transition">
+                    <input type="checkbox" name="foco" value="biologia">
+                    <span class="text-sm"><b>Fortalecer</b> Vigor Biológico (Longevidade)</span>
+                </label>
+
+                <label class="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl border border-gray-700 cursor-pointer hover:bg-gray-700 transition">
+                    <input type="checkbox" name="foco" value="emocional">
+                    <span class="text-sm"><b>Equilibrar</b> Vínculos e Prosperidade</span>
+                </label>
+
+                <label class="flex items-center space-x-4 p-4 bg-gray-800 rounded-xl border border-gray-700 cursor-pointer hover:bg-gray-700 transition">
+                    <input type="checkbox" name="foco" value="mente">
+                    <span class="text-sm"><b>Conquistar</b> Soberania da Atenção</span>
+                </label>
+            </div>
+
+            <div style="background: rgba(108, 92, 231, 0.1); padding: 15px; border-radius: 15px; margin-top: 25px;" class="text-left">
+                <p class="text-xs text-indigo-300 leading-relaxed">
+                    <b>Sapiência:</b> Telômeros e Metilação do DNA definem sua saúde real. Vamos <b>Otimizar</b> sua Idade Biológica.
+                </p>
+            </div>
+
+            <button onclick="concluirVeredito()" class="btn-prisma mt-8 w-full text-white font-bold py-4 rounded-xl text-lg shadow-lg">
+                SELAR MEUS IDEAIS
+            </button>
+
+            <div class="mt-8 text-xs font-bold text-gray-500 uppercase tracking-tighter">
+                Seeemmpre MelhorrrAndo... NUNKAKABA!
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function concluirVeredito() {
+            // 1. Capturar as escolhas do Protagonista
+            const checkboxes = document.querySelectorAll('input[name="foco"]:checked');
+            const escolhas = Array.from(checkboxes).map(cb => cb.value);
+            
+            if (escolhas.length === 0) {
+                alert("Zelar pela escolha de ao menos um Ideal para prosseguir.");
+                return;
+            }
+
+            // 2. Fixar no Lastro Digital
+            localStorage.setItem('prisma_interesses', JSON.stringify(escolhas));
+            
+            // 3. ENGATE SOBERANO: Pular para a TELA 05
+            // Verifique se o nome da pasta no seu Windows é este mesmo!
+            window.location.href = "../TELA 05 - IDEIAS_IDEAIS/index.html";
+        }
+    </script>
+</body>
+</html>

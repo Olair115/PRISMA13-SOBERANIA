@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>PRISMA13 - KRIYA YOGA</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PRISMA13" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../prisma13-icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="../prisma13-icon.svg" />
+  <link rel="stylesheet" href="../mobile-shell.css" />
+
+    <style>
+        :root { --primary: #FF8C00; --bg: #0a0f1d; --card: #1e1e1e; --gold: #FFD700; --anil: #1E88E5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #e0e0e0; display: flex; flex-direction: column; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card-yoga { background: var(--card); padding: 30px; border-radius: 20px; border: 2px solid var(--primary); text-align: center; max-width: 450px; box-shadow: 0 0 20px rgba(255, 140, 0, 0.3); }
+        .timer { font-size: 3em; color: var(--gold); margin: 20px 0; font-family: 'Courier New', monospace; }
+        .btn { background: var(--primary); color: white; border: none; padding: 15px 30px; border-radius: 30px; font-weight: bold; cursor: pointer; margin: 5px; }
+        .btn-voltar { background: transparent; color: #888; border: 1px solid #333; margin-top: 20px; }
+
+    /* PRISMA13 footer padrao */
+    footer.prisma-footer{
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:auto minmax(280px, 520px) auto;
+      justify-content:center;
+      align-items:center;
+      column-gap:clamp(18px, 3.2vw, 42px);
+      color:#fff;
+      opacity:.92;
+    }
+
+    .prisma-footer .footer-side{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .prisma-footer .footer-side-left{
+      justify-self:end;
+    }
+
+    .prisma-footer .footer-side-right{
+      justify-self:start;
+    }
+
+    .prisma-footer .footer-seal{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+      flex:0 0 auto;
+    }
+
+    .prisma-footer .footer-seal-left{
+      border-radius:50%;
+    }
+
+    .prisma-footer .footer-seal-right{
+      border-radius:8px;
+    }
+
+    .prisma-footer .footer-label{
+      color:var(--gold, #ffe600);
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .prisma-footer .footer-text{
+      display:grid;
+      gap:1px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.45vw, 24px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
+      justify-self:center;
+    }
+
+    .prisma-footer .footer-text span:last-child{
+      font-style:normal;
+      font-weight:500;
+    }
+
+    @media(max-width:760px){
+      footer.prisma-footer{
+        grid-template-columns:1fr;
+        justify-items:center;
+        row-gap:12px;
+        text-align:center;
+      }
+
+      .prisma-footer .footer-side-left,
+      .prisma-footer .footer-side-right{
+        justify-self:center;
+      }
+
+      .prisma-footer .footer-text{
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+<body>
+    <div class="card-yoga">
+        <h1 style="color:var(--primary);">KRIYA YOGA</h1>
+        <p><i>"O Atrator de Ordem da Consciência"</i></p>
+        
+        <div class="timer" id="display">00:00</div>
+        
+        <button class="btn" onclick="toggleTimer()" id="btnStart">INICIAR PRÁTICA</button>
+        <button class="btn" style="background:#c0392b" onclick="resetTimer()">REINICIAR</button>
+        
+        <div style="margin-top:25px; text-align:left;">
+            <label>Nível de Quietude (1-13):</label>
+            <input type="range" min="1" max="13" value="7" style="width:100%; accent-color:var(--gold);">
+        </div>
+
+        <button class="btn btn-voltar" onclick="window.location.href='../index.html'">SALVAR E RETORNAR AO PORTAL</button>
+        <div style="margin-top:20px; font-size:0.8rem; font-style:italic; color:#666;">
+            <b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b><br>Há braços!
+        </div>
+    </div>
+    <footer class="prisma-footer">
+      <div class="footer-side footer-side-left">
+        <img class="footer-seal footer-seal-left" src="../assets/sol-1985.jpg" alt="SOL 1984" />
+        <span class="footer-label">SOL 1984</span>
+      </div>
+
+      <div class="footer-text" aria-label="Rodape padrao PRISMA13">
+        <span>Seeemmpre melhorrrAndo... <b>NUNKAKABA.</b></span>
+        <span>Há braços.</span>
+        <span>Dr. Olair Rafael – @drolairrafael</span>
+      </div>
+
+      <div class="footer-side footer-side-right">
+        <span class="footer-label">ESBELTEZA</span>
+        <img class="footer-seal footer-seal-right" src="../assets/esbelteza-imc22.jpg" alt="ESBELTEZA" />
+      </div>
+    </footer>
+
+
+    <script>
+        let seconds = 0, interval = null;
+        function toggleTimer() {
+            if (interval) {
+                clearInterval(interval);
+                interval = null;
+                document.getElementById('btnStart').innerText = 'RETOMAR';
+            } else {
+                interval = setInterval(() => {
+                    seconds++;
+                    let m = Math.floor(seconds / 60).toString().padStart(2, '0');
+                    let s = (seconds % 60).toString().padStart(2, '0');
+                    document.getElementById('display').innerText = `${m}:${s}`;
+                }, 1000);
+                document.getElementById('btnStart').innerText = 'PAUSAR';
+            }
+        }
+        function resetTimer() {
+            clearInterval(interval);
+            interval = null;
+            seconds = 0;
+            document.getElementById('display').innerText = "00:00";
+            document.getElementById('btnStart').innerText = 'INICIAR PRÁTICA';
+        }
+    </script>
+  <script src="../mobile-shell.js" defer></script>
+</body>
+</html>

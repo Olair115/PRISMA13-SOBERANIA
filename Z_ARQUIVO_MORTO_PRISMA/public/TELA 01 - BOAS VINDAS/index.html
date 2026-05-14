@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Soberania em Saúde</title>
+    <style>
+        /* Estilo Soberano e Assertivo */
+        body { font-family: 'Segoe UI', sans-serif; background-color: #000; color: #fff; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card-prisma13 { background: #111; max-width: 600px; width: 90%; padding: 40px; border-radius: 20px; box-shadow: 0 0 30px rgba(108, 92, 231, 0.2); border: 1px solid #333; text-align: center; }
+        h1 { color: #6c5ce7; margin-bottom: 10px; }
+        input { width: 100%; padding: 15px; margin: 20px 0; border-radius: 10px; border: 1px solid #444; background: #222; color: #fff; box-sizing: border-box; }
+        .btn-navegar { background: #6c5ce7; color: white; border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1rem; }
+        .btn-navegar:hover { background: #5849be; }
+        .welcome-text { line-height: 1.6; color: #ccc; margin: 20px 0; }
+        .footer-lemas { margin-top: 30px; font-size: 0.9rem; color: #6c5ce7; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div id="app-container">
+        </div>
+
+    <script>
+        // 1. A MATRIZ CANÔNICA (TELAS)
+        const screens = {
+            // TELA 01 - APRESENTAÇÃO
+            boasvindas: () => `
+                <div class="card-prisma13">
+                    <h1>PRISMA13: A r)EVOLUÇÃO</h1>
+                    <p class="welcome-text"><b>Aceitar</b> as minhas Boas-Vindas!</p>
+                    <p class="welcome-text">Aqui se inicia a sua própria evolução revolucionária para um modo Alegre e Feliz de bem-viver.</p>
+                    
+                    <input type="text" id="nome_protagonista" placeholder="Como quer ser chamado?">
+                    
+                    <button class="btn-navegar" onclick="processarIdentificacao()">CONTINUAR r)EVOLUÇÃO</button>
+                    
+                    <div class="footer-lemas">
+                        <p>Seeemmpre MelhorrrAndo... NUNKAKABA!</p>
+                        <p>Há braços!</p>
+                    </div>
+                </div>
+            `,
+
+            // TELA 02 - VIGOR (CALIBRAGEM)
+            vigor: () => {
+                const nome = localStorage.getItem('prisma_nome') || 'Protagonista';
+                return `
+                <div class="card-prisma13">
+                    <h1>Olá, ${nome}!</h1>
+                    <p class="welcome-text"><b>Calibrar</b> o Conatus: A persistência do Ser na biologia.</p>
+                    
+                    <input type="date" id="dn" title="Data de Nascimento">
+                    <input type="number" id="peso" placeholder="Peso Atual (kg)" step="0.1">
+                    <input type="number" id="altura" placeholder="Altura Atual (m)" step="0.01">
+                    
+                    <button class="btn-navegar" onclick="alert('Calculando IMC Ponderado...')">CALIBRAR VIGOR VITAL</button>
+                    
+                    <div class="footer-lemas">
+                        <p>Seeemmpre MelhorrrAndo... NUNKAKABA!</p>
+                    </div>
+                </div>
+            `;}
+        };
+
+        // 2. O LEME (NAVEGAÇÃO)
+        function navegar(screenName) {
+            const container = document.getElementById('app-container');
+            if (screens[screenName]) {
+                container.innerHTML = screens[screenName]();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // 3. O COMANDO DE IDENTIFICAÇÃO
+        function processarIdentificacao() {
+            const nomeInput = document.getElementById('nome_protagonista');
+            const nome = nomeInput ? nomeInput.value.trim() : "";
+
+            if (!nome || nome.length < 2) {
+                alert("Por favor, identifique o Protagonista.");
+                return;
+            }
+
+            localStorage.setItem('prisma_nome', nome);
+            navegar('vigor');
+        }
+
+        // INICIAR NA TELA DE BOAS-VINDAS
+        navegar('boasvindas');
+    </script>
+</body>
+</html>

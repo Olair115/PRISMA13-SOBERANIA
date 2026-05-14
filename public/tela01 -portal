@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 · Portal Teia</title>
+  <meta name="theme-color" content="#000000" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="PRISMA13" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  
+  <style>
+    :root {
+      --bg: #000;<br/>
+      --fg: #fff;<br/>
+      --gold: #ffe600;<br/>
+      --gold-soft: rgba(255, 230, 0, .72);<br/>
+      --cyan: #7ffcff;<br/>
+      --soft: rgba(255, 255, 255, .74);<br/>
+      --muted: rgba(255, 255, 255, .46);<br/>
+      --line: rgba(255, 255, 255, .18);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      width: 100%;<br/>
+      min-height: 100%;<br/>
+      background: var(--bg);<br/>
+      color: var(--fg);<br/>
+      font-family: Arial, Helvetica, sans-serif;<br/>
+      overflow-x: hidden;
+    }
+
+    body::before {<br/>
+      content: "";<br/>
+      position: fixed;<br/>
+      inset: 0;<br/>
+      z-index: 0;<br/>
+      pointer-events: none;<br/>
+      background: 
+        radial-gradient(circle at 10% 16%, rgba(255,255,255,.62) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 48%, rgba(255,230,0,.055), transparent 54%);
+      background-size: 300px 300px, 100% 100%;<br/>
+      opacity: .62;<br/>
+      animation: pulseSky 7s ease-in-out infinite alternate;
+    }
+
+    @keyframes pulseSky { from { opacity: .42 } to { opacity: .74 } }
+
+    .page {
+      position: relative;<br/>
+      z-index: 1;<br/>
+      width: min(1040px, calc(100% - 32px));<br/>
+      min-height: 100svh;<br/>
+      margin: 0 auto;<br/>
+      padding: 34px 0 18px;<br/>
+      display: grid;<br/>
+      grid-template-rows: 1fr auto;<br/>
+      gap: 28px;
+    }
+
+    .portal {
+      width: min(680px, 100%);<br/>
+      margin: 0 auto;<br/>
+      display: flex;<br/>
+      flex-direction: column;<br/>
+      align-items: center;<br/>
+      justify-content: center;<br/>
+      text-align: center;
+    }
+
+    .kicker { color: var(--gold); font-size: 11px; font-weight: 900; text-transform: uppercase; margin-bottom: 12px; letter-spacing: 2px; }<br/>
+    h1 { color: var(--gold); font-size: clamp(46px, 10vw, 92px); line-height: .92; font-weight: 950; text-transform: uppercase; margin-bottom: 12px; }<br/>
+    .subtitle { max-width: 520px; color: var(--gold); font-family: Georgia, serif; font-size: clamp(17px, 4vw, 20px); font-style: italic; line-height: 1.38; margin-bottom: 24px; }
+
+    .teia-container { width: min(360px, 90vw); height: min(360px, 90vw); margin: 0 auto 22px; position: relative; }<br/>
+    svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+    .label { fill: rgba(255,255,255,.62); font-size: 8.5px; font-weight: 900; text-transform: uppercase; dominant-baseline: middle; text-anchor: middle; }<br/>
+    .grade { fill: none; stroke: rgba(255,255,255,.12); stroke-width: 1; }<br/>
+    .raio { stroke: rgba(255,255,255,.16); stroke-width: 1; }<br/>
+    .poligono-base { fill: none; stroke: rgba(255,230,0,.62); stroke-width: 1.9; stroke-linejoin: round; }<br/>
+    .poligono-interno { fill: none; stroke: rgba(127,252,255,.42); stroke-width: 1.3; stroke-linejoin: round; }<br/>
+    .cauda { fill: none; stroke: url(#caudaGrad); stroke-width: 4; stroke-linecap: round; opacity: .9; }<br/>
+    .cauda-fria { fill: none; stroke: url(#caudaFriaGrad); stroke-width: 2; stroke-linecap: round; opacity: .62; }<br/>
+    .ponto { fill: var(--gold); filter: drop-shadow(0 0 7px var(--gold)); }<br/>
+    .halo { fill: rgba(255,230,0,.18); stroke: rgba(255,230,0,.55); stroke-width: .8; }
+
+    .btn-primary {
+      width: min(340px, 100%);<br/>
+      min-height: 60px;<br/>
+      border: 1px solid var(--gold);<br/>
+      background: transparent;<br/>
+      color: var(--gold);<br/>
+      font-size: 12px;<br/>
+      font-weight: 950;<br/>
+      text-transform: uppercase;<br/>
+      cursor: pointer;<br/>
+      transition: all .2s ease;
+    }
+    .btn-primary:hover { background: var(--gold); color: #000; }
+
+    footer { border-top: 1px solid var(--line); padding: 22px 0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }<br/>
+    .footer-mark { color: var(--gold); font-size: 13px; font-weight: 950; display: flex; align-items: center; gap: 10px; }<br/>
+    .footer-mark img { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--gold-soft); }<br/>
+    .footer-text { color: var(--gold); font-family: Georgia, serif; font-size: 14px; font-style: italic; text-align: center; flex: 1; }
+
+    @media (max-width: 760px) { footer { flex-direction: column; } }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="portal">
+      <div class="kicker">Portal PRISMA13</div>
+      <h1>PRISMA13</h1>
+      <p class="subtitle">Arquitetura de vitalidade em evolução contínua.</p>
+
+      <div class="teia-container">
+        <svg id="teiaSvg" viewBox="-190 -190 380 380">
+          <defs>
+            <linearGradient id="caudaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(255,230,0,0)" />
+              <stop offset="100%" stop-color="rgba(255,230,0,1)" />
+            </linearGradient>
+            <linearGradient id="caudaFriaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(127,252,255,0)" />
+              <stop offset="100%" stop-color="rgba(127,252,255,.88)" />
+            </linearGradient>
+          </defs>
+          <g id="grade"></g>
+          <g id="poligonos"></g>
+          <path id="caudaFria" class="cauda-fria" d="" />
+          <path id="cauda" class="cauda" d="" />
+          <circle id="halo" class="halo" cx="0" cy="0" r="14" />
+          <circle id="ponto" class="ponto" cx="0" cy="0" r="7.5" />
+          <g id="labels"></g>
+        </svg>
+      </div>
+
+      <button class="btn-primary" onclick="app.entrar()">Ingressar na PUP13</button>
+      <div id="sussurro" style="margin-top:15px; font-size:11px; color:var(--gold); text-transform:uppercase;">Iniciando Teia...</div>
+    </section>
+
+    <footer>
+      <div class="footer-mark"><img src="assets/sol-1985.jpg" alt="" /><span>SOL 1985</span></div>
+      <div class="footer-text">Seeemmpre melhorrrAndo... <b>NUNKAKABA!</b><br>Dr. Olair Rafael</div>
+      <div class="footer-mark"><img src="assets/esbelteza-imc22.jpg" alt="" /><span>IMC22</span></div>
+    </footer>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>

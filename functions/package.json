@@ -6,6 +6,7 @@
     "serve": "firebase emulators:start --only functions",
     "shell": "firebase functions:shell",
     "start": "npm run shell",
+    "test": "jest --runInBand",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -20,7 +21,8 @@
   "devDependencies": {
     "eslint": "^8.15.0",
     "eslint-config-google": "^0.14.0",
-    "firebase-functions-test": "^3.4.1"
+    "firebase-functions-test": "^3.4.1",
+    "jest": "^30.3.0"
   },
   "private": true
 }

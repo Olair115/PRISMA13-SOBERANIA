@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Aquilatamento</title>
+    <style>
+        :root { --primary: #6c5ce7; --bg: #0a0f1d; --card: #111; --text: #e0e0e0; --gold: #FFD700; --anil: #1E88E5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .card-prisma13 { background: var(--card); padding: 30px; border-radius: 25px; box-shadow: 0 15px 40px rgba(0,0,0,0.6); max-width: 480px; width: 92%; text-align: center; border: 1px solid #333; }
+        .sap-frase { background: #1a1a1a; border-left: 5px solid var(--primary); padding: 20px; margin: 20px 0; text-align: left; color: var(--gold); font-style: italic; font-size: 1.1rem; line-height: 1.6; border-radius: 0 15px 15px 0; }
+        .btn-navegar { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.2rem; transition: 0.3s; box-shadow: 0 5px 15px rgba(108, 92, 231, 0.3); }
+        .btn-navegar:hover { background: #5849be; transform: translateY(-2px); }
+        input[type=range] { width: 100%; cursor: pointer; accent-color: var(--anil); margin: 20px 0; }
+        .footer-lemas { margin-top: 30px; font-size: 0.85rem; color: var(--primary); font-weight: bold; border-top: 1px solid #333; padding-top: 20px; }
+        .ontologia { font-size: 0.95rem; color: #bbb; margin-bottom: 20px; line-height: 1.4; }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script src="frasesSemana01.js"></script>
+    <script src="frasesSemana02.js"></script>
+    <script>
+        const app = document.getElementById('app');
+        
+        // --- CALIBRAGEM DA ESTAÇÃO ATUAL ---
+        const DIMENSAO_ATUAL = 6; // Iniciando pelo Vigor Físico
+
+        const NOMES_DIMENSOES = {
+            6: "VIGOR FÍSICO",
+            7: "MENTE E EQUILÍBRIO",
+            8: "AFETOS E RELAÇÕES",
+            9: "CARREIRA E OBRA",
+            10: "SOBERANIA FINANCEIRA",
+            11: "FAMÍLIA E LAÇOS",
+            12: "COMUNIDADE E CIDADANIA",
+            13: "CRIATIVIDADE E APOTEOSE"
+        };
+
+        function dispararSapiencia(dim) {
+            const dataInicio = localStorage.getItem('prisma_data_inicio') || new Date().toISOString();
+            if(!localStorage.getItem('prisma_data_inicio')) localStorage.setItem('prisma_data_inicio', dataInicio);
+            const dias = Math.floor((new Date() - new Date(dataInicio)) / (1000 * 60 * 60 * 24)) + 1;
+            const semanaNum = Math.ceil(dias / 7) || 1;
+            const semana = semanaNum > 13 ? 13 : semanaNum;
+            const par = dim <= 7 ? `${dim}-${14-dim}` : `${14-dim}-${dim}`;
+            try {
+                const baseFrases = window[`frasesSemana${semana.toString().padStart(2, '0')}`];
+                return baseFrases[par] || "Seeemmpre MelhorrrAndo... NUNKAKABA!";
+            } catch (e) { return "Persistir na r)EVOLUÇÃO diária."; }
+        }
+
+        const screens = {
+            aquilatar: () => {
+                const fraseAura = dispararSapiencia(DIMENSAO_ATUAL);
+                const nomeTela = NOMES_DIMENSOES[DIMENSAO_ATUAL];
+                return `
+                <div class="card-prisma13">
+                    <h1 style="color:var(--gold); font-size:1.4rem; letter-spacing:2px;">ESTAÇÃO ${DIMENSAO_ATUAL}: ${nomeTela}</h1>
+                    <div class="sap-frase"><span>"${fraseAura}"</span></div>
+                    <p class="ontologia"><b>Aquilatar</b> o compromisso com a Longevidade Saudável:<br><span style="color:var(--anil); font-size:0.8rem;">Longe de drogarias e hospitais</span></p>
+                    
+                    <div style="margin:20px 0;">
+                        <div style="width:100%; height:16px; border-radius:8px; background:linear-gradient(to right, #5D4037, #FFEE58, #EF5350, #1E88E5); box-shadow:inset 0 2px 5px rgba(0,0,0,0.7);"></div>
+                    </div>
+                    
+                    <input type="range" id="slider" min="1" max="13" value="7" oninput="document.getElementById('v').innerText = this.value">
+                    
+                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:black; color:#aaa; text-transform:uppercase;">
+                        <span>BARRO (Denso)</span>
+                        <span id="v" style="font-size:1.8rem; color:var(--gold); font-weight:bold;">7</span>
+                        <span>SOPRO (Anil)</span>
+                    </div>
+                    
+                    <button class="btn-navegar" onclick="consolidarSoberania()">CONSOLIDAR SOBERANIA</button>
+                    
+                    <div class="footer-lemas">Seeemmpre MelhorrrAndo... NUNKAKABA!<br>Há braços!</div>
+                </div>`;
+            }
+        };
+
+        function consolidarSoberania() {
+            const nota = document.getElementById('slider').value;
+            localStorage.setItem(`prisma_dim_${DIMENSAO_ATUAL}`, nota);
+            
+            // Navegação Sucessiva (Engatando os Vagões)
+            const proximas = {
+                6: "../TELA 07/index.html",
+                7: "../TELA 08/index.html",
+                8: "../TELA 09/index.html",
+                9: "../TELA 10/index.html",
+                10: "../TELA 11/index.html",
+                11: "../TELA 12/index.html",
+                12: "../TELA 13/index.html",
+                13: "../TELA 14/index.html"
+            };
+            
+            if (proximas[DIMENSAO_ATUAL]) {
+                window.location.href = proximas[DIMENSAO_ATUAL];
+            } else {
+                alert("Ciclo Sistêmico Concluído com Sucesso!");
+            }
+        }
+
+        window.onload = () => app.innerHTML = screens.aquilatar();
+    </script>
+</body>
+</html>

@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 · PUP13</title>
+  <meta name="theme-color" content="#000000" />
+  <link rel="manifest" href="../manifest.webmanifest" />
+  <link rel="icon" href="../prisma13-icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="../mobile-shell.css" />
+
+  <style>
+    :root{
+      --bg:#000;
+      --fg:#fff;
+      --gold:#ffe600;
+      --soft:rgba(255,255,255,.74);
+      --muted:rgba(255,255,255,.46);
+      --line:rgba(255,255,255,.18);
+      --panel:rgba(255,255,255,.045);
+    }
+
+    *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+
+    html,
+    body{
+      width:100%;
+      min-height:100%;
+      background:var(--bg);
+      color:var(--fg);
+      font-family:Arial, Helvetica, sans-serif;
+      overflow-x:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255,255,255,.42) 0 1px, transparent 2px),
+        radial-gradient(circle at 24% 76%, rgba(255,230,0,.34) 0 1px, transparent 2px),
+        radial-gradient(circle at 54% 20%, rgba(255,255,255,.24) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 62%, rgba(255,230,0,.30) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 48%, rgba(255,230,0,.045), transparent 54%);
+      background-size:320px 320px,380px 380px,340px 340px,360px 360px,100% 100%;
+      opacity:.62;
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(1040px, calc(100% - 32px));
+      min-height:100svh;
+      margin:0 auto;
+      padding:24px 0 18px;
+      display:grid;
+      grid-template-rows:auto 1fr auto;
+      gap:28px;
+    }
+
+    header,
+    footer{
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      opacity:.74;
+    }
+
+    header{
+      grid-template-columns:1fr;
+      border-bottom:1px solid var(--line);
+      padding-bottom:14px;
+      text-align:center;
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:22px 0 0;
+    }
+
+    .mark,
+    .footer-mark{
+      color:#fff;
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-mark img{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      border-radius:50%;
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+    }
+
+    .footer-mark.right img{
+      border-radius:8px;
+    }
+
+    .center,
+    .footer-text{
+      color:rgba(255,255,255,.74);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.3;
+      text-align:center;
+    }
+
+    .right,
+    .footer-mark.right{
+      text-align:left;
+    }
+
+    footer .footer-mark:first-child{
+      justify-self:start;
+      margin-right:0;
+    }
+
+    .footer-mark.right{
+      justify-self:end;
+      margin-left:0;
+    }
+
+    main{
+      display:grid;
+      align-items:center;
+      padding:20px 0 34px;
+    }
+
+    .entry{
+      width:100%;
+      display:grid;
+      grid-template-columns:.82fr 1.18fr;
+      gap:clamp(42px, 7vw, 82px);
+      align-items:center;
+    }
+
+    .intro{
+      min-width:0;
+    }
+
+    .kicker{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:950;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    h1{
+      color:#fff;
+      font-size:76px;
+      line-height:.92;
+      font-weight:950;
+      text-transform:uppercase;
+      margin-bottom:16px;
+    }
+
+    .lede{
+      max-width:430px;
+      color:var(--soft);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:21px;
+      font-style:italic;
+      line-height:1.36;
+    }
+
+    .ritual-note{
+      margin-top:34px;
+      display:grid;
+      gap:10px;
+      max-width:430px;
+      color:rgba(255,255,255,.56);
+      font-size:13px;
+      line-height:1.45;
+    }
+
+    .ritual-note b{
+      color:#fff;
+      font-size:11px;
+      font-weight:950;
+      text-transform:uppercase;
+    }
+
+    form{
+      display:grid;
+      gap:24px;
+      width:100%;
+      padding:26px 0 0;
+      border-top:1px solid rgba(255,230,0,.30);
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:24px;
+    }
+
+    .field{
+      min-width:0;
+    }
+
+    label{
+      display:block;
+      margin-bottom:8px;
+      color:rgba(255,255,255,.72);
+      font-size:11px;
+      font-weight:950;
+      text-transform:uppercase;
+    }
+
+    input,
+    select{
+      width:100%;
+      min-height:52px;
+      border:0;
+      border-bottom:1px solid var(--gold);
+      border-radius:0;
+      outline:0;
+      background:transparent;
+      color:#fff;
+      font-size:18px;
+      padding:12px 2px 13px;
+    }
+
+    input::placeholder{
+      color:rgba(255,255,255,.36);
+    }
+
+    select{
+      appearance:auto;
+      cursor:pointer;
+    }
+
+    option{
+      background:#000;
+      color:#fff;
+    }
+
+    .btn-primary{
+      min-height:60px;
+      border:1px solid var(--gold);
+      border-radius:8px;
+      background:var(--gold);
+      color:#000;
+      font-size:12px;
+      font-weight:950;
+      text-transform:uppercase;
+      cursor:pointer;
+      box-shadow:0 0 30px rgba(255,230,0,.16);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+
+    .btn-primary:hover{
+      transform:translateY(-1px);
+      box-shadow:0 0 42px rgba(255,230,0,.28);
+    }
+
+    .status{
+      min-height:18px;
+      color:var(--muted);
+      font-size:12px;
+      line-height:1.35;
+      text-align:center;
+      text-transform:uppercase;
+    }
+
+    @media(max-width:860px){
+      .entry{
+        grid-template-columns:1fr;
+        gap:34px;
+      }
+
+      .intro{
+        text-align:center;
+      }
+
+      .lede,
+      .ritual-note{
+        margin-left:auto;
+        margin-right:auto;
+      }
+    }
+
+    @media(max-width:720px){
+      .page{
+        width:min(100% - 24px, 560px);
+        padding:24px 0 calc(100px + env(safe-area-inset-bottom, 0px));
+      }
+
+      header,
+      footer,
+      .grid{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      .right{
+        text-align:center;
+      }
+
+      .footer-mark.right{
+        text-align:center;
+      }
+
+      footer .footer-mark:first-child,
+      .footer-mark.right{
+        justify-self:center;
+        margin-left:0;
+        margin-right:0;
+      }
+
+      h1{
+        font-size:54px;
+      }
+    }
+
+    body,
+    header,
+    h1,
+    .mark,
+    .center,
+    .kicker,
+    .lede,
+    .ritual-note,
+    .ritual-note b,
+    label,
+    input,
+    select,
+    .status,
+    .footer-mark,
+    .footer-text{
+      color:var(--gold);
+    }
+
+    input::placeholder{
+      color:rgba(255,230,0,.42);
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:22px 0 0;
+      display:grid;
+      grid-template-columns:1fr minmax(260px, 420px) 1fr;
+      gap:0;
+      align-items:center;
+      opacity:.78;
+    }
+
+    .footer-mark{
+      color:var(--gold);
+      font-size:13px;
+      font-weight:950;
+      text-transform:uppercase;
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .footer-text{
+      color:var(--gold);
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:14px;
+      font-style:italic;
+      font-weight:700;
+      line-height:1.2;
+      text-align:center;
+    }
+
+    @media(max-width:720px){
+      footer{
+        grid-template-columns:1fr;
+        text-align:center;
+        gap:12px;
+      }
+    }
+
+    /* PRISMA13 footer padrao */
+    footer.prisma-footer{
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.18);
+      padding:22px 0 0;
+      margin-top:auto;
+      display:grid;
+      grid-template-columns:auto minmax(280px, 520px) auto;
+      justify-content:center;
+      align-items:center;
+      column-gap:clamp(18px, 3.2vw, 42px);
+      color:#fff;
+      opacity:.92;
+    }
+
+    .prisma-footer .footer-side{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      white-space:nowrap;
+    }
+
+    .prisma-footer .footer-side-left{
+      justify-self:end;
+    }
+
+    .prisma-footer .footer-side-right{
+      justify-self:start;
+    }
+
+    .prisma-footer .footer-seal{
+      width:42px;
+      height:42px;
+      border:1px solid rgba(255,230,0,.28);
+      background:#000;
+      object-fit:cover;
+      box-shadow:0 0 14px rgba(255,230,0,.12);
+      flex:0 0 auto;
+    }
+
+    .prisma-footer .footer-seal-left{
+      border-radius:50%;
+    }
+
+    .prisma-footer .footer-seal-right{
+      border-radius:8px;
+    }
+
+    .prisma-footer .footer-label{
+      color:var(--gold, #ffe600);
+      font-family:Arial, Helvetica, sans-serif;
+      font-size:13px;
+      font-weight:950;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .prisma-footer .footer-text{
+      display:grid;
+      gap:1px;
+      color:#fff;
+      font-family:Georgia, "Times New Roman", serif;
+      font-size:clamp(16px, 1.45vw, 24px);
+      font-style:italic;
+      font-weight:700;
+      line-height:1.05;
+      text-align:center;
+      white-space:nowrap;
+      justify-self:center;
+    }
+
+    .prisma-footer .footer-text span:last-child{
+      font-style:normal;
+      font-weight:500;
+    }
+
+    @media(max-width:760px){
+      footer.prisma-footer{
+        grid-template-columns:1fr;
+        justify-items:center;
+        row-gap:12px;
+        text-align:center;
+      }
+
+      .prisma-footer .footer-side-left,
+      .prisma-footer .footer-side-right{
+        justify-self:center;
+      }
+
+      .prisma-footer .footer-text{
+        white-space:normal;
+      }
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <header>
+      <strong class="mark">LGPD DO PLANO PUP13</strong>
+      <div class="center">Consentimento · Finalidade · Proteção de Dados</div>
+    </header>
+
+    <main>
+      <section class="entry">
+        <div class="intro">
+          <div class="kicker">Identificação</div>
+          <h1>PUP13</h1>
+          <p class="lede">Identidade, sigilo e continuidade da jornada.</p>
+
+          <div class="ritual-note">
+            <span><b>Registro local.</b> Os dados permanecem nesta máquina para sustentar a sequência PRISMA13.</span>
+            <span><b>Entrada precisa.</b> Nome, corpo e horizonte formam o primeiro eixo da leitura.</span>
+          </div>
+        </div>
+
+        <form id="form">
+          <div class="field">
+            <label for="nome">Nome</label>
+            <input id="nome" placeholder="Nome da PUP13" />
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="dn">Nascimento</label>
+              <input id="dn" type="date" />
+            </div>
+
+            <div class="field">
+              <label for="sexo">Sexo / Gênero</label>
+              <select id="sexo">
+                <option value="">Selecionar</option>
+                <option>Feminino</option>
+                <option>Masculino</option>
+                <option>Outro</option>
+                <option>Prefiro registrar depois</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid">
+            <div class="field">
+              <label for="altura">Altura em cm</label>
+              <input id="altura" type="number" placeholder="170" />
+            </div>
+
+            <div class="field">
+              <label for="peso">Peso em kg</label>
+              <input id="peso" type="number" step="0.1" placeholder="70" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="metaVitalidade">Meta de vitalidade</label>
+            <input id="metaVitalidade" placeholder="Ex: mais vigor ao acordar" />
+          </div>
+
+          <div class="field">
+            <label for="horizonte">Horizonte de longevidade</label>
+            <input id="horizonte" placeholder="Ex: viver 100 anos com autonomia" />
+          </div>
+
+          <button class="btn-primary" type="submit">Consolidar identificação</button>
+          <div class="status" id="status">Memória local PRISMA13 preparada.</div>
+        </form>
+      </section>
+    </main>
+
+    <footer class="prisma-footer">
+      <div class="footer-side footer-side-left">
+        <img class="footer-seal footer-seal-left" src="../assets/sol-1985.jpg" alt="SOL 1984" />
+        <span class="footer-label">SOL 1984</span>
+      </div>
+
+      <div class="footer-text" aria-label="Rodape padrao PRISMA13">
+        <span>Seeemmpre melhorrrAndo... <b>NUNKAKABA.</b></span>
+        <span>Há braços.</span>
+        <span>Dr. Olair Rafael – @drolairrafael</span>
+      </div>
+
+      <div class="footer-side footer-side-right">
+        <span class="footer-label">ESBELTEZA</span>
+        <img class="footer-seal footer-seal-right" src="../assets/esbelteza-imc22.jpg" alt="ESBELTEZA" />
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const KEY = "PRISMA13_MEMORIA";
+
+    function memoria(){
+      try{
+        return JSON.parse(localStorage.getItem(KEY) || "{}");
+      }catch(e){
+        return {};
+      }
+    }
+
+    function salvar(obj){
+      localStorage.setItem(KEY, JSON.stringify({
+        ...memoria(),
+        ...obj,
+        atualizadoEm:new Date().toISOString()
+      }));
+    }
+
+    function v(id){
+      return document.getElementById(id).value.trim();
+    }
+
+    window.onload = () => {
+      const m = memoria();
+      ["nome","dn","sexo","altura","peso","metaVitalidade","horizonte"].forEach(id => {
+        if(m[id]) document.getElementById(id).value = m[id];
+      });
+    };
+
+    document.getElementById("form").addEventListener("submit", e => {
+      e.preventDefault();
+      salvar({
+        nome:v("nome"),
+        dn:v("dn"),
+        sexo:v("sexo"),
+        altura:Number(v("altura")),
+        peso:Number(v("peso")),
+        metaVitalidade:v("metaVitalidade"),
+        horizonte:v("horizonte")
+      });
+      location.href = "../tela03/index.html";
+    });
+  </script>
+  <script src="../mobile-shell.js" defer></script>
+</body>
+</html>

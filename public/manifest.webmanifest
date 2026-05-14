@@ -1,0 +1,20 @@
+{
+  "name": "PRISMA13",
+  "short_name": "PRISMA13",
+  "description": "Aplicativo PRISMA13 para acompanhamento de vitalidade, consciencia e supersaude.",
+  "start_url": "index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "categories": ["health", "lifestyle", "productivity"],
+  "icons": [
+    {
+      "src": "prisma13-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

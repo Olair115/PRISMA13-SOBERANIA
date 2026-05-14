@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "PRISMA13: abrir no Edge",
+      "type": "pwa-msedge",
+      "request": "launch",
+      "url": "http://localhost:5500",
+      "preLaunchTask": "PRISMA13: rodar local",
+      "webRoot": "${workspaceFolder}"
+    },
+    {
+      "name": "PRISMA13: abrir no Chrome",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:5500",
+      "preLaunchTask": "PRISMA13: rodar local",
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

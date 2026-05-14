@@ -1,145 +1,571 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PRISMA13 - Portal de Entrada</title>
-    <style>
-        :root { --primary: #8A63D2; --bg: #121212; --card: #1e1e1e; --text: #e0e0e0; --gold: #FFD700; --anil: #1E88E5; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
-        .card-prisma13 { background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); max-width: 450px; width: 90%; text-align: center; border: 1px solid #333; }
-        .sap-frase { background: #2a2a2a; border-left: 4px solid var(--primary); padding: 15px; margin: 20px 0; text-align: left; color: var(--gold); font-style: italic; font-size: 1.05rem; line-height: 1.5; }
-        .btn-navegar { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem; transition: 0.3s; }
-        input[type=range] { width: 100%; cursor: pointer; accent-color: var(--anil); background: transparent; -webkit-appearance: none; margin: 15px 0; }
-        .footer-lemas { margin-top: 25px; font-size: 0.8rem; color: #888; font-style: italic; border-top: 1px solid #333; padding-top: 15px; }
-        .ontologia { font-size: 0.9rem; color: #bbb; margin-bottom: 15px; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PRISMA13 · Portal</title>
+
+  <style>
+    :root{
+      --bg:#000;
+      --fg:#fff;
+      --muted:rgba(255,255,255,.58);
+      --soft:rgba(255,255,255,.28);
+      --gold:#ffe600;
+      --gold2:#ffb800;
+      --cyan:#7ffcff;
+      --green:#7cffb2;
+    }
+
+    *{
+      margin:0;
+      padding:0;
+      box-sizing:border-box;
+    }
+
+    html,body{
+      width:100%;
+      min-height:100%;
+      background:#000;
+      color:#fff;
+      font-family:Arial, Helvetica, sans-serif;
+      overflow:hidden;
+    }
+
+    body::before{
+      content:"";
+      position:fixed;
+      inset:0;
+      z-index:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at 8% 18%, rgba(255,255,255,.82) 0 1px, transparent 2px),
+        radial-gradient(circle at 17% 70%, rgba(255,230,0,.65) 0 1px, transparent 2px),
+        radial-gradient(circle at 31% 29%, rgba(255,255,255,.48) 0 1px, transparent 2px),
+        radial-gradient(circle at 44% 78%, rgba(255,255,255,.58) 0 1px, transparent 2px),
+        radial-gradient(circle at 56% 12%, rgba(255,230,0,.48) 0 1px, transparent 2px),
+        radial-gradient(circle at 70% 68%, rgba(255,255,255,.52) 0 1px, transparent 2px),
+        radial-gradient(circle at 82% 26%, rgba(255,230,0,.48) 0 1px, transparent 2px),
+        radial-gradient(circle at 94% 76%, rgba(255,255,255,.62) 0 1px, transparent 2px),
+        radial-gradient(circle at 50% 50%, rgba(255,230,0,.045), transparent 58%);
+      background-size:
+        280px 280px,
+        340px 340px,
+        300px 300px,
+        360px 360px,
+        290px 290px,
+        330px 330px,
+        280px 280px,
+        360px 360px,
+        100% 100%;
+      opacity:.58;
+      animation:twinkle 6s ease-in-out infinite alternate;
+    }
+
+    body::after{
+      content:"";
+      position:fixed;
+      left:-44vw;
+      top:16vh;
+      width:38vw;
+      height:2px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.25), var(--gold), transparent);
+      transform:rotate(-18deg);
+      opacity:0;
+      filter:drop-shadow(0 0 12px rgba(255,230,0,.9));
+      animation:estrelaCadente 14s linear infinite;
+      pointer-events:none;
+      z-index:0;
+    }
+
+    @keyframes twinkle{
+      from{opacity:.34}
+      to{opacity:.78}
+    }
+
+    @keyframes estrelaCadente{
+      0%,66%{opacity:0; transform:translate(-8vw,-10vh) rotate(-18deg);}
+      72%{opacity:.95;}
+      88%{opacity:0; transform:translate(150vw,74vh) rotate(-18deg);}
+      100%{opacity:0;}
+    }
+
+    .page{
+      position:relative;
+      z-index:1;
+      width:min(1160px, calc(100% - 34px));
+      min-height:100vh;
+      margin:0 auto;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:34px 0 76px;
+    }
+
+    .portal{
+      width:min(760px, 100%);
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      text-align:center;
+    }
+
+    .eyebrow{
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.34em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.42);
+      margin-bottom:16px;
+    }
+
+    h1{
+      font-size:clamp(58px, 9vw, 118px);
+      line-height:.86;
+      font-weight:900;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      margin-bottom:18px;
+    }
+
+    .sub{
+      font-family:Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-size:clamp(18px, 2vw, 25px);
+      line-height:1.42;
+      color:rgba(255,255,255,.78);
+      margin-bottom:32px;
+    }
+
+    .teia{
+      width:min(430px, 84vw);
+      height:min(430px, 84vw);
+      margin:0 auto 28px;
+      display:grid;
+      place-items:center;
+      position:relative;
+    }
+
+    svg{
+      width:100%;
+      height:100%;
+      overflow:visible;
+      display:block;
+    }
+
+    .label{
+      fill:rgba(255,255,255,.62);
+      font-size:8.2px;
+      font-weight:900;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      dominant-baseline:middle;
+      text-anchor:middle;
+      filter:drop-shadow(0 0 6px rgba(0,0,0,.9));
+    }
+
+    .grade{
+      fill:none;
+      stroke:rgba(255,255,255,.11);
+      stroke-width:1;
+    }
+
+    .raio{
+      stroke:rgba(255,255,255,.17);
+      stroke-width:1;
+    }
+
+    .nodo{
+      fill:rgba(255,255,255,.42);
+      filter:drop-shadow(0 0 5px rgba(255,255,255,.15));
+    }
+
+    .poligono-base{
+      fill:none;
+      stroke:rgba(255,230,0,.52);
+      stroke-width:1.8;
+      stroke-linejoin:round;
+      filter:drop-shadow(0 0 5px rgba(255,230,0,.18));
+    }
+
+    .poligono-interno{
+      fill:none;
+      stroke:rgba(124,255,210,.42);
+      stroke-width:1.4;
+      stroke-linejoin:round;
+      filter:drop-shadow(0 0 5px rgba(124,255,210,.14));
+    }
+
+    .cauda{
+      fill:none;
+      stroke:url(#caudaGrad);
+      stroke-width:4;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      opacity:.9;
+      filter:drop-shadow(0 0 10px rgba(255,230,0,.55));
+    }
+
+    .cauda-fria{
+      fill:none;
+      stroke:url(#caudaFriaGrad);
+      stroke-width:2;
+      stroke-linecap:round;
+      stroke-linejoin:round;
+      opacity:.62;
+      filter:drop-shadow(0 0 10px rgba(127,252,255,.42));
+    }
+
+    .ponto{
+      fill:var(--gold);
+      filter:
+        drop-shadow(0 0 7px rgba(255,230,0,1))
+        drop-shadow(0 0 22px rgba(255,230,0,.75));
+    }
+
+    .halo{
+      fill:rgba(255,230,0,.18);
+      stroke:rgba(255,230,0,.55);
+      stroke-width:.8;
+      filter:drop-shadow(0 0 18px rgba(255,230,0,.65));
+    }
+
+    .frases{
+      margin-top:2px;
+      margin-bottom:24px;
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+
+    .frases p{
+      font-family:Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-weight:800;
+      font-size:clamp(24px, 3.1vw, 42px);
+      line-height:1.13;
+    }
+
+    .btn{
+      min-width:300px;
+      min-height:58px;
+      padding:0 30px;
+      background:rgba(255,230,0,.035);
+      border:1px solid var(--gold);
+      color:var(--gold);
+      text-transform:uppercase;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.28em;
+      cursor:pointer;
+      transition:.22s ease;
+    }
+
+    .btn:hover{
+      background:var(--gold);
+      color:#000;
+      box-shadow:0 0 28px rgba(255,230,0,.22);
+      transform:translateY(-1px);
+    }
+
+    .sussurro{
+      margin-top:14px;
+      font-size:10px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:rgba(255,255,255,.30);
+    }
+
+    footer{
+      position:absolute;
+      left:0;
+      right:0;
+      bottom:14px;
+      width:100%;
+      border-top:1px solid rgba(255,255,255,.22);
+      padding-top:15px;
+      display:grid;
+      grid-template-columns:1fr 2fr 1fr;
+      gap:18px;
+      align-items:center;
+    }
+
+    footer strong{
+      font-size:12px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+    }
+
+    footer .centro{
+      text-align:center;
+      color:rgba(255,255,255,.72);
+      font-family:Georgia, "Times New Roman", serif;
+      font-style:italic;
+      font-size:12px;
+      line-height:1.28;
+    }
+
+    footer .direita{
+      text-align:right;
+    }
+
+    @media(max-width:720px){
+      .page{
+        padding-bottom:130px;
+      }
+
+      .teia{
+        width:min(360px, 88vw);
+        height:min(360px, 88vw);
+      }
+
+      footer{
+        grid-template-columns:1fr;
+        text-align:center;
+      }
+
+      footer .direita{
+        text-align:center;
+      }
+
+      .btn{
+        min-width:240px;
+        width:100%;
+        max-width:340px;
+      }
+    }
+  </style>
 </head>
+
 <body>
-    <div id="app"></div>
-<div id="display-sapiencia" style="font-weight: bold; color: #0047AB; text-align: center; padding: 20px; font-size: 1.2em;">
-    Iniciando Metamorfose...
-</div>
+  <main class="page">
+    <section class="portal">
+      <div class="eyebrow">Tela01 · Portal</div>
 
-<script>
-    (function() {
-        /**
-         * ALGORITMO PRISMA13 - MATRIZ MATERIALIZADA DE LUZ
-         * Identifica a semana no ciclo de 13 e carrega o banco correspondente.
-         */
-        function despertarMatriz() {
-            const hoje = new Date();
-            const inicioAno = new Date(hoje.getFullYear(), 0, 1);
-            const milissegundosPorDia = 24 * 60 * 60 * 1000;
-            const diasDecorridos = Math.floor((hoje - inicioAno) / milissegundosPorDia);
-            
-            // Cálculo do Ciclo de 1 a 13
-            const semanaDoAno = Math.ceil((diasDecorridos + 1) / 7);
-            const ciclo13 = ((semanaDoAno - 1) % 13) + 1;
-            const idSemana = ciclo13.toString().padStart(2, '0');
+      <h1>PRISMA13</h1>
 
-            // Caminho da pasta conforme imagem 014b15.png
-            const pastaSapiencia = "TELA 06 - 1 Saúde Física – Tracker de atividade e sono – Horas de exercício sono";
-            const arquivoJS = `${pastaSapiencia}/frasesSemana${idSemana}.js`;
+      <p class="sub">
+        Arquitetura de vitalidade em evolução contínua.
+      </p>
 
-            console.log(`🚀 AI-Agente: Sincronizando Diamante da Semana ${idSemana}`);
+      <div class="teia">
+        <svg id="teiaSvg" viewBox="-190 -190 380 380" aria-label="Teia dinâmica PRISMA13">
+          <defs>
+            <linearGradient id="caudaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(255,230,0,0)" />
+              <stop offset="34%" stop-color="rgba(255,230,0,.18)" />
+              <stop offset="72%" stop-color="rgba(255,184,0,.75)" />
+              <stop offset="100%" stop-color="rgba(255,230,0,1)" />
+            </linearGradient>
 
-            const motorScript = document.createElement('script');
-            motorScript.src = arquivoJS;
+            <linearGradient id="caudaFriaGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stop-color="rgba(127,252,255,0)" />
+              <stop offset="54%" stop-color="rgba(127,252,255,.30)" />
+              <stop offset="100%" stop-color="rgba(127,252,255,.88)" />
+            </linearGradient>
+          </defs>
 
-            motorScript.onload = () => {
-                // Acessa o objeto global (ex: frasesSemana01)
-                const banco = window[`frasesSemana${idSemana}`];
-                const display = document.getElementById('display-sapiencia');
-                
-                if (banco && display) {
-                    // Manifesta a frase âncora "1-13" (Pureza Máxima)
-                    display.innerText = banco["1-13"];
-                } else {
-                    console.error("❌ Erro: Objeto de Sapiência não encontrado no arquivo.");
-                    display.innerText = "Soberania em Processamento...";
-                }
-            };
+          <g id="grade"></g>
+          <g id="poligonos"></g>
 
-            motorScript.onerror = () => {
-                console.error(`❌ Erro: Não foi possível localizar o arquivo ${arquivoJS}`);
-                document.getElementById('display-sapiencia').innerText = "Aguardando Conexão com o Almoxarifado...";
-            };
+          <path id="caudaFria" class="cauda-fria" d="" />
+          <path id="cauda" class="cauda" d="" />
 
-            document.head.appendChild(motorScript);
-        }
+          <circle id="halo" class="halo" cx="0" cy="0" r="14" />
+          <circle id="ponto" class="ponto" cx="0" cy="0" r="7.5" />
 
-        // Executa a Ressurreição ao carregar a página
-        if (document.readyState === 'complete') {
-            despertarMatriz();
-        } else {
-            window.addEventListener('load', despertarMatriz);
-        }
-    })();
-</script>
+          <g id="labels"></g>
+        </svg>
+      </div>
 
-    <script>
-        const app = document.getElementById('app');
-        
-        // COMEÇAMOS PELO VIGOR (DIMENSÃO 6)
-        const DIMENSAO_ATUAL = 6; 
+      <div class="frases">
+        <p>O Solo, fértil, sustenta a vida.</p>
+        <p>A Cultura, autônoma, orienta a melhoria.</p>
+      </div>
 
-        const NOMES_DIMENSOES = {
-            6: "VIGOR FÍSICO",
-            7: "MENTE E EQUILÍBRIO",
-            8: "AFETOS E RELAÇÕES",
-            9: "CARREIRA E OBRA",
-            10: "SOBERANIA FINANCEIRA",
-            11: "FAMÍLIA E LAÇOS",
-            12: "COMUNIDADE E CIDADANIA",
-            13: "CRIATIVIDADE E APOTEOSE"
-        };
+      <button class="btn" onclick="entrar()">Ingressar na PUP13</button>
 
-        function dispararSapiencia(dim) {
-            const dataInicio = localStorage.getItem('prisma_data_inicio') || new Date().toISOString();
-            if(!localStorage.getItem('prisma_data_inicio')) localStorage.setItem('prisma_data_inicio', dataInicio);
-            const dias = Math.floor((new Date() - new Date(dataInicio)) / (1000 * 60 * 60 * 24)) + 1;
-            const semanaNum = Math.ceil(dias / 7) || 1;
-            const semana = semanaNum > 13 ? 13 : semanaNum;
-            const par = dim <= 7 ? `${dim}-${14-dim}` : `${14-dim}-${dim}`;
-            try {
-                const baseFrases = window[`frasesSemana${semana.toString().padStart(2, '0')}`];
-                return baseFrases[par];
-            } catch (e) { return "Seeemmpre MelhorrrAndo... NUNKAKABA!"; }
-        }
+      <div class="sussurro">Registro em curso</div>
+    </section>
 
-        const screens = {
-            aquilatar: () => {
-                const fraseAura = dispararSapiencia(DIMENSAO_ATUAL);
-                const nomeDestaTela = NOMES_DIMENSOES[DIMENSAO_ATUAL] || "PORTAL PRISMA13";
-                return `
-                <div class="card-prisma13">
-                    <h1 style="color:var(--primary); font-size:1.2rem; margin-top:0;">${nomeDestaTela}</h1>
-                    <div class="sap-frase"><span>"${fraseAura}"</span></div>
-                    <p class="ontologia"><b>Iniciar</b> o Aquilatamento para Longevidade Saudável:</p>
-                    <div style="margin:15px 0;">
-                        <div style="width:100%; height:14px; border-radius:7px; background:linear-gradient(to right, #5D4037, #FFEE58, #EF5350, #1E88E5); box-shadow:inset 0 2px 4px rgba(0,0,0,0.5);"></div>
-                    </div>
-                    <input type="range" id="slider" min="1" max="13" value="7" oninput="document.getElementById('v').innerText = this.value">
-                    <div style="display:flex; justify-content:space-between; font-size:0.75rem; font-weight:bold; color:#888;">
-                        <span>BARRO</span>
-                        <span id="v" style="font-size:1.3rem; color:var(--anil);">7</span>
-                        <span>SOPRO</span>
-                    </div>
-                    <button class="btn-navegar" onclick="consolidar()">INICIAR JORNADA</button>
-                    <div class="footer-lemas"><b>Seeemmpre MelhorrrAndo... NUNKAKABA!</b><br>Há braços!</div>
-                </div>`;
-            }
-        };
+    <footer>
+      <strong>SOL 1985</strong>
 
-        function consolidar() {
-            const nota = document.getElementById('slider').value;
-            localStorage.setItem(`prisma_dim_6`, nota);
-            // APONTANDO PARA A PRIMEIRA PASTA INTERNA
-            window.location.href = "TELA 06 - 1 Saúde Física – Tracker de atividade e sono – Horas de exercício  sono/index.html";
-        }
+      <div class="centro">
+        Seeemmpre melhorrrAndo... <b>NUNKAKABA!</b><br>
+        Há braços! · Dr. Olair Rafael
+      </div>
 
-        window.onload = () => app.innerHTML = screens.aquilatar();
-    </script>
+      <strong class="direita">ESBELTEZA IMC22</strong>
+    </footer>
+  </main>
+
+  <script>
+    const dimensoes = [
+      "Vigor",
+      "Clareza",
+      "Vínculo",
+      "Direção",
+      "Suficiência",
+      "Sentido",
+      "Fruição",
+      "Maestria",
+      "Impacto",
+      "Ecologia",
+      "Laço",
+      "Pertencimento",
+      "Expressão"
+    ];
+
+    const valoresExternos = [82, 70, 74, 86, 64, 70, 78, 76, 58, 72, 88, 69, 81];
+    const valoresInternos = [38, 44, 52, 46, 39, 56, 48, 42, 34, 66, 84, 48, 37];
+
+    const grade = document.getElementById("grade");
+    const labels = document.getElementById("labels");
+    const poligonos = document.getElementById("poligonos");
+    const ponto = document.getElementById("ponto");
+    const halo = document.getElementById("halo");
+    const cauda = document.getElementById("cauda");
+    const caudaFria = document.getElementById("caudaFria");
+
+    const centro = { x:0, y:0 };
+    const raioMax = 116;
+    const raioLabel = 154;
+    const total = dimensoes.length;
+    const trilha = [];
+    const trilhaMax = 42;
+
+    function polar(angulo, raio){
+      return {
+        x: Math.cos(angulo) * raio,
+        y: Math.sin(angulo) * raio
+      };
+    }
+
+    function anguloDimensao(i){
+      return -Math.PI / 2 + (i * 2 * Math.PI / total);
+    }
+
+    function criarSVG(tag, attrs = {}){
+      const el = document.createElementNS("http://www.w3.org/2000/svg", tag);
+      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k,v));
+      return el;
+    }
+
+    function pontosPoligono(valores){
+      return valores.map((v,i)=>{
+        const p = polar(anguloDimensao(i), raioMax * (v / 100));
+        return `${p.x.toFixed(2)},${p.y.toFixed(2)}`;
+      }).join(" ");
+    }
+
+    function montarTeia(){
+      [28, 54, 82, 116].forEach(r=>{
+        grade.appendChild(criarSVG("circle", {
+          cx:0,
+          cy:0,
+          r,
+          class:"grade"
+        }));
+      });
+
+      dimensoes.forEach((nome,i)=>{
+        const a = anguloDimensao(i);
+        const fim = polar(a, raioMax);
+        const lab = polar(a, raioLabel);
+
+        grade.appendChild(criarSVG("line", {
+          x1:0,
+          y1:0,
+          x2:fim.x,
+          y2:fim.y,
+          class:"raio"
+        }));
+
+        [28,54,82,116].forEach(r=>{
+          const n = polar(a,r);
+          grade.appendChild(criarSVG("circle", {
+            cx:n.x,
+            cy:n.y,
+            r:2.8,
+            class:"nodo"
+          }));
+        });
+
+        const text = criarSVG("text", {
+          x:lab.x,
+          y:lab.y,
+          class:"label"
+        });
+        text.textContent = nome.toUpperCase();
+        labels.appendChild(text);
+      });
+
+      poligonos.appendChild(criarSVG("polygon", {
+        points:pontosPoligono(valoresExternos),
+        class:"poligono-base"
+      }));
+
+      poligonos.appendChild(criarSVG("polygon", {
+        points:pontosPoligono(valoresInternos),
+        class:"poligono-interno"
+      }));
+    }
+
+    function caminhoTrilha(lista){
+      if(lista.length < 2) return "";
+
+      return lista.map((p,i)=>{
+        const prefixo = i === 0 ? "M" : "L";
+        return `${prefixo} ${p.x.toFixed(2)} ${p.y.toFixed(2)}`;
+      }).join(" ");
+    }
+
+    function animar(){
+      const agora = performance.now() / 1000;
+
+      /*
+        Movimento levógiro:
+        o ângulo diminui com o tempo, fazendo o ponto girar à esquerda.
+        A precessão cria uma oscilação lenta, como algoritmo que não apenas roda:
+        ele vagueia, inclina, retorna e avança.
+      */
+
+      const velocidade = 0.42;
+      const precessao = Math.sin(agora * 0.73) * 0.24;
+      const ondulacao = Math.sin(agora * 1.17) * 10;
+      const respiracao = Math.sin(agora * 2.2) * 4;
+
+      const angulo = -Math.PI / 2 - agora * velocidade + precessao;
+      const raio = 78 + ondulacao + respiracao;
+
+      const pos = polar(angulo, raio);
+
+      trilha.push(pos);
+      if(trilha.length > trilhaMax) trilha.shift();
+
+      ponto.setAttribute("cx", pos.x);
+      ponto.setAttribute("cy", pos.y);
+
+      halo.setAttribute("cx", pos.x);
+      halo.setAttribute("cy", pos.y);
+      halo.setAttribute("r", 12 + Math.sin(agora * 5) * 2.4);
+
+      cauda.setAttribute("d", caminhoTrilha(trilha));
+      caudaFria.setAttribute("d", caminhoTrilha(trilha.slice(0, -6)));
+
+      requestAnimationFrame(animar);
+    }
+
+    function entrar(){
+      window.location.href = "tela02/index.html";
+    }
+
+    montarTeia();
+    animar();
+  </script>
 </body>
 </html>
+

@@ -1,0 +1,53 @@
+<div class="card-prisma13 bg-gray-900 p-6 rounded-3xl border border-gray-800 shadow-2xl">
+    <h2 class="text-xl font-black text-indigo-400 uppercase tracking-widest">Vagão 05: Ideias e Ideais</h2>
+    <p class="text-xs text-gray-500 mt-1 italic">"Onde o Pensamento se torna Ação Sistêmica."</p>
+
+    <div class="mt-6 space-y-4 text-left">
+        <div class="bg-gray-800 p-4 rounded-2xl border-l-4 border-yellow-500">
+            <label class="block text-xs font-black text-yellow-500 uppercase mb-1">Qual a sua Ideia de Força hoje?</label>
+            <textarea id="ideia_forca" class="w-full p-3 bg-gray-900 border border-gray-700 rounded-xl text-white outline-none focus:border-indigo-500 transition" placeholder="Escreva aqui o que anima seu Sopro Vital..."></textarea>
+        </div>
+
+        <div class="bg-gray-800 p-4 rounded-2xl border-l-4 border-indigo-500">
+            <label class="block text-xs font-black text-indigo-400 uppercase mb-2">Seus Ideais de r)EVOLUÇÃO:</label>
+            <div class="space-y-2">
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" name="ideal" value="clareza" class="w-5 h-5 accent-indigo-500">
+                    <span class="text-sm text-gray-300">Conquistar Clareza Mental e Foco</span>
+                </label>
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" name="ideal" value="vibracao" class="w-5 h-5 accent-indigo-500">
+                    <span class="text-sm text-gray-300">Elevar a Frequência Vibracional</span>
+                </label>
+                <label class="flex items-center space-x-3 cursor-pointer">
+                    <input type="checkbox" name="ideal" value="disciplina" class="w-5 h-5 accent-indigo-500">
+                    <span class="text-sm text-gray-300">Praticar a Disciplina que gera Vigor</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="arquivarVagao05()" class="btn-prisma mt-8 w-full text-white font-bold py-4 rounded-2xl text-lg shadow-lg transition transform hover:scale-105">
+        AFIRMAR E ENGATAR TELA 06
+    </button>
+    
+    <div class="mt-6 text-xs font-bold text-gray-600">
+        Seeemmpre MelhorrrAndo... NUNKAKABA!<br>Há braços!
+    </div>
+</div>
+
+<script>
+    function arquivarVagao05() {
+        const ideia = document.getElementById('ideia_forca').value;
+        const ideais = Array.from(document.querySelectorAll('input[name="ideal"]:checked')).map(el => el.value);
+        
+        if(!ideia || ideais.length === 0) return alert("Zelar pelo preenchimento das Ideias e Ideais.");
+
+        // Fixar no Lastro Digital
+        localStorage.setItem('prisma_v05_ideia', ideia);
+        localStorage.setItem('prisma_v05_ideais', JSON.stringify(ideais));
+        
+        // Engatar a próxima Estação (Saúde Física)
+        window.location.href = "../TELA 06 - 1 Saúde Física – Tracker de atividade e sono – Horas de exercício  sono/index.html";
+    }
+</script>

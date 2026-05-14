@@ -1,0 +1,7 @@
+{
+  "name": "@prisma13/integrations",
+  "version": "0.21.0",
+  "private": true,
+  "main": "src/index.js",
+  "description": "Clientes reais para Firebase Auth, health data e wearables PRISMA13."
+}

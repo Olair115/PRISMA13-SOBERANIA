@@ -1,0 +1,43 @@
+// No seu objeto screens, o trecho da Avaliação com o MCA:
+    avaliacao: () => {
+        const gen = localStorage.getItem('prisma_gen');
+        const p = parseFloat(localStorage.getItem('prisma_p'));
+        const a = parseFloat(localStorage.getItem('prisma_a'));
+        const nascDate = new Date(localStorage.getItem('prisma_nasc'));
+        const hoje = new Date();
+        
+        let anos = hoje.getFullYear() - nascDate.getFullYear();
+        if (hoje.getMonth() < nascDate.getMonth() || (hoje.getMonth() === nascDate.getMonth() && hoje.getDate() < nascDate.getDate())) anos--;
+
+        const imcPadrao = (p / (a * a)).toFixed(2);
+        // Aplicação do MCA: Proteção metabólica se idade >= 65 anos
+        const mca = (anos >= 65) ? (imcPadrao * 0.94).toFixed(2) : imcPadrao;
+        
+        const isIdoso = anos >= 65;
+        let categoria = mca < (isIdoso ? 22 : 18.5) ? "Abaixo da Faixa de Reserva" : 
+                        mca <= (isIdoso ? 27 : 24.9) ? "Zona de Proteção e Vigor" : "Alerta de Normose / Sobrepeso";
+        
+        return `
+        <div class="card-prisma13">
+            <h1>O VEREDITO</h1>
+            <div class="result-box">
+                <p class="text-xs uppercase text-gray-500">IMC Padrão: ${imcPadrao.replace('.',',')} Kg/m²</p>
+                <h2 style="margin:5px 0; color:var(--gold);">MCA (IMC Corrigido): ${mca.replace('.',',')} Kg/m²</h2>
+                <p style="font-weight:bold; color:var(--anil);">${categoria}</p>
+            </div>
+            <div class="sap-frase"><b>Nota Pericial:</b> O MCA aquilata a reserva funcional para a longevidade. "Deus ajuda a quem se ajuda!"</div>
+            <button class="btn-navegar" onclick="navegar('historia')">CONTAR MINHA HISTÓRIA</button>
+        </div>`;
+    },
+
+    // No final da função salvarHistoria(), o Engate para o Próximo Vagão:
+    function salvarHistoria() {
+        const bio = document.getElementById('bio').value;
+        if(!bio) return alert("Zelar pelo registro da sua trajetória.");
+        
+        localStorage.setItem('prisma_historia', bio);
+        console.log("Memória Fixada! Seeemmpre MelhorrrAndo.");
+        
+        // ENGATAR O PRÓXIMO VAGÃO (TELA 04)
+        window.location.href = "../TELA 04 - INTERESSE/index.html";
+    }

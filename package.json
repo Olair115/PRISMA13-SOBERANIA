@@ -1,0 +1,28 @@
+{
+  "name": "prisma13-monorepo",
+  "version": "0.21.0",
+  "private": true,
+  "description": "Monorepo do ecossistema PRISMA13: app estatico, app React em migracao, core, integracoes e Firebase Functions.",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "functions"
+  ],
+  "scripts": {
+    "dev": "node public/dev-server.js",
+    "dev:static": "npm run dev -w @prisma13/static",
+    "test": "npm run test:functions && npm run test:core",
+    "test:functions": "npm run test -w functions",
+    "test:core": "node functions/node_modules/jest/bin/jest.js packages/core/__tests__ --runInBand",
+    "test:react": "npm run test -w @prisma13/react",
+    "validate:static": "node scripts/validate-static.js",
+    "deploy:firebase": "firebase deploy",
+    "deploy:hosting": "firebase deploy --only hosting",
+    "deploy:functions": "firebase deploy --only functions",
+    "docker:build": "docker build -t prisma13 .",
+    "docker:run": "docker run --rm -p 8080:8080 prisma13"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

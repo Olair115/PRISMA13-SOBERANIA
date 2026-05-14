@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRISMA13 - Memorial do Vigor</title>
+    <style>
+        :root { --primary: #8A63D2; --bg: #0a0f1d; --card: #1e1e1e; --text: #ffffff; --gold: #FFD700; --anil: #1E88E5; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow-x: hidden; }
+        .card-prisma13 { background: var(--card); padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 95%; max-width: 580px; text-align: center; border: 1px solid #333; margin: 20px 0; }
+        .sap-frase { background: #2a2a2a; border-left: 4px solid var(--primary); padding: 15px; margin: 15px 0; color: var(--gold); font-style: italic; text-align: left; font-size: 0.95rem; line-height: 1.4; }
+        .btn-navegar { background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-size: 1.1rem; transition: 0.3s; margin-top: 15px; }
+        .welcome-text { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; border: 1px solid #334155; text-align: left; color: #e0e0e0; font-size: 0.95rem; line-height: 1.6; }
+        .result-box { border: 2px solid var(--anil); padding: 20px; border-radius: 15px; background: rgba(30, 136, 229, 0.1); margin: 20px 0; }
+        textarea { width: 100%; padding: 15px; margin-top: 10px; border-radius: 10px; border: 1px solid #444; background: #2a2a2a; color: white; font-size: 1rem; font-family: 'Inter', sans-serif; resize: vertical; }
+        .footer-lemas { margin-top: 25px; font-size: 0.75rem; color: #666; border-top: 1px solid #333; padding-top: 15px; }
+        
+        /* Ampulheta de Sincronia */
+        .waiting-container { display: none; padding: 40px 0; }
+        .ampulheta { font-size: 3rem; animation: flip 2.5s infinite ease-in-out; display: inline-block; }
+        @keyframes flip { 0% { transform: rotate(0deg); } 50% { transform: rotate(180deg); } 100% { transform: rotate(180deg); } }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+
+    <script>
+        const app = document.getElementById('app');
+
+        const screens = {
+            boasVindas: () => `
+                <div class="card-prisma13">
+                    <h1 style="color:var(--gold); margin:0;">PRISMA13</h1>
+                    <div class="sap-frase">"O Sopro Vital anima a Matéria, o Barro. O Vigor é a persistência da evolução biológica."</div>
+                    <button class="btn-navegar" onclick="navegar('vigor')">CALIBRAR VIGOR ATUAL</button>
+                    <div class="footer-lemas"><strong>Seeemmpre MelhorrrAndo... NUNKAKABA!</strong><br>Há braços!</div>
+                </div>`,
+            
+            vigor: () => `
+                <div class="card-prisma13">
+                    <h1>CALIBRAGEM</h1>
+                    <div id="form-vigor" class="welcome-text">
+                        <label>Peso (kg):</label>
+                        <input type="text" id="p" placeholder="Ex: 76,4" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #444; background:#2a2a2a; color:white;">
+                        <label>Altura (m):</label>
+                        <input type="text" id="a" placeholder="Ex: 1,64" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #444; background:#2a2a2a; color:white;">
+                        <label>Nascimento:</label>
+                        <input type="date" id="nasc" style="width:100%; padding:12px; margin:5px 0; border-radius:8px; border:1px solid #444; background:#2a2a2a; color:white;">
+                        <button class="btn-navegar" onclick="iniciarEspera()">AVANÇAR</button>
+                    </div>
+                    <div id="waiting" class="waiting-container">
+                        <div class="ampulheta">⌛</div>
+                        <p style="color:var(--gold); margin-top:20px;">Sincronizando Sopro e Barro...</p>
+                    </div>
+                </div>`,
+
+            veredito: () => {
+                const imc = parseFloat(localStorage.getItem('prisma_imc'));
+                return `
+                <div class="card-prisma13">
+                    <h1>REGÊNCIA VITAL</h1>
+                    <div class="result-box">
+                        <h2 style="margin:0; color:var(--gold);">IMC PONDERADO: ${imc.toFixed(2).replace('.',',')}</h2>
+                    </div>
+                    <div class="sap-frase">"Deus ajuda a quem se ajuda." A reserva de hoje é a autonomia de amanhã.</div>
+                    <button class="btn-navegar" onclick="navegar('historia')">TELA 20: REGISTRAR HISTÓRIA DE VIDA</button>
+                </div>`;
+            },
+
+            historia: () => `
+                <div class="card-prisma13">
+                    <h1>TELA 20: HISTÓRIA DE VIDA</h1>
+                    <div class="welcome-text">
+                        <p><b>O Sopro registra o caminho do Barro.</b></p>
+                        <p style="font-size:0.85rem; color:#888;">Utilize este espaço para consolidar seu lastro: vitórias, superações e a herança biológica que você carrega.</p>
+                        <textarea id="bio" rows="10" placeholder="Ex: Em 1985, classificado em 3º lugar no concurso de Medicina entre 2.047 concorrentes... Hoje, regendo o Vigor aos 66 anos."></textarea>
+                        <button class="btn-navegar" onclick="salvarBio()">FIXAR MEMÓRIA NO PRISMA</button>
+                    </div>
+                    <div class="footer-lemas">A história é o fundamento da soberania sobre a saúde.<br>Há braços!</div>
+                </div>`
+        };
+
+        function navegar(tela) { app.innerHTML = screens[tela](); window.scrollTo(0,0); }
+
+        function iniciarEspera() {
+            if (document.getElementById('p').value && document.getElementById('a').value) {
+                document.getElementById('form-vigor').style.display = 'none';
+                document.getElementById('waiting').style.display = 'block';
+                setTimeout(processarVigor, 2000);
+            } else { alert("Atenção ao preenchimento!"); }
+        }
+
+        function processarVigor() {
+            let pStr = document.getElementById('p').value.replace(',', '.');
+            let aStr = document.getElementById('a').value.replace(',', '.');
+            let p = parseFloat(pStr); let a = parseFloat(aStr);
+            if (a > 100) a = a / 100;
+            localStorage.setItem('prisma_imc', (p / (a * a)).toFixed(2));
+            navegar('veredito');
+        }
+
+        function salvarBio() {
+            const bio = document.getElementById('bio').value;
+            localStorage.setItem('prisma_bio', bio);
+            alert("Memória Vital Registrada com Sucesso!");
+            navegar('boasVindas');
+        }
+
+        navegar('boasVindas');
+    </script>
+</body>
+</html>

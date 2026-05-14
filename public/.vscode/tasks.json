@@ -1,0 +1,27 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "PRISMA13: rodar local",
+      "type": "shell",
+      "command": "node dev-server.js",
+      "isBackground": true,
+      "problemMatcher": {
+        "owner": "prisma13",
+        "pattern": {
+          "regexp": "."
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "PRISMA13 rodando",
+          "endsPattern": "PRISMA13 rodando"
+        }
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+  ]
+}

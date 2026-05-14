@@ -1,0 +1,45 @@
+{
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ]
+    }
+  ],
+  "hosting": {
+    "public": "public",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
+    "rewrites": [
+      {
+        "source": "/api/health-data",
+        "function": "healthData"
+      },
+      {
+        "source": "/api/google-fit/connect",
+        "function": "googleFitConnect"
+      },
+      {
+        "source": "/api/google-fit/callback",
+        "function": "googleFitCallback"
+      },
+      {
+        "source": "/api/google-fit/sync",
+        "function": "googleFitSync"
+      },
+      {
+        "source": "/api/apple-health/import",
+        "function": "appleHealthImport"
+      }
+    ]
+  }
+}

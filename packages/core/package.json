@@ -1,0 +1,7 @@
+{
+  "name": "@prisma13/core",
+  "version": "0.21.0",
+  "private": true,
+  "main": "src/index.js",
+  "description": "Regras puras do PRISMA13: dimensoes, bandas, medias e snapshots."
+}
