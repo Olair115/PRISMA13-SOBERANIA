@@ -13,12 +13,17 @@
       --ouro-vivo: #fff2a8;
       --cyan: #7ffcff;
       --borda: rgba(255, 215, 0, 0.2);
+      --portal-base: #000000;
+      --portal-centro: rgba(10, 25, 50, 0.3);
+      --portal-anel: rgba(127, 252, 255, 0.2);
+      --portal-luz: rgba(255, 215, 0, 0.18);
+      --portal-acento: #7ffcff;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Montserrat", sans-serif; background-color: #000000; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Montserrat", sans-serif; background-color: var(--portal-base); transition: background-color 520ms ease; }
     body, h1, p, div, span, label, input, button, footer, header, section, main, text { color: var(--ouro) !important; }
     
-    #kosmos { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at center, rgba(10,25,50,0.3) 0%, #000 100%); }
+    #kosmos { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at center, var(--portal-centro) 0%, var(--portal-base) 100%); transition: background 520ms ease; }
     #kosmos::before {
       content: ""; position: absolute; inset: 0; pointer-events: none;
       background: radial-gradient(1.5px 1.5px at 20px 30px, #fff, rgba(0,0,0,0)), 
@@ -43,13 +48,69 @@
     
     .centro-mandala { width: 100%; height: 100%; display: grid; place-items: center; }
     .mandala-wrap { width: min(650px, 65vmin); aspect-ratio: 1 / 1; display: grid; place-items: center; }
-    .cauda { fill: none; stroke: url(#caudaGrad); stroke-width: 4.5; stroke-linecap: round; }
+    .cauda { fill: none; stroke: url(#caudaGrad); stroke-width: 4.5; stroke-linecap: round; filter: drop-shadow(0 0 10px var(--portal-anel)); transition: filter 420ms ease; }
     .cauda-fria { fill: none; stroke: url(#caudaFriaGrad); stroke-width: 2.5; stroke-linecap: round; opacity: 0.35; }
-    .ponto { fill: var(--cyan); filter: drop-shadow(0 0 10px var(--cyan)); }
-    .halo { fill: rgba(127, 252, 255, 0.06); stroke: rgba(127, 252, 255, 0.25); stroke-width: 1; }
+    .ponto { fill: var(--portal-acento); filter: drop-shadow(0 0 10px var(--portal-acento)); transition: fill 420ms ease, filter 420ms ease; }
+    .halo { fill: rgba(127, 252, 255, 0.06); stroke: var(--portal-anel); stroke-width: 1; transition: stroke 420ms ease; }
     
     .base-controle { width: 100%; max-width: 1200px; display: grid; gap: 16px; justify-items: center; }
     .entrada-unificada { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 280px; }
+    .degustacao-cromatica {
+      width: min(440px, 86vw);
+      display: grid;
+      gap: 9px;
+      justify-items: center;
+      padding: 10px 14px 12px;
+      border: 1px solid rgba(127, 252, 255, 0.22);
+      border-radius: 8px;
+      background: linear-gradient(135deg, rgba(127, 252, 255, 0.08), var(--portal-luz));
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.28), inset 0 0 18px rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(4px);
+      transition: background 420ms ease, border-color 420ms ease, box-shadow 420ms ease;
+    }
+    .degustacao-cromatica__rotulo {
+      color: var(--ouro-vivo) !important;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+    }
+    .controle-cromatico {
+      width: 100%;
+      height: 28px;
+      accent-color: var(--portal-acento);
+      cursor: pointer;
+    }
+    .controle-cromatico::-webkit-slider-runnable-track {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(127,252,255,0.28), rgba(255,215,0,0.72), rgba(255,86,118,0.88));
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.45);
+    }
+    .controle-cromatico::-webkit-slider-thumb {
+      width: 24px;
+      height: 24px;
+      margin-top: -8px;
+      border: 2px solid rgba(255,255,255,0.92);
+      border-radius: 50%;
+      background: var(--portal-acento);
+      box-shadow: 0 0 14px var(--portal-acento), 0 4px 10px rgba(0,0,0,0.35);
+      appearance: none;
+    }
+    .controle-cromatico::-moz-range-track {
+      height: 8px;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(127,252,255,0.28), rgba(255,215,0,0.72), rgba(255,86,118,0.88));
+      box-shadow: inset 0 0 8px rgba(0,0,0,0.45);
+    }
+    .controle-cromatico::-moz-range-thumb {
+      width: 22px;
+      height: 22px;
+      border: 2px solid rgba(255,255,255,0.92);
+      border-radius: 50%;
+      background: var(--portal-acento);
+      box-shadow: 0 0 14px var(--portal-acento), 0 4px 10px rgba(0,0,0,0.35);
+    }
     .campo-identificacao { display: grid; gap: 4px; text-align: center; width: 100%; }
     .campo-identificacao input { width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.6); color: var(--ouro-vivo) !important; text-align: center; font-size: 0.95rem; font-weight: 700; padding: 4px; outline: none; }
     .memoria-visita {
@@ -79,7 +140,7 @@
       white-space: nowrap;
     }
     .btn-avancar { background: transparent; border: 1px solid var(--ouro); padding: 8px 24px; font-family: "Montserrat", sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 300ms ease; }
-    .btn-avancar:hover { background: rgba(255, 215, 0, 0.12); box-shadow: 0 0 10px rgba(255, 215, 0, 0.25); }
+    .btn-avancar:hover { background: var(--portal-luz); box-shadow: 0 0 14px var(--portal-anel); }
     
     /* ENGENHARIA DE ARQUITETURA: RODAPÉ PADRÃO UNIVERSAL JUSTAPOSTO */
     .framework-footer { width: 100%; max-width: 1200px; display: grid; grid-template-columns: auto minmax(220px, max-content) auto; justify-content: center; align-items: center; gap: 16px; border-top: 1px solid var(--borda); padding-top: 16px; }
@@ -114,6 +175,10 @@
       </div>
     </section>
     <section class="base-controle">
+      <div class="degustacao-cromatica" aria-label="Degustação cromática PRISMAS">
+        <span class="degustacao-cromatica__rotulo">Vigor cromático</span>
+        <input id="controleCromatico" class="controle-cromatico" type="range" min="0" max="100" value="38" aria-label="Vigor cromático do portal" />
+      </div>
       <div class="entrada-unificada">
         <div class="campo-identificacao"><input id="login" type="text" placeholder="informar identificação" autofocus /></div>
         <div id="ultimaVisita" class="memoria-visita"></div>
@@ -140,7 +205,7 @@
         setInterval(atualizarRelogio, 1000); atualizarRelogio();
         const memoriaContainer = document.getElementById("ultimaVisita"); const cadastroSessao = localStorage.getItem("prisma13.sessao");
         if(cadastroSessao) { try { const dados = JSON.parse(cadastroSessao); memoriaContainer.innerHTML = `<span class="memoria-visita__rotulo">Ultima visita</span><span class="memoria-visita__data">${dados.dataFormatada}</span>`; } catch(e) {} }
-        const svg = document.getElementById("teiaSvg"), gridG = document.getElementById("gridMandala"), caudaPath = document.getElementById("tailMandala"), caudaFriaPath = document.getElementById("caudaFria"), ponto = document.getElementById("ponto"), halo = document.getElementById("halo"), loginInput = document.getElementById("login"), btnConvidar = document.getElementById("btnConvidar");
+        const svg = document.getElementById("teiaSvg"), gridG = document.getElementById("gridMandala"), caudaPath = document.getElementById("tailMandala"), caudaFriaPath = document.getElementById("caudaFria"), ponto = document.getElementById("ponto"), halo = document.getElementById("halo"), loginInput = document.getElementById("login"), btnConvidar = document.getElementById("btnConvidar"), controleCromatico = document.getElementById("controleCromatico");
         const CONFIG = { intervaloPulsoMs: 333, totalDimensoes: 13, totalEstagios: 5 };
         const MANDALA = { cx: 380, cy: 380, raiosBase: [82, 126, 172, 220, 270], dimAtual: 0, estagioAtual: 2, ciclo: 0, passo: 0, coords: [], maxHist: 9, historico: [] };
         const DIMENSOES = ["Soberania", "Ar Limpo", "Água Viva", "Luz Solar", "Sono", "Movimento", "Nutrição", "Jejum", "Pensamento", "Sentimento", "Zenim", "Ações", "Trabalho"];
@@ -154,6 +219,22 @@
                 const s=polar(315,r),o=criarSVG("text",{x:s.x,y:s.y,"text-anchor":"middle","dominant-baseline":"middle",style:"fill:#ffd700;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:0.5px;"});
                 o.textContent=a.toUpperCase();gridG.appendChild(o);
             });
+        }
+        function ajustarVigorCromatico(valor){
+            const vigor = Math.max(0, Math.min(100, Number(valor))) / 100;
+            const hue = Math.round(184 + vigor * 150);
+            const centroAlpha = (0.22 + vigor * 0.42).toFixed(2);
+            const luzAlpha = (0.10 + vigor * 0.28).toFixed(2);
+            const anelAlpha = (0.22 + vigor * 0.42).toFixed(2);
+            document.documentElement.style.setProperty("--portal-base", `hsl(${Math.round(198 + vigor * 32)} 28% ${Math.round(4 + vigor * 7)}%)`);
+            document.documentElement.style.setProperty("--portal-centro", `hsla(${hue} 90% ${Math.round(18 + vigor * 22)}% / ${centroAlpha})`);
+            document.documentElement.style.setProperty("--portal-anel", `hsla(${hue} 96% ${Math.round(68 + vigor * 14)}% / ${anelAlpha})`);
+            document.documentElement.style.setProperty("--portal-luz", `hsla(${Math.round(48 - vigor * 24)} 100% ${Math.round(54 + vigor * 8)}% / ${luzAlpha})`);
+            document.documentElement.style.setProperty("--portal-acento", `hsl(${hue} 96% ${Math.round(68 + vigor * 14)}%)`);
+        }
+        if(controleCromatico){
+            ajustarVigorCromatico(controleCromatico.value);
+            controleCromatico.addEventListener("input", e => ajustarVigorCromatico(e.target.value));
         }
         function atualizarGeometriaTeia(){MANDALA.coords=[];const t=360/CONFIG.totalDimensoes;for(let a=0;a<CONFIG.totalDimensoes;a++){MANDALA.coords[a]=[];const e=-90+a*t;for(let r=0;r<CONFIG.totalEstagios;r++)MANDALA.coords[a][r]=polar(raioIrregular(a,r),e)}}
         desenharGradeEstatica();
