@@ -1,421 +1,172 @@
 <!DOCTYPE html>
-<html lang="pt">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TEIA HOLOSSISTÊMICA CORRIGIDA COM IMPERMANÊNCIA E CICLOS TEMPORAIS</title>
-    <style>
-        body {
-            margin: 0;
-            background: black;
-            color: gold;
-            font-family: serif;
-            overflow: hidden;
-        }
-        canvas {
-            display: block;
-        }
-        #ui {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            z-index: 10;
-            color: gold;
-            font-size: 1.2em;
-            text-align: left;
-            text-shadow: 0 0 10px gold;
-        }
-        #narrative {
-            position: absolute;
-            bottom: 120px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.4em;
-            text-align: center;
-            max-width: 90%;
-            opacity: 0;
-            transition: opacity 0.3s ease-out;
-            text-shadow: 0 0 10px white;
-            font-style: italic;
-        }
-        #next {
-            position: absolute;
-            bottom: 20px;
-            right: 20px;
-            padding: 15px 30px;
-            background: linear-gradient(gold, #FFD700);
-            color: black;
-            border: none;
-            font-size: 1.2em;
-            font-family: serif;
-            cursor: pointer;
-            border-radius: 25px;
-            box-shadow: 0 5px 15px rgba(255,215,0,0.5);
-            transition: transform 0.2s;
-        }
-        #next:hover {
-            transform: scale(1.05);
-        }
-        #footer {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            text-align: center;
-            color: #aaa;
-            font-size: 0.9em;
-            padding: 10px;
-            font-style: italic;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>PRISMA13 — a imPRECISÃO da Vida.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ouro: #ffd700;
+      --ouro-vivo: #fff2a8;
+      --cyan: #7ffcff;
+      --borda: rgba(255, 215, 0, 0.2);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { width: 100%; height: 100%; overflow: hidden; font-family: "Montserrat", sans-serif; background-color: #000000; }
+    body, h1, p, div, span, label, input, button, footer, header, section, main, text { color: var(--ouro) !important; }
+    
+    #kosmos { position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at center, rgba(10,25,50,0.3) 0%, #000 100%); }
+    #kosmos::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background: radial-gradient(1.5px 1.5px at 20px 30px, #fff, rgba(0,0,0,0)), 
+                  radial-gradient(2px 2px at 70px 90px, #fff, rgba(0,0,0,0)),
+                  radial-gradient(1px 1px at 140px 130px, #fff, rgba(0,0,0,0));
+      background-size: 180px 180px; opacity: 0.65;
+    }
+    .shooting-star {
+      position: absolute; top: 10%; left: 30%; width: 80px; height: 1px;
+      background: linear-gradient(90deg, #ffffff, transparent); transform: rotate(-25deg); opacity: 0; animation: shoot 6s infinite ease-in-out;
+    }
+    .star-2 { top: 25%; left: 65%; width: 120px; animation-delay: 2s; animation-duration: 8s; }
+    .star-3 { top: 5%; left: 80%; width: 60px; animation-delay: 4.5s; animation-duration: 5s; }
+    @keyframes shoot { 0% { opacity: 0; transform: translate(0,0) rotate(-25deg); } 5% { opacity: 0.8; } 15% { opacity: 0; transform: translate(-150px, 70px) rotate(-25deg); } 100% { opacity: 0; } }
+
+    .framework-tela { position: relative; z-index: 2; width: 100%; height: 100vh; display: grid; grid-template-rows: auto 1fr auto; align-items: center; justify-items: center; padding: 20px 40px; }
+    
+    .framework-header { width: 100%; max-width: 1200px; display: flex; flex-direction: column; align-items: center; gap: 6px; border-bottom: 1px solid var(--borda); padding-bottom: 14px; text-align: center; }
+    .framework-header .brand { font-weight: 900; font-size: 1.8rem; letter-spacing: 5px; text-transform: uppercase; text-shadow: 0 0 8px var(--ouro); }
+    .framework-header .sub-brand { font-family: "Cormorant Garamond", serif; font-style: italic; font-size: 1.1rem; color: var(--ouro-vivo) !important; opacity: 0.85; margin-bottom: 2px; }
+    .framework-header .meta-display { display: flex; gap: 16px; align-items: center; font-family: monospace; font-size: 0.85rem; color: var(--cyan) !important; }
+    
+    .centro-mandala { width: 100%; height: 100%; display: grid; place-items: center; }
+    .mandala-wrap { width: min(650px, 65vmin); aspect-ratio: 1 / 1; display: grid; place-items: center; }
+    .cauda { fill: none; stroke: url(#caudaGrad); stroke-width: 4.5; stroke-linecap: round; }
+    .cauda-fria { fill: none; stroke: url(#caudaFriaGrad); stroke-width: 2.5; stroke-linecap: round; opacity: 0.35; }
+    .ponto { fill: var(--cyan); filter: drop-shadow(0 0 10px var(--cyan)); }
+    .halo { fill: rgba(127, 252, 255, 0.06); stroke: rgba(127, 252, 255, 0.25); stroke-width: 1; }
+    
+    .base-controle { width: 100%; max-width: 1200px; display: grid; gap: 16px; justify-items: center; }
+    .entrada-unificada { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 280px; }
+    .campo-identificacao { display: grid; gap: 4px; text-align: center; width: 100%; }
+    .campo-identificacao input { width: 100%; background: transparent; border: 0; border-bottom: 1px solid rgba(255, 215, 0, 0.6); color: var(--ouro-vivo) !important; text-align: center; font-size: 0.95rem; font-weight: 700; padding: 4px; outline: none; }
+    .memoria-visita {
+      min-height: 34px;
+      display: grid;
+      gap: 3px;
+      justify-items: center;
+      text-align: center;
+      opacity: 0.82;
+    }
+    .memoria-visita__rotulo {
+      color: rgba(255, 215, 0, 0.72) !important;
+      font-family: "Montserrat", sans-serif;
+      font-size: 0.62rem;
+      font-weight: 900;
+      letter-spacing: 1.1px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .memoria-visita__data {
+      color: var(--ouro-vivo) !important;
+      font-family: "Cormorant Garamond", Georgia, serif;
+      font-size: clamp(1rem, 1.6vw, 1.22rem);
+      font-style: italic;
+      font-weight: 700;
+      line-height: 1.12;
+      white-space: nowrap;
+    }
+    .btn-avancar { background: transparent; border: 1px solid var(--ouro); padding: 8px 24px; font-family: "Montserrat", sans-serif; font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px; text-transform: uppercase; cursor: pointer; border-radius: 4px; transition: all 300ms ease; }
+    .btn-avancar:hover { background: rgba(255, 215, 0, 0.12); box-shadow: 0 0 10px rgba(255, 215, 0, 0.25); }
+    
+    /* ENGENHARIA DE ARQUITETURA: RODAPÉ PADRÃO UNIVERSAL JUSTAPOSTO */
+    .framework-footer { width: 100%; max-width: 1200px; display: grid; grid-template-columns: auto minmax(220px, max-content) auto; justify-content: center; align-items: center; gap: 16px; border-top: 1px solid var(--borda); padding-top: 16px; }
+    .selo-container { display: flex; align-items: center; gap: 12px; font-weight: 900; font-size: 0.75rem; letter-spacing: 1.5px; }
+    .selo-container.esquerda { justify-content: flex-end; }
+    .selo-container.direita { justify-content: flex-start; }
+    .selo-colorido-sol { width: 26px; height: 26px; border-radius: 50%; background: conic-gradient(#ff4500, #ffa500, #ffd700, #adff2f, #00ffff, #ff4500); box-shadow: 0 0 8px rgba(255, 165, 0, 0.5); }
+    .selo-colorido-imc { width: 24px; height: 24px; border-radius: 4px; background: linear-gradient(135deg, #00f2fe 0%, #4facfe 100%); box-shadow: 0 0 8px rgba(79, 172, 254, 0.5); }
+    .footer-slogan { text-align: center; font-family: "Cormorant Garamond", serif; font-style: italic; font-weight: 700; font-size: clamp(1.2rem, 1.45vw, 1.55rem); line-height: 1.4; display: flex; flex-direction: column; gap: 2px; }
+    @media (max-width: 820px) { .framework-footer { grid-template-columns: 1fr; gap: 12px; text-align: center; } .selo-container.esquerda, .selo-container.direita { justify-content: center; } }
+  </style>
 </head>
 <body>
-    <canvas id="canvas"></canvas>
-    <div id="ui">TEIA HOLOSSISTÊMICA<br>CORRIGIDA COM IMPERMANÊNCIA E CICLOS TEMPORAIS</div>
-    <div id="narrative"></div>
-    <button id="next">Próxima</button>
-    <div id="footer">Seeemmpre melhorrrAndo... NUNKAKABA.<br>Há braços.<br>Link-se: @drolairrafael</div>
-
-    <script>
-        const canvas = document.getElementById('canvas');
-        const ctx = canvas.getContext('2d');
-        let cx, cy, scale;
-        let now, prevTime = 0;
-        let stars = [];
-        let shootingStars = [];
-        let narrativeText = '';
-        let narrativeStart = 0;
-
-        const NUM_DIMS = 13;
-        const JUMP_MS = 333;
-        const TRAIL_LIFE = 8 * JUMP_MS;
-        const LEVELS = 5;
-        const levelRadii = [130, 165, 200, 235, 270];
-        const levelColors = ['#0066FF', '#00FF99', '#9966FF', '#FFD700', '#FFFFFF'];
-        const dimensions = [
-            'AR LIMPO', 'ÁGUA PURA', 'FOGO VIVO', 'TERRA FÉRTIL', 'ÉTER',
-            'AMOR', 'CONSCIÊNCIA', 'INTENÇÃO', 'HARMONIA', 'UNIDADE',
-            'INFINITO', 'ETERNIDADE', 'SOBERANIA'
-        ];
-        const narratives = [
-            'O corpo denso se move, absorvendo energias terrestres...',
-            'Sentimentos fluem livremente, dançam em cores vivas...',
-            'A forma física se desfaz, agora o cometa viaja como energia pura de pensamento...',
-            'A realidade se reconstrói a partir de intenções puras...',
-            'A separação dissolve-se, tudo é Um, infinito e eterno...'
-        ];
-
-        const cycles = [
-            {interval: 333, offset: 0},
-            {interval: 1250, offset: Math.PI / 2},
-            {interval: 7500, offset: Math.PI}
-        ];
-
-        class TrailManager {
-            constructor(interval, offset) {
-                this.interval = interval;
-                this.offset = offset;
-                this.nextJumpTime = performance.now() + interval;
-                this.currentIndex = Math.floor(Math.random() * NUM_DIMS);
-                this.currentAngle = (this.currentIndex * 2 * Math.PI / NUM_DIMS) + offset;
-                this.currentLevel = Math.floor(Math.random() * LEVELS);
-                this.trails = [];
-                this.justJumped = false;
-            }
-
-            update(now) {
-                if (now >= this.nextJumpTime) {
-                    this.currentIndex = (this.currentIndex + NUM_DIMS - 1) % NUM_DIMS;
-                    this.currentLevel = Math.floor(Math.random() * LEVELS);
-                    this.currentAngle = (this.currentIndex * 2 * Math.PI / NUM_DIMS) + this.offset;
-                    this.trails.push({
-                        angle: this.currentAngle,
-                        level: this.currentLevel,
-                        start: now
-                    });
-                    this.nextJumpTime = now + this.interval;
-                    this.justJumped = true;
-                }
-                this.trails = this.trails.filter(t => now - t.start < TRAIL_LIFE);
-                return { angle: this.currentAngle, level: this.currentLevel };
-            }
-
-            draw(ctx, now, scale, cx, cy) {
-                for (let trail of this.trails) {
-                    let ageFrac = (now - trail.start) / TRAIL_LIFE;
-                    let alpha = Math.max(0, 1 - ageFrac);
-                    let r = levelRadii[trail.level] * scale;
-                    let x = cx + Math.cos(trail.angle) * r;
-                    let y = cy + Math.sin(trail.angle) * r;
-                    ctx.save();
-                    ctx.globalAlpha = alpha;
-                    let glowSize = (20 + 15 * Math.sin(ageFrac * Math.PI)) * scale * alpha;
-                    ctx.shadowColor = levelColors[trail.level];
-                    ctx.shadowBlur = glowSize;
-                    ctx.fillStyle = levelColors[trail.level];
-                    ctx.beginPath();
-                    ctx.arc(x, y, 7 * scale * alpha, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.shadowBlur = 0;
-                    ctx.globalAlpha *= 0.6;
-                    ctx.fillStyle = 'white';
-                    ctx.beginPath();
-                    ctx.arc(x, y, 3 * scale, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.restore();
-                }
-            }
+  <div id="kosmos" aria-hidden="true"><div class="shooting-star"></div><div class="shooting-star star-2"></div><div class="shooting-star star-3"></div></div>
+  <main class="framework-tela">
+    <header class="framework-header">
+      <div class="brand">PRISMA13</div>
+      <div class="sub-brand">a imPRECISÃO da Vida.</div>
+      <div class="meta-display"><span id="relogioDisplay">--/--/---- --:--:-- (UTC-3)</span></div>
+    </header>
+    <section class="centro-mandala">
+      <div class="mandala-wrap">
+        <svg id="teiaSvg" class="mandala-svg" viewBox="0 0 760 760">
+          <defs>
+            <linearGradient id="caudaGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(127,252,255,0)" /><stop offset="60%" stop-color="rgba(127,252,255,0.4)" /><stop offset="100%" stop-color="rgba(127,252,255,1)" /></linearGradient>
+            <linearGradient id="caudaFriaGrad" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="rgba(255,255,255,0)" /><stop offset="100%" stop-color="rgba(255,255,255,0.25)" /></linearGradient>
+          </defs>
+          <g id="gridMandala"></g>
+          <path id="tailMandala" class="cauda" d="" /><path id="caudaFria" class="cauda-fria" d="" />
+          <circle id="halo" class="halo" cx="380" cy="380" r="18" /><circle id="ponto" class="ponto" cx="380" cy="380" r="6.5" /><circle class="nucleo" cx="380" cy="380" r="6" />
+        </svg>
+      </div>
+    </section>
+    <section class="base-controle">
+      <div class="entrada-unificada">
+        <div class="campo-identificacao"><input id="login" type="text" placeholder="informar identificação" autofocus /></div>
+        <div id="ultimaVisita" class="memoria-visita"></div>
+        <button id="btnConvidar" class="btn-avancar" type="button">Avançar para o Portal</button>
+      </div>
+      <footer class="framework-footer">
+        <div class="selo-container esquerda"><div class="selo-colorido-sol"></div><div>SOL 1985</div></div>
+        <div class="footer-slogan">
+          <div>O solo fértil garante a sobrevivência.</div><div>A cultura autônoma garante a melhoria.</div>
+          <div>Seeemmpre melhorrrAndo... NUNKAKABA!</div><div>Há braços! | Dr. Olair Rafael – @drolairrafael</div>
+        </div>
+        <div class="selo-container direita"><div>ESBELTEZA imc22</div><div class="selo-colorido-imc"></div></div>
+      </footer>
+    </section>
+  </main>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        function atualizarRelogio() {
+            const agora = new Date(); const utc = agora.getTime() + (agora.getTimezoneOffset() * 60000); const dataSaoPaulo = new Date(utc + (3600000 * -3));
+            const dia = String(dataSaoPaulo.getDate()).padStart(2, '0'); const mes = String(dataSaoPaulo.getMonth() + 1).padStart(2, '0'); const ano = dataSaoPaulo.getFullYear();
+            const hora = String(dataSaoPaulo.getHours()).padStart(2, '0'); const min = String(dataSaoPaulo.getMinutes()).padStart(2, '0'); const seg = String(dataSaoPaulo.getSeconds()).padStart(2, '0');
+            document.getElementById("relogioDisplay").textContent = `${dia}/${mes}/${ano} ${hora}:${min}:${seg} (UTC-3)`;
         }
-
-        let managers;
-        let mainManager;
-
-        function resize() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            cx = canvas.width / 2;
-            cy = canvas.height / 2;
-            generateStars();
-            shootingStars = [];
-        }
-
-        function generateStars() {
-            stars = [];
-            for (let i = 0; i < 500; i++) {
-                stars.push({
-                    x: Math.random() * canvas.width,
-                    y: Math.random() * canvas.height,
-                    twinkle: Math.random() * Math.PI * 2,
-                    speed: 0.01 + Math.random() * 0.02
-                });
-            }
-        }
-
-        function spawnShooting(now, cx, cy, scale) {
-            let startAng = -Math.PI / 2 + (Math.random() - 0.5) * Math.PI / 3;
-            let dist = 150 * scale;
-            let sx = cx + Math.cos(startAng) * dist;
-            let sy = cy + Math.sin(startAng) * dist;
-            let dirAng = startAng + Math.PI / 2.2;
-            shootingStars.push({
-                x: sx,
-                y: sy,
-                vx: Math.cos(dirAng) * 800 * scale,
-                vy: Math.sin(dirAng) * 800 * scale,
-                start: now,
-                life: 3000
+        setInterval(atualizarRelogio, 1000); atualizarRelogio();
+        const memoriaContainer = document.getElementById("ultimaVisita"); const cadastroSessao = localStorage.getItem("prisma13.sessao");
+        if(cadastroSessao) { try { const dados = JSON.parse(cadastroSessao); memoriaContainer.innerHTML = `<span class="memoria-visita__rotulo">Ultima visita</span><span class="memoria-visita__data">${dados.dataFormatada}</span>`; } catch(e) {} }
+        const svg = document.getElementById("teiaSvg"), gridG = document.getElementById("gridMandala"), caudaPath = document.getElementById("tailMandala"), caudaFriaPath = document.getElementById("caudaFria"), ponto = document.getElementById("ponto"), halo = document.getElementById("halo"), loginInput = document.getElementById("login"), btnConvidar = document.getElementById("btnConvidar");
+        const CONFIG = { intervaloPulsoMs: 333, totalDimensoes: 13, totalEstagios: 5 };
+        const MANDALA = { cx: 380, cy: 380, raiosBase: [82, 126, 172, 220, 270], dimAtual: 0, estagioAtual: 2, ciclo: 0, passo: 0, coords: [], maxHist: 9, historico: [] };
+        const DIMENSOES = ["Soberania", "Ar Limpo", "Água Viva", "Luz Solar", "Sono", "Movimento", "Nutrição", "Jejum", "Pensamento", "Sentimento", "Zenim", "Ações", "Trabalho"];
+        function criarSVG(t,a={}){const e=document.createElementNS("http://www.w3.org/2000/svg",t);Object.entries(a).forEach(([t,a])=>e.setAttribute(t,a));return e}
+        function polar(t,a){const e=a*Math.PI/180;return{x:MANDALA.cx+Math.cos(e)*t,y:MANDALA.cy+Math.sin(e)*t}}
+        function raioIrregular(t,a){return MANDALA.raiosBase[a]+Math.sin((t+1)*.88+a*.96+MANDALA.ciclo*.42)*14}
+        function desenharGradeEstatica(){
+            if(!gridG)return;gridG.innerHTML=""; MANDALA.raiosBase.forEach(t=>{gridG.appendChild(criarSVG("circle",{cx:MANDALA.cx,cy:MANDALA.cy,r:t,style:"fill:none;stroke:rgba(255,215,0,0.12);stroke-width:1;"}))});
+            const t=360/CONFIG.totalDimensoes; DIMENSOES.forEach((a,e)=>{
+                const r=-90+e*t,n=polar(285,r); gridG.appendChild(criarSVG("line",{x1:MANDALA.cx,y1:MANDALA.cy,x2:n.x,y2:n.y,style:"stroke:rgba(255,215,0,0.2);stroke-width:1;"}));
+                const s=polar(315,r),o=criarSVG("text",{x:s.x,y:s.y,"text-anchor":"middle","dominant-baseline":"middle",style:"fill:#ffd700;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:800;letter-spacing:0.5px;"});
+                o.textContent=a.toUpperCase();gridG.appendChild(o);
             });
         }
-
-        function init() {
-            managers = cycles.map(c => new TrailManager(c.interval, c.offset));
-            mainManager = managers[0];
-            resize();
-            window.addEventListener('resize', resize);
-
-            // localStorage login
-            let user = localStorage.getItem('holossistemica_user');
-            if (!user) {
-                user = 'Nodo_' + Date.now().toString(36).slice(-5).toUpperCase();
-                localStorage.setItem('holossistemica_user', user);
-            }
-            document.getElementById('ui').innerHTML += `<br><small>Bem-vindo, ${user}</small>`;
-
-            // next button
-            document.getElementById('next').onclick = () => {
-                window.location.href = '/tela02/index.html';
-            };
-
-            requestAnimationFrame(animate);
-        }
-
-        function animate(time) {
-            if (prevTime === 0) prevTime = time;
-            let dt = (time - prevTime) / 1000;
-            prevTime = time;
-            now = time;
-
-            ctx.fillStyle = 'black';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            scale = Math.min(cx, cy) / 350;
-
-            // stars
-            ctx.globalAlpha = 1;
-            stars.forEach(s => {
-                s.twinkle += s.speed;
-                let alpha = 0.3 + 0.7 * (Math.sin(s.twinkle) + 1) / 2;
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.fillStyle = 'white';
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, 1.5, 0, Math.PI * 2);
-                ctx.fill();
-                ctx.restore();
-            });
-
-            // shooting stars
-            if (Math.random() < 0.004) spawnShooting(now, cx, cy, scale);
-            for (let i = shootingStars.length - 1; i >= 0; i--) {
-                let s = shootingStars[i];
-                s.x += s.vx * dt;
-                s.y += s.vy * dt;
-                let age = now - s.start;
-                if (age > s.life) {
-                    shootingStars.splice(i, 1);
-                    continue;
-                }
-                let alpha = 1 - age / s.life;
-                ctx.save();
-                ctx.globalAlpha = alpha;
-                ctx.strokeStyle = 'white';
-                ctx.lineWidth = 2;
-                ctx.lineCap = 'round';
-                ctx.shadowColor = 'cyan';
-                ctx.shadowBlur = 20;
-                ctx.beginPath();
-                ctx.moveTo(s.x - s.vx * dt * 5, s.y - s.vy * dt * 5);
-                ctx.lineTo(s.x, s.y);
-                ctx.stroke();
-                ctx.restore();
-            }
-
-            // teia concentric
-            for (let lv = 0; lv < 7; lv++) {
-                let r = 50 + lv * 45 * scale;
-                let alpha = 0.15 - lv * 0.015;
-                ctx.strokeStyle = `rgba(0, 102, 255, ${alpha})`;
-                ctx.lineWidth = 1.2;
-                ctx.beginPath();
-                ctx.arc(cx, cy, r, 0, Math.PI * 2);
-                ctx.stroke();
-            }
-
-            // radial teia
-            for (let i = 0; i < 26; i++) {
-                let ang = i * Math.PI / 13;
-                let rmax = 340 * scale;
-                let ex = cx + rmax * Math.cos(ang);
-                let ey = cy + rmax * Math.sin(ang);
-                ctx.strokeStyle = 'rgba(0, 102, 255, 0.12)';
-                ctx.lineWidth = 0.8;
-                ctx.beginPath();
-                ctx.moveTo(cx, cy);
-                ctx.lineTo(ex, ey);
-                ctx.stroke();
-            }
-
-            // dimension names
-            ctx.font = `${22 * scale}px serif`;
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.shadowColor = '#FFD700';
-            ctx.shadowBlur = 10 * scale;
-            ctx.fillStyle = '#FFD700';
-            for (let i = 0; i < NUM_DIMS; i++) {
-                let ang = i * 2 * Math.PI / NUM_DIMS;
-                let rx = 320 * scale;
-                let px = cx + rx * Math.cos(ang);
-                let py = cy + rx * Math.sin(ang);
-                ctx.save();
-                ctx.translate(px, py);
-                ctx.rotate(ang - Math.PI / 2);
-                ctx.fillText(dimensions[i], 0, 0);
-                ctx.restore();
-            }
-            ctx.shadowBlur = 0;
-
-            // center pulse
-            let pulsePhase = now * 0.003;
-            let pulseSize = 25 * scale * (0.8 + 0.2 * Math.sin(pulsePhase));
-            ctx.save();
-            ctx.shadowColor = 'white';
-            ctx.shadowBlur = 50 * scale;
-            ctx.fillStyle = 'rgba(255,255,255,0.5)';
-            ctx.beginPath();
-            ctx.arc(cx, cy, pulseSize, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 25 * scale;
-            ctx.fillStyle = 'rgba(255,255,255,0.8)';
-            ctx.beginPath();
-            ctx.arc(cx, cy, pulseSize * 0.4, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-            // update managers
-            let mainCurr = mainManager.update(now);
-            managers.slice(1).forEach(m => m.update(now));
-
-            // narrative
-            if (mainManager.justJumped) {
-                narrativeText = narratives[mainCurr.level];
-                narrativeStart = now;
-                mainManager.justJumped = false;
-            }
-            let narrAlpha = 0;
-            if (now - narrativeStart < TRAIL_LIFE) {
-                narrAlpha = 1 - (now - narrativeStart) / TRAIL_LIFE;
-            }
-            let narrEl = document.getElementById('narrative');
-            narrEl.style.opacity = narrAlpha;
-            if (narrAlpha > 0) {
-                narrEl.textContent = narrativeText;
-            }
-
-            // draw trails
-            managers.forEach(m => m.draw(ctx, now, scale, cx, cy));
-
-            // main comet
-            let cometAngle = mainCurr.angle;
-            let cometLevel = mainCurr.level;
-            let cometRad = levelRadii[cometLevel] * scale;
-            let comx = cx + cometRad * Math.cos(cometAngle);
-            let comy = cy + cometRad * Math.sin(cometAngle);
-            let cometPulse = 0.6 + 0.4 * Math.sin(now * 0.012);
-            ctx.save();
-            ctx.shadowColor = levelColors[cometLevel];
-            ctx.shadowBlur = 70 * scale * cometPulse;
-            ctx.fillStyle = levelColors[cometLevel];
-            ctx.globalAlpha = 0.85;
-            ctx.beginPath();
-            ctx.arc(comx, comy, 22 * scale * cometPulse, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 100 * scale * cometPulse;
-            ctx.globalAlpha = 0.4;
-            ctx.beginPath();
-            ctx.arc(comx, comy, 35 * scale * cometPulse, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.shadowBlur = 0;
-            ctx.globalAlpha = 1;
-            ctx.fillStyle = 'white';
-            ctx.shadowColor = 'white';
-            ctx.shadowBlur = 20 * scale;
-            ctx.beginPath();
-            ctx.arc(comx, comy, 6 * scale, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-            // next point preview
-            let nextIndex = (mainManager.currentIndex + NUM_DIMS - 1) % NUM_DIMS;
-            let nextAngle = (nextIndex * 2 * Math.PI / NUM_DIMS) + mainManager.offset;
-            let nextLevel = Math.floor(Math.random() * LEVELS);
-            let nextRad = levelRadii[nextLevel] * scale;
-            let nx = cx + nextRad * Math.cos(nextAngle);
-            let ny = cy + nextRad * Math.sin(nextAngle);
-            ctx.save();
-            ctx.globalAlpha = 0.4;
-            ctx.shadowColor = levelColors[nextLevel];
-            ctx.shadowBlur = 25 * scale;
-            ctx.fillStyle = levelColors[nextLevel];
-            ctx.beginPath();
-            ctx.arc(nx, ny, 10 * scale, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-
-            requestAnimationFrame(animate);
-        }
-
-        window.addEventListener('load', init);
-    </script>
+        function atualizarGeometriaTeia(){MANDALA.coords=[];const t=360/CONFIG.totalDimensoes;for(let a=0;a<CONFIG.totalDimensoes;a++){MANDALA.coords[a]=[];const e=-90+a*t;for(let r=0;r<CONFIG.totalEstagios;r++)MANDALA.coords[a][r]=polar(raioIrregular(a,r),e)}}
+        desenharGradeEstatica();
+        setInterval(() => {
+            MANDALA.ciclo+=.24;MANDALA.passo+=1;atualizarGeometriaTeia(); MANDALA.dimAtual=(MANDALA.dimAtual-1+CONFIG.totalDimensoes)%CONFIG.totalDimensoes; MANDALA.estagioAtual=Math.floor(Math.random()*CONFIG.totalEstagios);
+            const t=MANDALA.coords[MANDALA.dimAtual][MANDALA.estagioAtual];MANDALA.historico.push({x:t.x,y:t.y}); if(MANDALA.historico.length>MANDALA.maxHist)MANDALA.historico.shift();
+            if(MANDALA.historico.length>1){let t=`M ${MANDALA.historico[0].x} ${MANDALA.historico[0].y}`;for(let a=1;a<MANDALA.historico.length;a++)t+=` L ${MANDALA.historico[a].x} ${MANDALA.historico[a].y}`;if(caudaPath)caudaPath.setAttribute("d",t);if(caudaFriaPath)caudaFriaPath.setAttribute("d",t)}
+            if(ponto&&halo){ponto.setAttribute("cx",t.x);ponto.setAttribute("cy",t.y);halo.setAttribute("cx",t.x);halo.setAttribute("cy",t.y);halo.setAttribute("r",14+4*Math.sin(.5*MANDALA.passo))}
+        }, CONFIG.intervaloPulsoMs);
+        function ejecutarAvanco(){const t=loginInput.value.trim();if(t.length>0){const ag = new Date();const dataStr = ag.toLocaleDateString('pt-BR') + ' às ' + ag.toLocaleTimeString('pt-BR');localStorage.setItem("prisma13.sessao",JSON.stringify({sistema:"PRISMA13",usuario:t,dataFormatada:dataStr}));window.location.href="tela02/index.html"}else loginInput.focus()}
+        btnConvidar.addEventListener("click",ejecutarAvanco);loginInput.addEventListener("keydown",t=>{"Enter"===t.key&&executarAvanco()});
+    });
+  </script>
+  <script src="scripts/footer-selos.js"></script>
 </body>
 </html>
