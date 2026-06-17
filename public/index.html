@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>PRISMA13 — a imPRECISÃO da Vida.</title>
+  <title>PRISMAS — a imPRECISÃO da Vida.</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -157,7 +157,7 @@
   <div id="kosmos" aria-hidden="true"><div class="shooting-star"></div><div class="shooting-star star-2"></div><div class="shooting-star star-3"></div></div>
   <main class="framework-tela">
     <header class="framework-header">
-      <div class="brand">PRISMA13</div>
+      <div class="brand">PRISMAS</div>
       <div class="sub-brand">a imPRECISÃO da Vida.</div>
       <div class="meta-display"><span id="relogioDisplay">--/--/---- --:--:-- (UTC-3)</span></div>
     </header>
@@ -244,7 +244,7 @@
             if(MANDALA.historico.length>1){let t=`M ${MANDALA.historico[0].x} ${MANDALA.historico[0].y}`;for(let a=1;a<MANDALA.historico.length;a++)t+=` L ${MANDALA.historico[a].x} ${MANDALA.historico[a].y}`;if(caudaPath)caudaPath.setAttribute("d",t);if(caudaFriaPath)caudaFriaPath.setAttribute("d",t)}
             if(ponto&&halo){ponto.setAttribute("cx",t.x);ponto.setAttribute("cy",t.y);halo.setAttribute("cx",t.x);halo.setAttribute("cy",t.y);halo.setAttribute("r",14+4*Math.sin(.5*MANDALA.passo))}
         }, CONFIG.intervaloPulsoMs);
-        function ejecutarAvanco(){const t=loginInput.value.trim();if(t.length>0){const ag = new Date();const dataStr = ag.toLocaleDateString('pt-BR') + ' às ' + ag.toLocaleTimeString('pt-BR');localStorage.setItem("prisma13.sessao",JSON.stringify({sistema:"PRISMA13",usuario:t,dataFormatada:dataStr}));window.location.href="tela02/index.html"}else loginInput.focus()}
+        function ejecutarAvanco(){const t=loginInput.value.trim();if(t.length>0){const ag = new Date();const dataStr = ag.toLocaleDateString('pt-BR') + ' às ' + ag.toLocaleTimeString('pt-BR');localStorage.setItem("prisma13.sessao",JSON.stringify({sistema:"PRISMAS",usuario:t,dataFormatada:dataStr}));window.location.href="tela02/index.html"}else loginInput.focus()}
         btnConvidar.addEventListener("click",ejecutarAvanco);loginInput.addEventListener("keydown",t=>{"Enter"===t.key&&executarAvanco()});
     });
   </script>
