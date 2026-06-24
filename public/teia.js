@@ -1,4 +1,4 @@
-// PRISMA13 - Código de Fusão Holossistêmica e Renderização da Teia
+// PRISMAS - Código de Fusão Holossistêmica e Renderização da Teia
 document.addEventListener("DOMContentLoaded", () => {
     const svg = document.getElementById("teiaSvg");
     if (!svg) return;

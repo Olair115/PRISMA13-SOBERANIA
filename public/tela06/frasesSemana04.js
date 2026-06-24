@@ -1,4 +1,4 @@
-// frasesSemana04.js - REFINADO COM RIGOR PRISMA13
+// frasesSemana04.js - REFINADO COM RIGOR PRISMAS
 const frasesSemana04 = {
     "1-13": "Fortalecer o vigor físico para sustentar a expansão da consciência criadora.",
     "2-12": "Refinar a percepção mental para processar informações com precisão ética.",

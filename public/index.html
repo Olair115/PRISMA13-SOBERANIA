@@ -203,7 +203,7 @@
             document.getElementById("relogioDisplay").textContent = `${dia}/${mes}/${ano} ${hora}:${min}:${seg} (UTC-3)`;
         }
         setInterval(atualizarRelogio, 1000); atualizarRelogio();
-        const memoriaContainer = document.getElementById("ultimaVisita"); const cadastroSessao = localStorage.getItem("prisma13.sessao");
+        const memoriaContainer = document.getElementById("ultimaVisita"); const cadastroSessao = localStorage.getItem("prismas.sessao");
         if(cadastroSessao) { try { const dados = JSON.parse(cadastroSessao); memoriaContainer.innerHTML = `<span class="memoria-visita__rotulo">Ultima visita</span><span class="memoria-visita__data">${dados.dataFormatada}</span>`; } catch(e) {} }
         const svg = document.getElementById("teiaSvg"), gridG = document.getElementById("gridMandala"), caudaPath = document.getElementById("tailMandala"), caudaFriaPath = document.getElementById("caudaFria"), ponto = document.getElementById("ponto"), halo = document.getElementById("halo"), loginInput = document.getElementById("login"), btnConvidar = document.getElementById("btnConvidar"), controleCromatico = document.getElementById("controleCromatico");
         const CONFIG = { intervaloPulsoMs: 333, totalDimensoes: 13, totalEstagios: 5 };
@@ -244,7 +244,7 @@
             if(MANDALA.historico.length>1){let t=`M ${MANDALA.historico[0].x} ${MANDALA.historico[0].y}`;for(let a=1;a<MANDALA.historico.length;a++)t+=` L ${MANDALA.historico[a].x} ${MANDALA.historico[a].y}`;if(caudaPath)caudaPath.setAttribute("d",t);if(caudaFriaPath)caudaFriaPath.setAttribute("d",t)}
             if(ponto&&halo){ponto.setAttribute("cx",t.x);ponto.setAttribute("cy",t.y);halo.setAttribute("cx",t.x);halo.setAttribute("cy",t.y);halo.setAttribute("r",14+4*Math.sin(.5*MANDALA.passo))}
         }, CONFIG.intervaloPulsoMs);
-        function ejecutarAvanco(){const t=loginInput.value.trim();if(t.length>0){const ag = new Date();const dataStr = ag.toLocaleDateString('pt-BR') + ' às ' + ag.toLocaleTimeString('pt-BR');localStorage.setItem("prisma13.sessao",JSON.stringify({sistema:"PRISMAS",usuario:t,dataFormatada:dataStr}));window.location.href="tela02/index.html"}else loginInput.focus()}
+        function ejecutarAvanco(){const t=loginInput.value.trim();if(t.length>0){const ag = new Date();const dataStr = ag.toLocaleDateString('pt-BR') + ' às ' + ag.toLocaleTimeString('pt-BR');localStorage.setItem("prismas.sessao",JSON.stringify({sistema:"PRISMAS",usuario:t,dataFormatada:dataStr}));window.location.href="tela02/index.html"}else loginInput.focus()}
         btnConvidar.addEventListener("click",ejecutarAvanco);loginInput.addEventListener("keydown",t=>{"Enter"===t.key&&executarAvanco()});
     });
   </script>

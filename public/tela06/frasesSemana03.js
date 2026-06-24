@@ -1,4 +1,4 @@
-// frasesSemana03.js - REFINADO COM RIGOR PRISMA13
+// frasesSemana03.js - REFINADO COM RIGOR PRISMAS
 const frasesSemana03 = {
     "1-13": "Disciplinar o corpo físico para liberar o fluxo da intuição criadora.",
     "2-12": "Focar na clareza mental para absorver ensinamentos de alta complexidade.",

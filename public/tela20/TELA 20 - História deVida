@@ -7,7 +7,7 @@
         veredito: () => {
             const imc = parseFloat(localStorage.getItem('prisma_imc')) || 0;
             return `
-            <div class="card-prisma13">
+            <div class="card-prismas">
                 <h1>REGÊNCIA VITAL</h1>
                 <div class="result-box">
                     <h2 style="margin:0; color:var(--gold);">IMC PONDERADO: ${imc.toFixed(2).replace('.',',')}</h2>
@@ -18,7 +18,7 @@
         },
 
         historia: () => `
-            <div class="card-prisma13">
+            <div class="card-prismas">
                 <h1>TELA 20: HISTÓRIA DE VIDA</h1>
                 <div class="welcome-text">
                     <p><b>O Sopro registra o caminho do Barro.</b></p>
@@ -45,7 +45,7 @@
                 imc: imc,
                 historia: bio,
                 data: firebase.firestore.FieldValue.serverTimestamp(),
-                versao: "PRISMA13-V20"
+                versao: "PRISMAS-V20"
             });
             
             // FEEDBACK FUNCIONAL E EVOLUTIVO

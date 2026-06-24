@@ -1,4 +1,4 @@
-// frasesSemana13.js - O ÁPICE DO RIGOR PRISMA13
+// frasesSemana13.js - O ÁPICE DO RIGOR PRISMAS
 const frasesSemana13 = {
     "1-13": "Ser saúde plena para manifestar a criatividade absoluta.",
     "2-12": "Ser mente clara para compreender a verdade do Todo.",

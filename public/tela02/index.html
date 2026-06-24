@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>PRISMA13 — Tela 02</title>
+  <title>PRISMAS — Tela 02</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -53,7 +53,7 @@
   <div id="kosmos" aria-hidden="true"><div class="shooting-star"></div><div class="shooting-star star-2"></div></div>
   <main class="framework-tela">
     <header class="framework-header">
-      <div class="brand">PRISMA13</div>
+      <div class="brand">PRISMAS</div>
       <div class="meta-display">
         <span id="relogioDisplay">--/--/---- --:--:-- (UTC-3)</span>
         <span id="climaDisplay" class="clima-display">SÃO PAULO — MÁX: 24°C / MÍN: 17°C</span>
@@ -109,7 +109,7 @@
             document.getElementById("relogioDisplay").textContent = `${dia}/${mes}/${ano} ${hora}:${min}:${seg} (UTC-3)`;
         }
         setInterval(atualizarRelogio, 1000); atualizarRelogio();
-        const campoNascimento = document.getElementById("nascimento"); const campoIdade = document.getElementById("idade"); const formMetricas = document.getElementById("formMetricas"); const sessionRaw = localStorage.getItem("prisma13.sessao");
+        const campoNascimento = document.getElementById("nascimento"); const campoIdade = document.getElementById("idade"); const formMetricas = document.getElementById("formMetricas"); const sessionRaw = localStorage.getItem("prismas.sessao");
         let usuarioAtivo = "Explorador Sobrevivente"; let ageData = { anos: 0, meses: 0, dias: 0, stringFormatada: "", septenio: "" };
         if (sessionRaw) { try { const sessionData = JSON.parse(sessionRaw); if (sessionData.usuario) usuarioAtivo = sessionData.usuario; } catch (e) { console.error("Erro na leitura da sessao:", e); } }
         function interpretarDataNascimento(valorEntrada) {
@@ -174,7 +174,7 @@
             const imcPadrao = pesoKg / (alturaM * alturaM);
             let fatorCorrecaoIdade = 1.0;
             if (ageData.anos >= 60) { fatorCorrecaoIdade = 0.94; } else if (ageData.anos < 25) { fatorCorrecaoIdade = 1.03; }
-            const ip13Resultado = imcPadrao * (fatorAtividade / 1.4) * fatorCorrecaoIdade;
+            const ipebResultado = imcPadrao * (fatorAtividade / 1.4) * fatorCorrecaoIdade;
             const pesoIdealEsbelteza22 = 22 * (alturaM * alturaM);
             const diferencaPeso = pesoKg - pesoIdealEsbelteza22;
             let diagnosticoMensagem = "";
@@ -182,17 +182,17 @@
             else if (diferencaPeso > 0) { diagnosticoMensagem = `A eliminacao proativa de ${diferencaPeso.toFixed(1)} kg constituira o foco evolutivo para manifestar a Esbelteza 22.`; }
             else { diagnosticoMensagem = `O ganho proativo de ${Math.abs(diferencaPeso).toFixed(1)} kg constituira o foco evolutivo para manifestar a Esbelteza 22.`; }
             const dadosBiometricos = {
-                sistema: "PRISMA13",
+                sistema: "PRISMAS",
                 usuario: usuarioAtivo,
-                antropometria: { idadeString: ageData.stringFormatada, septenioBiologico: ageData.septenio, ip13Equilibrio: parseFloat(ip13Resultado.toFixed(2)), pesoIdealKg: parseFloat(pesoIdealEsbelteza22.toFixed(1)), fatorAtividade },
+                antropometria: { idadeString: ageData.stringFormatada, septenioBiologico: ageData.septenio, ipebEquilibrio: parseFloat(ipebResultado.toFixed(2)), pesoIdealKg: parseFloat(pesoIdealEsbelteza22.toFixed(1)), fatorAtividade },
                 climatologia: { moradia: cepMoradia, trabalho: cepTrabalho, lazer: cepLazer, fotoperiodoGravado: new Date().toISOString() },
                 cicloEstrategico: { frequenciaHoras: 12, totalSemanas: 13, frequenciaAnual: 4 },
                 harmoniaHolosistemica: { familia: document.getElementById("harmoniaFamilia").value, trabalho: document.getElementById("harmoniaTrabalho").value, igreja: document.getElementById("harmoniaIgreja").value, clube: document.getElementById("harmoniaClube").value },
-                statusProcessamento: "PUP13_Estruturada",
+                statusProcessamento: "PUP_Estruturada",
                 dataCalculo: new Date().toISOString()
             };
-            localStorage.setItem("prisma13.sessao", JSON.stringify(dadosBiometricos));
-            alert(`Processamento Concluido com Sucesso!\n\nAssinatura: ESBELTEZA 22\nIndicador: IP13 de Equilibrio Biologico: ${dadosBiometricos.antropometria.ip13Equilibrio.toString().replace(".", ",")} Kg/m2\n\nDiretriz Semantica: ${diagnosticoMensagem}`);
+            localStorage.setItem("prismas.sessao", JSON.stringify(dadosBiometricos));
+            alert(`Processamento Concluido com Sucesso!\n\nAssinatura: ESBELTEZA 22\nIndicador IPEB de Equilibrio Biologico: ${dadosBiometricos.antropometria.ipebEquilibrio.toString().replace(".", ",")} Kg/m2\n\nDiretriz Semantica: ${diagnosticoMensagem}`);
             window.location.href = "../tela03/index.html";
         });
     });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>PRISMA13 — Tela 03</title>
+  <title>PRISMAS — Tela 03</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,600;1,700&family=Montserrat:wght@500;700;800;900&display=swap" rel="stylesheet">
@@ -75,7 +75,7 @@
   <div id="kosmos" aria-hidden="true"><div class="shooting-star"></div><div class="shooting-star star-2"></div></div>
   <main class="framework-tela">
     <header class="framework-header">
-      <div class="brand">PRISMA13</div>
+      <div class="brand">PRISMAS</div>
       <div class="meta-display"><span id="relogioDisplay">--/--/---- --:--:-- (UTC-3)</span></div>
     </header>
     
@@ -86,7 +86,7 @@
         <div class="result-box">
           <p>Identificação de Acesso: <span id="txtUsuario" style="color:var(--ouro-vivo)!important;">--</span></p>
           <p>Assinatura: <span style="color:var(--ouro-vivo)!important; font-weight:900;">ESBELTEZA 22</span></p>
-          <p>Indicador: IP13 — Índice PRISMA13 de Equilíbrio Biológico: <strong id="txtIp13Equilibrio">--,---</strong> Kg/m²[cite: 5]</p>
+          <p>Indicador IPEB — Índice PRISMAS de Equilíbrio Biológico: <strong id="txtIpebEquilibrio">--,---</strong> Kg/m²[cite: 5]</p>
         </div>
         
         <div class="catequese-text">
@@ -125,17 +125,17 @@
         }
         setInterval(atualizarRelogio, 1000); atualizarRelogio();
 
-        const sessionRaw = localStorage.getItem("prisma13.sessao");
-        let ip13Val = 22.0;
+        const sessionRaw = localStorage.getItem("prismas.sessao");
+        let ipebVal = 22.0;
         
         if (sessionRaw) {
             try {
                 const s = JSON.parse(sessionRaw);
                 document.getElementById("txtUsuario").textContent = s.usuario || "Explorador";
-                if(s.antropometria) { ip13Val = s.antropometria.ip13Equilibrio || ip13Val; }
+                if(s.antropometria) { ipebVal = s.antropometria.ipebEquilibrio || ipebVal; }
             } catch(e) {}
         }
-        document.getElementById("txtIp13Equilibrio").textContent = ip13Val.toString().replace('.', ',');
+        document.getElementById("txtIpebEquilibrio").textContent = ipebVal.toString().replace('.', ',');
 
         const dimensoes = ['Saúde Física', 'Saúde Mental', 'Relacionamentos', 'Carreira', 'Finanças', 'Espiritualidade', 'Lazer', 'Aprendizado', 'Contribuição', 'Meio Ambiente', 'Família', 'Comunidade', 'Criatividade'];
         const valores = [8, 7, 9, 8, 7, 9, 8, 8, 7, 9, 8, 8, 10];

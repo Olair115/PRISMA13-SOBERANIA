@@ -1,9 +1,9 @@
 (function () {
-  const FOOTER_MARK = "data-prisma13-footer";
+  const FOOTER_MARK = "data-prismas-footer";
   const path = window.location.pathname.replace(/\\/g, "/");
   const assetBase = /\/tela\d+\//.test(path) ? "../assets/" : "assets/";
 
-  const styleId = "prisma13-footer-selos-style";
+  const styleId = "prismas-footer-selos-style";
   if (!document.getElementById(styleId)) {
     const style = document.createElement("style");
     style.id = styleId;
@@ -24,7 +24,7 @@
         margin-top: 24px;
         text-align: center;
       }
-      .prisma13-selo {
+      .prismas-selo {
         display: flex;
         align-items: center;
         gap: 12px;
@@ -36,22 +36,22 @@
         line-height: 1.2;
         text-transform: uppercase;
       }
-      .prisma13-selo--esquerda { justify-content: flex-end; }
-      .prisma13-selo--direita { justify-content: flex-start; }
-      .prisma13-selo img {
+      .prismas-selo--esquerda { justify-content: flex-end; }
+      .prismas-selo--direita { justify-content: flex-start; }
+      .prismas-selo img {
         width: 45px;
         height: 45px;
         object-fit: cover;
         display: block;
       }
-      .prisma13-selo--sol img {
+      .prismas-selo--sol img {
         border-radius: 50%;
         border: 1px solid rgba(255, 230, 0, 0.35);
       }
-      .prisma13-selo--imc img {
+      .prismas-selo--imc img {
         border-radius: 10px;
       }
-      .prisma13-footer-centro {
+      .prismas-footer-centro {
         color: #fff !important;
         font-family: Georgia, "Times New Roman", serif;
         font-size: clamp(0.92rem, 1.35vw, 1.08rem);
@@ -60,7 +60,7 @@
         line-height: 1.45;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.65);
       }
-      .prisma13-footer-centro span {
+      .prismas-footer-centro span {
         display: block;
         margin-top: 4px;
         color: rgba(255, 255, 255, 0.68) !important;
@@ -77,8 +77,8 @@
           grid-template-columns: 1fr;
           gap: 12px;
         }
-        .prisma13-selo--esquerda,
-        .prisma13-selo--direita {
+        .prismas-selo--esquerda,
+        .prismas-selo--direita {
           justify-content: center;
         }
       }
@@ -88,16 +88,16 @@
 
   function footerMarkup() {
     return `
-      <div class="prisma13-selo prisma13-selo--sol prisma13-selo--esquerda">
+      <div class="prismas-selo prismas-selo--sol prismas-selo--esquerda">
         <img src="${assetBase}sol-1985.jpg" alt="SOL 1985">
         <div>SOL 1985</div>
       </div>
-      <div class="prisma13-footer-centro">
+      <div class="prismas-footer-centro">
         Seeemmpre melhorrrAndo... NUNKAKABA!<br>
         Ha bracos!
         <span>Dr Olair Rafael - @drolairrafael</span>
       </div>
-      <div class="prisma13-selo prisma13-selo--imc prisma13-selo--direita">
+      <div class="prismas-selo prismas-selo--imc prismas-selo--direita">
         <div>ESBELTEZA imc22</div>
         <img src="${assetBase}esbelteza-imc22.jpg" alt="ESBELTEZA imc22">
       </div>

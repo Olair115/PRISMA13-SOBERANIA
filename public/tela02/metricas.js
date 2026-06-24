@@ -1,9 +1,9 @@
-// PRISMA13 - Processamento de Métricas e Personalidade da PUP13
+// PRISMAS - Processamento de Métricas e Personalidade da PUP
 document.addEventListener("DOMContentLoaded", () => {
     console.log("Motor de Métricas Vital Inicializado.");
     
     const formMetricas = document.getElementById("formMetricas");
-    const sessionRaw = localStorage.getItem("prisma13.sessao");
+    const sessionRaw = localStorage.getItem("prismas.sessao");
     
     // Resgatar identificação do usuário obtida na tela anterior
     let usuarioAtivo = "Explorador Sobrevivente";
@@ -61,9 +61,9 @@ document.addEventListener("DOMContentLoaded", () => {
             diagnosticoMensagem = `Você precisa ganhar ${Math.abs(diferencaPeso).toFixed(1)} kg para atingir o seu PESO IDEAL (IMC 22).`;
         }
 
-        // Consolidação do Payload para a Personalidade da PUP13
+        // Consolidação do Payload para a Personalidade da PUP
         const dadosBiometricos = {
-            sistema: "PRISMA13",
+            sistema: "PRISMAS",
             usuario: usuarioAtivo,
             antropometria: {
                 idade: idade,
@@ -81,15 +81,15 @@ document.addEventListener("DOMContentLoaded", () => {
             },
             cicloEstrategico: {
                 frequenciaHoras: 12,       // Monitoramento de 12 em 12 horas
-                totalSemanas: 13,         // Ciclo de 13 semanas sazonais
+                totalSemanas: 13,         // Ciclo sazonal completo
                 frequênciaAnual: 4         // 4 estações ao ano
             },
-            statusProcessamento: "PUP13_Estruturada",
+            statusProcessamento: "PUP_Estruturada",
             dataCalculo: new Date().toISOString()
         };
 
         // Gravação firme na sessão local para persistência de dados
-        localStorage.setItem("prisma13.sessao", JSON.stringify(dadosBiometricos));
+        localStorage.setItem("prismas.sessao", JSON.stringify(dadosBiometricos));
 
         // Alerta empático e direcionamento automático para a próxima etapa (Módulos de Avaliação)
         alert(`Métricas processadas com sucesso para ${usuarioAtivo}!\n\nDiretriz: ${diagnosticoMensagem}`);
