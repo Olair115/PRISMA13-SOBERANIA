@@ -17,6 +17,15 @@
 - Correcao final solicitada: rollback Firebase Hosting em `2026-06-24T10:32:43.204Z`.
 - Release atual apos correcao final: `ROLLBACK` para `e416b61f49b1b891`.
 
+## Ajuste pontual posterior
+
+- Ajuste solicitado: remover a formula tecnica visivel da tela de IMC padrao em `/tela03/index.html` e pluralizar o link/botao para `dados, privacidade e formulas`.
+- Base preservada: `sites/prisma13-e339b/versions/e416b61f49b1b891`.
+- Nova versao Firebase criada por patch de arquivo unico: `sites/prisma13-e339b/versions/0a67656fb9e2539b`.
+- Release do ajuste: `sites/prisma13-e339b/releases/1782299918093000`.
+- Release time: `2026-06-24T11:18:38.093Z`.
+- File count preservado: 746 arquivos.
+
 ## Contas Google/Firebase
 
 - Conta Firebase CLI com acesso ao projeto: `olairjr@gmail.com`.
